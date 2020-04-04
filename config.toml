@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://pandora.sh/"
 languageCode = "en-us"
 title = "Pandora's box"
 theme = "hello-friend"

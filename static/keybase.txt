@@ -20,13 +20,13 @@ To do so, I am signing this object:
 "username": "pe3z"
 },
 "merkle_root": {
-"ctime": 1586021885,
-"hash": "e5a33a6fbaee068350a65805f029c70b24fc729479652c0aec64b87a073b9c7453b5c07f7f957266eecbe0a286e2d4a70e6696ed34004700e3c06b7fe854776e",
-"hash_meta": "ffd3455e07f96da067c0a4d9602ae456eb9d7f5e22c1b19190c38b00cdce5589",
-"seqno": 15765249
+"ctime": 1586022660,
+"hash": "28743e9e0fdf2ab5d6ba6b5e37686789a5cb9b6df482cbc4b034195ec6331152b9db6327395cfb4ab1b1b064e18c8564080a453d3eb92fca48975f1e94ca0b62",
+"hash_meta": "4d048b7564a0cca8d5e1a65401df78c461df9f242dcf59836beb6c8dcce46553",
+"seqno": 15765373
 },
 "service": {
-"entropy": "h4W0g9kmeGVTmaXjE116V94M",
+"entropy": "SLGPJvNrm9lNTabc5LJ9svL3",
 "hostname": "pandora.sh",
 "protocol": "https:"
 },
@@ -37,16 +37,16 @@ To do so, I am signing this object:
 "name": "keybase.io go client",
 "version": "5.3.0"
 },
-"ctime": 1586021899,
+"ctime": 1586022682,
 "expire_in": 504576000,
-"prev": "ac2ce1b2141cf589175e4eeb862e7faa77e770e1f4559037b6798db991681773",
-"seqno": 101,
+"prev": "04e21ff36074999c1795b1d23950a26f5832d3a59d45422c7c68a64855a78ae3",
+"seqno": 104,
 "tag": "signature"
 }
 
 which yields the signature:
 
-hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgjZ6J+K1FTFVlBzizmF4GnbPjeoQS3FjELLEQgS+sCqQKp3BheWxvYWTESpcCZcQgrCzhshQc9YkXXk7rhi5/qnfncOH0VZA3tnmNuZFoF3PEIG2gdNskxs/tDsatj8YAwIKskuc4DGaKya5Xp1xQDMCiAgHCo3NpZ8RAfBlki09yAtZlmPoxQe3fWRwGfD3uCpize7wUOSvKvIhaTaHQPu8QnHaxDRdjWjqY3f3x9XwGtoZRq5fWd7ItDqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIH7XB/AviE2RkkwNLRYyqGZn0xdmB2lsfxAPPGDSp3Fso3RhZ80CAqd2ZXJzaW9uAQ==
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgjZ6J+K1FTFVlBzizmF4GnbPjeoQS3FjELLEQgS+sCqQKp3BheWxvYWTESpcCaMQgBOIf82B0mZwXlbHSOVCib1gy06WdRUIsfGimSFWniuPEIEUjt7UA8xtbyqvQiPcOfyOTbcvldjBcm+csmB5peIRpAgHCo3NpZ8RAVQIH7kN8GdBp0mXKwx6FLbv+nPfq+0L94Q/4wnIC2QGeebndHwrdey75Znsr+aQlOU8tupW6aNyzTHSsFY17C6hzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIBD/frOO5DoSLsX3G+zjMwE2VKn7GTb02naRfRWWE3Wio3RhZ80CAqd2ZXJzaW9uAQ==
 
 And finally, I am proving ownership of this host by posting or
 appending to this document.

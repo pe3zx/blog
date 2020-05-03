@@ -39,3 +39,7 @@ paginate = 3
         identifier = "archive"
         name = "Archive"
         url = "/archive"
+      [[languages.en.menu.main]]
+        identifier = "Research"
+        name = "Research"
+        url = "/research"

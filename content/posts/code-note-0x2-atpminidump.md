@@ -241,7 +241,7 @@ if (!status == 0xc0000004) {
 > 
 > — *[ZwQuerySystemInformation function parameters](https://docs.microsoft.com/en-us/windows/win32/sysinfo/zwquerysysteminformation#parameters)*
 
-ทั้งนี้ถ้าเราสังเกตดูให้ดีในการเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` พารามิเตอร์ `SystemInformation` ซึ่งควรถูกระบุเพื่อจัดเก็บข้อมูลกลับไม่มีการระบุค่าใด ๆ เอาไว้เลย พารามิเตอร์ที่ดูเหมือนจะมีการรับข้อมูลมีเพียงพารามิเตอร์เดียวคือ `uReturnLength` ซึ่งรับค่าขนาดของผลลัพธ์ออกมาเก็บไว้ จากนั้นจึงมีการตรวจสอบด้วยค่าประเภท `NTSTATUS` เพื่อให้แน่ใจว่าฟังก์ชันทำงานไม่ล้มเหลว อย่างไรก็เฉลยของการเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` ก็อยู่ไม่ใกล้ไม่ไกลจากโค้ดส่วนปัจจุบัน ซึ่งก็คืออีกไม่กี่บรรทัดต่อจากนี้ครับ
+ทั้งนี้ถ้าเราสังเกตดูให้ดีในการเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` พารามิเตอร์ `SystemInformation` ซึ่งควรถูกระบุเพื่อจัดเก็บข้อมูลกลับไม่มีการระบุค่าใด ๆ เอาไว้เลย พารามิเตอร์ที่ดูเหมือนจะมีการรับข้อมูลมีเพียงพารามิเตอร์เดียวคือ `uReturnLength` ซึ่งรับค่าขนาดของผลลัพธ์ออกมาเก็บไว้ จากนั้นจึงมีการตรวจสอบด้วยค่าประเภท `NTSTATUS` เพื่อให้แน่ใจว่าฟังก์ชันทำงานไม่ล้มเหลว อย่างไรก็ตามเฉลยของการเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` ก็อยู่ไม่ใกล้ไม่ไกลจากโค้ดส่วนปัจจุบัน ซึ่งก็คืออีกไม่กี่บรรทัดต่อจากนี้ครับ
 
 หลังจากมีการเรียกใช้ `ZwQuerySystemInformation()` จนได้ค่าขนาดของผลลัพธ์ของประเภทข้อมูล `SystemProcessInformation` มาเก็บไว้ที่ `uReturnLength` แล้ว เราจะเห็นการใช้ค่าใน `uReturnLength` ในโค้ดด้านล่าง
 
@@ -261,17 +261,90 @@ if (status != 0) {
 }
 
 status = ZwQuerySystemInformation(
-  SystemProcessInformation, // SystemInformationClass
-  0, // SystemInformation
-  0, // SystemInformationLength
+  SystemProcessInformation,  // SystemInformationClass
+  pBuffer, // SystemInformation
+  uReturnLength, // SystemInformationLength
   &uReturnLength // ReturnLength
-);
-if (status != 0) {
+  );
+	if (status != 0) {
+		return FALSE;
+	}
+```
+
+ค่า `uReturnLength` ที่เก็บค่าขนาดของประเภทข้อมูล `SystemProcessInformation` ซึ่งเป็นผลลัพธ์ของการฟังก์ชัน `ZwQuerySystemInformation()` ทุกจัดเก็บไว้ในตัวแปรใหม่ประเภท `SIZE_T` ชื่อ `uSize` พร้อมๆ กับการสร้างตัวแปรใหม่ในประเภท `LPVOID` ชื่อ `pBuffer` ซึ่งถูกกำหนดค่าเป็น `NULL` ตัวแปรใหม่ทั้งสองนี้ถูกนำมาใช้เป็นพารามิเตอร์ของฟังก์ชัน `NtAllocateVirtualMemory()` ซึ่งปรากฎในลำดับต่อมา โดยฟังก์ชันถูกเตรียมพร้อมในลักษณะของ function pointer เอาไว้อยู่แล้วซึ่งทำให้เราสามารถใช้งานฟังก์ชันนี้ได้ทันที
+
+ฟังก์ชัน `NtAllocateVirtualMemory()` เป็นฟังก์ชันสำหรับการจองและจัดการพื้นที่ในหน่วยความจำของโปรเซส โดยพารามิเตอร์ที่มีความสำคัญต่อกการทำงานของโปรแกรมมีดังต่อไปนี้
+
+- พารามิเตอร์ `ProcessHandle` เป็นพารามิเตอร์ซึ่งมีไว้ให้เราระบุโปรเซสที่เราจะใช้ฟังก์ชัน `NtAllocateVirtualMemory()` เข้าไปจองหน่วยความจำ ในทีนี้เราจะเห็นการใช้ฟังก์ชัน `GetCurrentProcess()` เพื่อให้ได้มาซึ่ง process handle ของโปรเซสปัจจุบันซึ่งบ่งชี้ให้เห็นว่าการจองพื้นที่หน่วยความจำที่กำลังจะเกิดขึ้นนั้นอยู่ในขอบเขตของโปรเซสปัจจุบัน
+- พารามิเตอร์ `*BaseAddress` ซึ่งเป็นตัวแปรแบบพอยน์เตอร์ที่จะเก็บตำแหน่งของหน่วยความจำซึ่งเป็นผลลัพธ์จากการทำงานของฟังก์ชัน `NtAllocateVirtualMemory()` ในที่นี้โค้ดมีการระบุตำแหน่งของตัวแปร `pBuffer` ซึ่งถูกสร้างไว้ก่อนหน้า
+- พารามิเตอร์ `RegionSize` เป็นพารามิเตอร์ซึ่งใช้ในการระบุขนาดในหน่วยไบต์ของพื้นที่ในหน่วยความจำที่จะมีการจอง ในที่นี้เราจะเห็นการนำค่า `uSize` ซึ่งมีที่มาจากตัวแปร `uReturnLength` ของการเรียกฟังก์ชัน `ZwQuerySystemInformation()` มาใช้งาน
+
+พารามิเตอร์อื่นๆ ซึ่งถูกระบุในการเรียกใช้ฟังก์ชัน อาทิ `AllocationType`, `ZeroBits` และ `Protect` เป็นพารามิเตอร์เสริมซึ่งใช้เพื่อระบุคุณลักษณะอื่นๆ ของพื้นที่หน่วยความจำที่ทำการจอง ผลลัพธ์ของการเรียกใช้ฟังก์ชัน `NtAllocateVirtualMemory()` จะถูกตรวจสอบว่าฟังก์ชันทำงานเสร็จสิ้นหรือไม่ หากไม่เสร็จสิ้นฟังก์ชันจะถูกหยุดการทำงาน แต่หากฟังก์ชันนี้ทำงานเสร็จสิ้น เราก็จะได้พื้นที่ใหม่ในหน่วยความจำของโปรเซสปัจจุบันตามขนาดที่เราระบุ และสามารถเรียกใช้ได้ผ่านตำแหน่งของหน่วยความจำซึ่งถูกเก็บอยู่ในตัวแปร `pBuffer`
+
+ต่อมาฟังก์ชัน `ZwQuerySystemInformation()` จะถูกเรียกใช้เป็นครั้งที่สองด้วยจุดประสงค์ที่ต่างออกไป เนื่องจากในตอนนี้เรามีพื้นที่ว่างในหน่วยความจำพร้อมใช้งานแล้ว เราก็สามารถระบุพื้นที่ดังกล่าวให้กับฟังก์ชัน `ZwQuerySystemInformation()` เพื่อจัดเก็บข้อมูลต่อได้ สังเกตว่าธรรมชาติของภาษาซีนั้น ก่อนจะมีการดำเนินการเรียกหาข้อมูลใดๆ เราจำเป็นจะต้องจัดเตรียมพื้นที่เอาไว้จัดเก็บผลลัพธ์เสมอ ซึ่งนั่นคือสิ่งที่เราเห็นในการเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` ครั้งแรกกับการเรัยกใช้ฟังก์ชัน `NtAllocationVirtualMemory()` ครับ
+
+การเรียกใช้ฟังก์ชัน `ZwQuerySystemInformation()` ในครั้งที่สองจะสังเกตได้อย่างชัดเจนว่าตัวแปร `pBuffer` นั้นถูกใส่ไว้ในตำแหน่งของพารามิเตอร์ `SystemInformation` เพื่อเป็นตำแหน่งที่จะเก็บข้อมูลผลลัพธ์ของการทำงาน โดยเมื่อสิ้นสุดการทำงานแล้ว พื้นที่หน่วยความจำซึ่งถูกอ้างอิงด้วยตัวแปร `pBuffer` จะเก็บข้อมูลประเภท `SystemProcessInformation` หรืออธิบายอีกอย่างได้คือข้อมูลของรายละเอียดของโปรเซสที่กำลังทำงานอยู่ในระบบ (หากใครสนใจว่า `pBuffer` เก็บข้อมูลในลักษณะใด ก็สามาถดีบั๊กเพื่อดูค่าในตัวแปรนี้ได้ตามสะดวกครับ)
+
+```c
+_RtlEqualUnicodeString RtlEqualUnicodeString = (_RtlEqualUnicodeString) GetProcAddress(GetModuleHandle(L"ntdll.dll"), "RtlEqualUnicodeString");
+if (RtlEqualUnicodeString == NULL) {
   return FALSE;
 }
 ```
 
-TODO: อธิบาย NtAllocateVirtualMemory, การใช้ uReturnLength เพื่อจองพื้นที่ที่เหมาะสมสำหรับเก็บข้อมูล และใช้ ZwQuerySystemInformation อีกครั้งเพื่อดึงข้อมูลมาเก็บ
+โค้ดส่วนต่อมาคือการสร้าง function pointer ให้กับฟังก์ชันชื่อ `RtlEqualUnicodeString()` ด้วยรูปแบบที่เราคุ้นเคยกันดี ฟังก์ชัน `RtlEqualUnicodeString()` มีการทำงานตรงตัวตามชื่อของมันการรับค่าอินพุตเข้าไปสองค่าในประเภท `PCUNICODE_STRING` หรือสตริงซึ่งใช้ยูนิโค้ด จากนั้นทำการเปรียบเทียบว่าสตริงทั้งสองค่านั้นเป็นสตริงเดียวกันหรือไม่ หากเป็นสตริงเดียวกันฟังก์ชัน `RtlEqualUnicodeString()` จะส่งผลลัพธ์เป็น `TRUE` และเป็น `FALSE` หากไม่เป็นสตริงเดียวกัน
+
+```c
+PSYSTEM_PROCESSES pProcInfo = (PSYSTEM_PROCESSES) pBuffer;
+```
+
+ในส่วนถัดมาเราจะเห็นโค้ดในลักษณะที่เหมือนกับการทำ function pointer แต่ในความคิดของผมนั้น มันจะสามารถเข้าใจได้ง่ายกว่าถ้าเราอธิบายโค้ดในบรรทัดด้านบนว่าเป็นการเอาค่าผลลัพธ์จากการทำงานของฟังก์ชัน `ZwQuerySystemInformation()` นั้นมาทำการแปลงให้อยู่ในประเภทข้อมูลที่ชื่อ `PSYSTEM_PROCESSES` และเก็บผลลัพธ์ที่ได้ไว้ในตัวแปรชื่อ `pProcInfo` การทำแบบนี้มีจุดประสงค์เพื่อให้เราสามารถเข้าถึงค่าใน `pBuffer` ได้อย่างเป็นรูปแบบตามโครงสร้างที่ประเภทข้อมูลนี้พึงมี เราสามารถดูรายละเอียดเพิ่มเติมของ `PSYSTEM_PROCESSES` ได้จาก[ไฟล์ `ATPMiniDump.h` ที่บรรทัดที่ 87 ครับ](https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L87)
+
+```c
+typedef struct _SYSTEM_PROCESSES {
+	ULONG NextEntryDelta;
+	ULONG ThreadCount;
+	ULONG Reserved1[6];
+	LARGE_INTEGER CreateTime;
+	LARGE_INTEGER UserTime;
+	LARGE_INTEGER KernelTime;
+	UNICODE_STRING ProcessName;
+	KPRIORITY BasePriority;
+	HANDLE ProcessId;
+	HANDLE InheritedFromProcessId;
+} SYSTEM_PROCESSES, *PSYSTEM_PROCESSES;
+```
+
+เมื่อผ่านการแปลงประเภทแล้ว เราสามารถมโนต่อได้เลยว่าหากเราเรียกดูข้อมูลโดยใช้การอ้างเป็น `&pProcInfo->ProcessName` เราก็จะได้รายการของชื่อโปรเซสจากผลลัพ์ของ `SystemProcessInformation` นั่นเอง
+
+ในตอนนี้เรามีรายการข้อมูลของโปรเซสที่ทำงานอยู่ในระบบอยู่แล้ว ด้วยจุดประสงค์ของฟังก์ชัน `GetPID()` คือการหาค่า process ID และค่านำเข้าของฟังก์ชันซึ่งคือ `pWinVerInfo->ProcName` เราน่าจะพอเดาสิ่งที่จะเกิดขึ้นต่อไปได้แล้วว่าสิ่งที่จะเกิดขึ้นต่อไปในการทำงานของฟังก์ชันนี้นั้นคือการนำข้อมูลใน `pProcInfo` ซึ่งเก็บรายการโปรเซสที่ทำงานอยู่ทั้งหมดในระบบมาเปรียบเทียบชื่อกับข้อมูลในตัวแปร `pWinVerInfo->ProcName` ด้วยฟังก์ชัน `RtlEqualUnicodeString()` ซึ่งถูกสร้างขึ้นมาแต่ยังไม่ถูกเรียกใช้ เมื่อมีเปรียบเทียบชื่อจนเจอแล้ว เราก็สามารถคาดเดาได้ว่าค่า `pProcInfo->ProcessId` ของโปรเซสที่มีชื่อตรงกับที่เราต้องการจะถูกย้ายมาเก็บไว้ใน `pWinVerInfo->hTargetPID` ที่มีการ initialize ค่าเป็น `NULL` เอาไว้ตั้งแต่เริ่มต้นฟังก์ชัน
+
+โค้ดส่วนถัดไปอธิบายสิ่งที่เราคาดเดาไว้ด้านบนครับ
+
+```c
+do {
+		if (RtlEqualUnicodeString(&pProcInfo->ProcessName, &pWinVerInfo->ProcName, TRUE)) {
+			pWinVerInfo->hTargetPID = pProcInfo->ProcessId;
+			break;
+		}
+		
+		pProcInfo = (PSYSTEM_PROCESSES)(((LPBYTE)pProcInfo) + pProcInfo->NextEntryDelta);
+} while (pProcInfo);
+```
+
+มีการเรียกใช้ `do-while` ในการไล่หาข้อมูลใน `pProcInfo` และเราจะเห็นการขยับค่าใน `pProcInfo` ด้วยการเอาตำแหน่งข้อมูลปัจจุบันมารวมระยะห่างของข้อมูลในรายการโปรเซสซึ่งถัดไปด้วย `pProcInfo->NextEntryDelta` ด้วย ในกรณีที่มีโปรเซสซึ่งมีชื่อตรงกับที่เราต้องการ ค่า process ID ก็จะถูกนำไปเก็บไว้ `pWinVerInfo->hTargetPID` แต่กรณีที่ไม่พบแล้วนั้น ค่าใน `pWinVerInfo->hTargetPID` ก็จะยังคงเป็นค่า `NULL` ตามที่ iniitalize ไว้ในตอนแรกเหมือนเดิม
+
+```c
+status = NtFreeVirtualMemory(GetCurrentProcess(), &pBuffer, &uSize, MEM_RELEASE);
+
+if (pWinVerInfo->hTargetPID == NULL) {
+  return FALSE;
+}
+
+return TRUE;
+```
+
+ส่วนสุดท้ายของฟังก์ชัน `GetPID()` คือการเรียกใช้ฟังก์ชัน `NtFreeVirtualMemory()` เพื่อจัดการคืนพื้นที่ของหน่วยความจำซึ่งถูกจองไว้ด้วยฟังก์ชัน `NtAllocateVirtualMemory()` หลังจากนั้นฟังก์ชันจะมีการตรวจสอบค่าผลลัพธ์ว่า `pWinVerInfo->hTargetPID` ยังมีค่าเป็น `NULL` อยู่หรือไม่ หากใช่ก็จะมีการส่งค่า `FALSE` ออก แต่หากไม่ก็จะมีการส่งหา `TRUE` ออก เป็นอันจับการทำงานของฟังก์ชัน `GetPID()` ครับ
 
 ### IsElevated Function
 

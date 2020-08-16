@@ -1,6 +1,7 @@
 ---
 title: "Google Technical Writing Course"
 date: 2020-08-12T14:37:28+07:00
+author: "P. Boonyakarn"
 description: "สรุปข้อควรทราบในการสร้างพฤติกรรม Technical Writing ที่ดีจากบทเรียน Google Technical Writing Course"
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "iPhone/iOS Anti-Forensics Notes"
+title: "iPhone/iOS Anti-Forensics Note"
 date: 2020-10-02T14:00:00+07:00
 author: "P. Boonyakarn"
 description: "A summary in Thai of a guideline by ElcomSoft to configure iPhone and Apple devices for anti-forensics purpose"

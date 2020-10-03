@@ -6,13 +6,7 @@
     --light-color: #222;
     --light-color-secondary: #999;
     --light-border-color: #dcdcdc;
-    /* dark theme colors */
-    --dark-background: #181a1b;
-    --dark-background-secondary: #444;
-    --dark-header: #252627;
-    --dark-color: #e8e6e3;
-    --dark-color-secondary: #aaa;
-    --dark-border-color: #aaa;
+
     /* variables for js, must be the same as these in @custom-media queries */
     --phoneWidth: (max-width: 684px);
     --tabletWidth: (max-width: 900px);
@@ -21,6 +15,15 @@
 body {
     font-weight: normal;
     font-family: Sarabun, 'Inter', -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+body.dark-theme {
+    --background: #181a1b;
+    --background-secondary: #444;
+    --header: #252627;
+    --color: #e8e6e3;
+    --color-secondary: #aaa;
+    --border-color: #aaa;
 }
 
 h1 {

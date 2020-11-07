@@ -1,5 +1,5 @@
 ---
-title: "Code Note 0x3 Ddos as a Service"
+title: "Code Note 0x3: DDoS as a Service"
 date: 2020-11-07T18:35:47+07:00
 author: "P. Boonyakarn"
 description: "Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x3 จะเป็นการนำโค้ดของบริการ DDoS as a Service ที่ถูกปล่อย (รั่วไหล) ออกมาวิเคราะห์และตรวจสอบ เพื่อความเข้าใจที่มากขึ้นเกี่ยวกับการดำเนินการของบริการ DDoS as a Service หรือ DDoS for Hire"

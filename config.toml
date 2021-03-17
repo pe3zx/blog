@@ -2,7 +2,7 @@ baseURL = "https://pandora.sh/"
 languageCode = "en-us"
 title = "Pandora's box"
 theme = "hello-friend"
-paginate = 3
+paginate = 5
 
 [params]
   contentTypeName = "posts"

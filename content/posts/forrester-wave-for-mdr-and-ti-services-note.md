@@ -1,5 +1,5 @@
 ---
-title: "Forrester Wave for Mdr and Ti Services Note"
+title: "Forrester Wave for MDR and Threat Intelligence Services Note"
 date: 2021-04-08T01:05:11+07:00
 author: "P. Boonyakarn"
 description: สรุปประเด็นน่าสนใจจากการประเมินประสิทธิภาพของบริการโดย Forrester Wave สำหรับบริการในกลุ่ม Managed

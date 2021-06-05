@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Integrating BinExport with GhiDra ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="เมื่อวันที่ 2 มีนาคม ที่ผ่านมา ผู้พัฒนาโครงการหลักของ BinDiff ได้มีการประกาศเวอร์ชันใหม่ของ BinDiff ในรุ่นที่ 6 โดยในรุ่นนี้นั้นมีหนึ่งในฟีเจอร์สำคัญซึ่งช่วยให้ผู้ใช้งาน Ghidra สามารถบันทึกข้อมูลในโปรเจคที่ทำการวิเคราะห์โดยใช้ BinExport และนำฐานข้อมูลในรูปแบบ BinExport มาหาความแตกต่างด้วย BinDiff ได้
+BinDiff มีบทบาทสำคัญในการเป็นเครื่องมือที่ทรงพลังในการช่วยให้ Reverse engineer หาความแตกต่างของไฟล์ไบนารีได้ อย่างไรก็ตามข้อจำกัดอย่างหนึ่งในการใช้งาน BinDiff คือการเปลี่ยนฟอร์แมตของไฟล์ไบนารีที่เราทำการวิเคราะห์ให้อยู่ในรูปแบบที่ BinDiff สามารถนำมาใช้ได้ด้วย BinExport ซึ่งแต่เดิมนั้นถูกพัฒนาให้เป็นคอมโพเนนต์ของ Disassembler อย่าง IDA Pro เท่านั้น การที่ BinExport จะต้องทำงานด้วย IDA Pro ในลักษณะปลั๊กอิน/คอมโพเนนต์ของ IDA Pro ทำให้ผู้ใช้ที่ต้องการจะใช้งาน BinDiff จะต้องครอบครอง license ของ IDA Pro ที่สามารถใช้ปลัํกอิน/คอมโพเนนต์ได้
+การมาของ Ghidra ซึ่งนอกจากฟังก์ชัน Decompiler ที่สามารถใช้ทดแทน Hex-Rays Decompiler ที่ต้องเสียเงินเช่นเดียวกับ IDA Pro ได้ ในขณะเดียวกัน Ghidra ก็ยังมาพร้อมกับฟีเจอร์ Version Tracking ซึ่งสามารถใช้เพื่อหาความเหมือนและแตกต่างของไฟล์ไบนารีที่ทำการวิเคราะห์อยู่ด้วย
+เมื่อเปรียบเทียบประสบการณ์การใช้งานระหว่าง BinDiff และ Version Tracking ของ Ghidra นั้น Version Tracking ของ Ghidra ใช้วิธีการวิเคราะห์ทั้ง instruction และ data ซึ่งจะใช้เวลานานกว่ามากหากยอมให้ Ghidra ใช้ทุกอัลกอริธึมที่มีอยู่ในการค้นหาความเหมือนและแตกต่าง ส่งผลให้ผลลัพธ์ซึ่งได้มาจาก Ghidra มีปริมาณที่เยอะ ใช้ทรัพยากรระบบจำนวนมากในการใช้งานจริง และจำเป็นต้องทำการคัดแยกออกมาตามอัลกอริธึมที่จะใช้เปรียบเทียบจึงจะสามารถเห็นความแตกต่างได้ Ghidra ยังคงมีข้อด้อยในเรื่องของการค้นหาไฟล์ PDB ที่จำเป็นต้องหาด้วยตนเองและโหลดเข้าโปรแกรมก่อนเริ่มทำ Auto-Analysis และใช้ฟีเจอร์ Version Tracking ด้วย"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/config-binexport-with-ghidra/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Integrating BinExport with GhiDra"/>
+<meta name="twitter:description" content="เมื่อวันที่ 2 มีนาคม ที่ผ่านมา ผู้พัฒนาโครงการหลักของ BinDiff ได้มีการประกาศเวอร์ชันใหม่ของ BinDiff ในรุ่นที่ 6 โดยในรุ่นนี้นั้นมีหนึ่งในฟีเจอร์สำคัญซึ่งช่วยให้ผู้ใช้งาน Ghidra สามารถบันทึกข้อมูลในโปรเจคที่ทำการวิเคราะห์โดยใช้ BinExport และนำฐานข้อมูลในรูปแบบ BinExport มาหาความแตกต่างด้วย BinDiff ได้"/>
+
+
+
+<meta property="og:title" content="Integrating BinExport with GhiDra" />
+<meta property="og:description" content="เมื่อวันที่ 2 มีนาคม ที่ผ่านมา ผู้พัฒนาโครงการหลักของ BinDiff ได้มีการประกาศเวอร์ชันใหม่ของ BinDiff ในรุ่นที่ 6 โดยในรุ่นนี้นั้นมีหนึ่งในฟีเจอร์สำคัญซึ่งช่วยให้ผู้ใช้งาน Ghidra สามารถบันทึกข้อมูลในโปรเจคที่ทำการวิเคราะห์โดยใช้ BinExport และนำฐานข้อมูลในรูปแบบ BinExport มาหาความแตกต่างด้วย BinDiff ได้" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/config-binexport-with-ghidra/" />
+<meta property="article:published_time" content="2020-03-07T16:49:00+07:00" />
+<meta property="article:modified_time" content="2020-03-07T16:49:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Integrating BinExport with GhiDra</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-03-07
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>เมื่อวันที่ 2 มีนาคม ที่ผ่านมา ผู้พัฒนาโครงการหลักของ BinDiff ได้มี<a href="https://twitter.com/AdmVonSchneider/status/1234178304837668869">การประกาศเวอร์ชันใหม่ของ BinDiff ในรุ่นที่ 6</a> โดยในรุ่นนี้นั้นมีหนึ่งในฟีเจอร์สำคัญซึ่งช่วยให้ผู้ใช้งาน Ghidra สามารถบันทึกข้อมูลในโปรเจคที่ทำการวิเคราะห์โดยใช้ BinExport และนำฐานข้อมูลในรูปแบบ BinExport มาหาความแตกต่างด้วย BinDiff ได้</p>
+<p>BinDiff มีบทบาทสำคัญในการเป็นเครื่องมือที่ทรงพลังในการช่วยให้ Reverse engineer หาความแตกต่างของไฟล์ไบนารีได้ อย่างไรก็ตามข้อจำกัดอย่างหนึ่งในการใช้งาน BinDiff คือการเปลี่ยนฟอร์แมตของไฟล์ไบนารีที่เราทำการวิเคราะห์ให้อยู่ในรูปแบบที่ BinDiff สามารถนำมาใช้ได้ด้วย BinExport ซึ่งแต่เดิมนั้นถูกพัฒนาให้เป็นคอมโพเนนต์ของ Disassembler อย่าง IDA Pro เท่านั้น การที่ BinExport จะต้องทำงานด้วย IDA Pro ในลักษณะปลั๊กอิน/คอมโพเนนต์ของ IDA Pro ทำให้ผู้ใช้ที่ต้องการจะใช้งาน BinDiff จะต้องครอบครอง <a href="https://www.hex-rays.com/order/">license ของ IDA Pro ที่สามารถใช้ปลัํกอิน/คอมโพเนนต์</a>ได้</p>
+<p>การมาของ Ghidra ซึ่งนอกจากฟังก์ชัน Decompiler ที่สามารถใช้ทดแทน <a href="https://www.hex-rays.com/products/decompiler/">Hex-Rays Decompiler</a> ที่ต้องเสียเงินเช่นเดียวกับ IDA Pro ได้ ในขณะเดียวกัน Ghidra ก็ยังมาพร้อมกับฟีเจอร์ <a href="https://ghidra.re/courses/GhidraClass/Intermediate/VersionTracking_withNotes.html#VersionTracking.html">Version Tracking</a> ซึ่งสามารถใช้เพื่อหาความเหมือนและแตกต่างของไฟล์ไบนารีที่ทำการวิเคราะห์อยู่ด้วย</p>
+<p>เมื่อเปรียบเทียบประสบการณ์การใช้งานระหว่าง BinDiff และ Version Tracking ของ Ghidra นั้น Version Tracking ของ Ghidra ใช้วิธีการวิเคราะห์ทั้ง instruction และ data ซึ่งจะใช้เวลานานกว่ามากหากยอมให้ Ghidra ใช้ทุกอัลกอริธึมที่มีอยู่ในการค้นหาความเหมือนและแตกต่าง ส่งผลให้ผลลัพธ์ซึ่งได้มาจาก Ghidra มีปริมาณที่เยอะ ใช้ทรัพยากรระบบจำนวนมากในการใช้งานจริง และจำเป็นต้องทำการคัดแยกออกมาตามอัลกอริธึมที่จะใช้เปรียบเทียบจึงจะสามารถเห็นความแตกต่างได้ Ghidra ยังคงมีข้อด้อยในเรื่องของการค้นหาไฟล์ PDB ที่จำเป็นต้องหาด้วยตนเองและโหลดเข้าโปรแกรมก่อนเริ่มทำ Auto-Analysis และใช้ฟีเจอร์ Version Tracking ด้วย</p>
+<h2 id="compile-and-build-binexport">Compile and Build BinExport</h2>
+<p><img src="https://1.bp.blogspot.com/-jZGUs6We5hI/XmNrrO7aA1I/AAAAAAAAVHk/kZ5WiqghyS04EpMsjAPYtLZb4chbh7nggCLcBGAsYHQ/s1600/Untitled.png" alt=""></p>
+<p>การคอมไพล์และติดตั้ง BinExport รวมไปถึง BinDiff เพื่อใช้งาน Ghidra สามารถทำได้ตามขั้นตอนดังต่อไปนี้</p>
+<ol>
+<li>ดาวโหลดและติดตั้ง BinDiff เวอร์ชันล่าสุดจากเว็บไซต์ของ <a href="https://zynamics.com/software.html">zynamics</a></li>
+<li>ติดตั้ง Dependencies ที่จำเป็นสำหรับการคอมไพล์ BinExport ได้แก่
+<ol>
+<li>OpenJDK 11 หรือใหม่กว่า</li>
+<li>Ghidra 9.1.2 (ดาวโหลดได้จาก <a href="http://ghidra-sre.org/">ghidra-sre.org</a>)</li>
+<li>Gradle 5.6 หรือมากกว่า (ดาวโหลดได้จาก <a href="http://services.gradle.org/">services.gradle.org</a>)</li>
+</ol>
+</li>
+<li>ทำการแตกไฟล์ของ Ghidra ไปยังพาธที่ต้องการ จากนั้นทำการตั้งค่า environment variable ในชื่อ <code>GHIDRA_INSTALL_DIR</code> ให้ชี้ไปยังพาธของโครงการ Ghidra</li>
+<li>ดาวโหลดโครงการ BinExport จาก <a href="https://github.com/google/binexport/">google/binexport</a></li>
+<li>ในโครงการ binexport ให้เข้าไปที่พาธ <code>java/BinExport</code> จากนั้นเรียกใช้คำสั่ง <code>gradle</code> หรือ <code>gradle.ba</code>t` ตามลักษณะของระบบเพื่อเริ่มกระบวนการคอมไพล์</li>
+<li>เมื่อกระบวนการคอมไพล์เสร็จสิ้น ไฟล์ปลั๊กอินสำหรับ Ghidra จะถูกเก็บอยู่ในพาธ <code>java/BinExport/dist</code> ในลักษณะชื่อไฟล์ <code>ghidra_9.1.2_PUBLIC_XXXXXXXX_BinExport.zip</code></li>
+</ol>
+<p>เมื่อได้ไฟล์ปลั๊กอินสำหรับ Ghidra แล้ว เราสามารถโหลดปลั๊กอินดังกล่าวได้จากหน้าต่าง Project ของ Ghidra โดยเข้าไปที่ File และ Install Extension จากนั้นกดเครื่องหมายบวกและเรื่องไฟล์ ZIP ของ BinExport ที่เราคอมไพล์ไว้ในตอนแรก ตรวจสอบให้แน่ใจว่าได้มีการเปิดใช้ปลั๊กอินแล้ว จากนั้นกด OK</p>
+<h2 id="create-a-binexport-database">Create a BinExport Database</h2>
+<p>การสร้างไฟล์ BinExport สามารถทำได้จากหน้า Project ของ Ghidra ตามขั้นตอนดังต่อไปนี้</p>
+<ol>
+<li>ตรวจสอบให้แน่ใจว่าไบนารีที่จะทำการวิเคราะห์ได้ผ่านการใช้ฟีเจอร์ Auto-analysis แล้ว โดยแนะนำให้มีการใช้ Analyzer ชื่อ <strong>Aggressive Instruction Finder</strong> ด้วย</li>
+<li>ที่หน้า Project view คลิกขวาที่ไบนารีที่ต้องการแล้วเลือก Export</li>
+<li>ที่หน้าต่าง Export filename ให้เลือกฟอร์แมตเป็น Binary Export (v2) for BinDiff จากนั้นกด OK</li>
+</ol>
+<p>ไฟล์ BinExport จะถูกบันทึกในตำแหน่งที่เราได้ระบุเอาไว้</p>
+<h2 id="diff-binexport-with-bindiff">Diff BinExport with BinDiff</h2>
+<p>เมื่อเราได้ไฟล์ BinExport สำหรับไบนารีที่เราต้องการเปรียบเทียบมาแล้ว ขั้นตอนต่อไปคือการใช้ BinDiff เพื่อวิเคราะห์ไฟล์ BinExprt เหล่านี้และสร้าง Workspace ที่สามารถนำไปตรวจสอบกับ BinDiff UI ได้ ตามขั้นตอนดังต่อไปนี้</p>
+<ul>
+<li>เรียกใช้คำสั่ง <code>bindiff</code> โดยระบุพารามิเตอร์เป็น <code>bindiff(.exe) Primary.BinExport Secondary.BinExport</code></li>
+<li>ไฟล์ <code>Primary_vs_Secondary.BinDiff</code> จะถูกสร้างขึ้นที่ไดเรกทอรีปัจจุบัน ให้เราทำการเปิด BinDiff UI และสร้าง Workspace ใหม่ จากนั้นเลือก Diff และ Add Exisiting Diff เพื่อโหลดไฟล์ <code>Primary_vs_Secondary.BinDiff</code> เข้าไป เป็นอันเสร็จสิ้นกระบวนการ</li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/cve-2020-0796-scanner-scripts-issues/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Problems in CVE-2020-0796 Scanner Scripts</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/enhancing-host-file-with-portproxy/">
+                  <span class="button__text">Enhancing Host File with PortProxy</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

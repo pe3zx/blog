@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Lesson Learned From Australian National University (ANU) Data Breach Incident Report ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="ในช่วงสัปดาห์ที่ผ่านมา Australian National University (ANU) ได้มีการเปิดเผยถึงรายละเอียดการโจมตีทางไซเบอร์ผ่านทาง Incident report ซึ่งรายงานถึงกรณีของการละเมิดข้อมูล (Data breach) และการเข้าถึงระบบซึ่งมีความสำคัญสูงตั้งแต่ช่วงปลายปีที่ผ่านมา รายงานฉบับนี้มีการเผยให้เห็นพฤติกรรมและเทคนิคของผู้โจมตี (Tradecraft) รวมไปถึงประเด็นในการตรวจพบการเกิดขึ้นของเหตุการณ์ด้านความปลอดภัยหลายประการ
+ดังนั้นในโพสต์นี้เราจะมาพูดถึงประเด็นที่น่าสนใจจากรายงานฉบับนี้กันครับ
+ Dwell time หรือช่วงเวลาที่ผู้โจมตีอยู่ใน ANU Network ก่อนจะถูกตรวจจับได้นั้นกินเวลาประมาณ 6 สัปดาห์ โดยผู้โจมตีถูกตรวจพบผ่าน Threat hunting exercise ที่ทำให้ทีมของผู้ดูแลระบบตรวจพบพฤติกรรมทางเครือข่ายที่ผิดปกติ เทคนิคในขั้นตอน Initial access ในหลายครั้งมีการอ้างถึง Interaction-less spearphishing ซึ่งหมายถึงลักษณะของอีเมลหลอกลวงที่เป้าหมายไม่จำเป็นต้องมีปฏิสัมพันธ์ด้วยแต่ก็ยังสามารถทำให้ผู้โจมตีบรรลุจุดประสงค์ในการเข้าถึงระบบเป้าหมายได้ อ้างอิงจากรายงานนั้น คาดว่ารูปแบบของ Interaction-less spearphishing มีการฝังสคริปต์ ซึ่งจากคาดเดาของผม อาจมีความเป็นไปได้ที่ผู้โจมตีจะใช้เทคนิคในการบังคับให้มีการเชื่อมต่อไปยัง SMB server ภายนอกเพื่อดักเอาค่าแฮช NTLM ผู้โจมตีถูกระบุว่ามีการใช้เทคนิคในกลุ่ม Operation security (OPSEC) หลายประการ หนึ่งในนั้นคือการติดต่อกับเซิร์ฟเวอร์ที่ใช้ออกคำสั่งและควบคุมภายเครือข่าย TOR ทั้งนี้ในความคิดเห็นของผม เนื่องจากเราสามารถระบุตำแหน่งของ TOR exit node ได้อย่างแน่ชัดในช่วงเวลาที่กำหนด ดังนั้นจึงมีความเป็นไปได้สูงที่เราอาจสามารถตรวจจับการโจมตีได้ก่อนหากมีการเฝ้าระวังการติดต่อในลักษณะที่มีปลายทางอยู่ในรายการของ TOR exit node กระบวนการ Lateral movement โดยส่วนใหญ่ถูกระบุว่าทำสำเร็จได้โดยการใช้ข้อมูลสำหรับยืนยันตัวตนที่ขโมยมา ทั้งนี้ยังมีความเป็นไปได้อยู่อีกหนึ่งกรณีซึ่งยากต่อการยืนยันและพิสูจน์คือการโจมตีช่องโหว่บางอย่างซึ่งทำให้เกิดผลลัพธ์ในรูปแบบของการยกระดับสิทธิ์และการเข้าถึงระบบ ซึ่งรายงานได้มีการระบุถึงความเป็นไปได้ในขั้นตอนนี้เอาไว้ด้วย เพื่อหลบหลีกการตรวจจับ เครื่องมือโดยส่วนใหญ่ซึ่งผู้โจมตีจะมีการใช้งานได้ถูกดาวโหลดเข้ามายัง ANU network ก่อนจะนำมาคอมไพล์และใช้งานในระบบภายหลังเพื่อหลีกเลี่ยงการตรวจจับ ผู้โจมตีมีการดาวโหลดไฟล์สำหรับติดตั้ง Windows XP และ Kali Linux ผ่าน BitTorrent จากนั้นจึงใช้ความสามารถของระบบในการดักจับข้อมูลที่เกี่ยวข้องกับการพิสูจน์ตัวตน และเช่นเดียวกัน มีความเป็นไปได้สูงที่เราจะสามารถตรวจจับการกระทำในลักษณะนี้ผ่านทางการระบุพฤติกรรมการใช้งานเครือข่ายที่ผิดปกติ ผู้โจมตีมีการใช้เครื่องมือในรูปแบบของภาษาสคริปต์หลายอย่างเพื่อสร้าง Tunnel สำหรับการโอนถ่ายข้อมูลออกและติดต่อกับเซิร์ฟเวอร์ออกคำสั่งและควบคุม ผู้โจมตีมีการตั้งค่าให้ระบบทำการลบหลักฐานและบันทึกการใช้งานออกไปในช่วงเวลาที่กำหนดเพื่อหลีกเลี่ยงการตรวจจับ ดังนั้นในกรณีเพื่อที่จะรักษาบันทึกการใช้งานเอาไว้ การส่งบันทึกการทำงานของระบบไปจัดเก็บไว้ในระบบอื่นแม้จะไม่มีการนำมาวิเคราะห์หรือตรวจหาการโจมตีก็ยังคงเป็นข้อปฏิบัติที่ควรดำเนินการ  "
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/lesson-learned-from-anu-data-breach/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Lesson Learned From Australian National University (ANU) Data Breach Incident Report"/>
+<meta name="twitter:description" content="ในช่วงสัปดาห์ที่ผ่านมา Australian National University (ANU) ได้มีการเปิดเผยถึงรายละเอียดการโจมตีทางไซเบอร์ผ่านทาง Incident report ซึ่งรายงานถึงกรณีของการละเมิดข้อมูล (Data breach) และการเข้าถึงระบบซึ่งมีความสำคัญสูงตั้งแต่ช่วงปลายปีที่ผ่านมา รายงานฉบับนี้มีการเผยให้เห็นพฤติกรรมและเทคนิคของผู้โจมตี (Tradecraft) รวมไปถึงประเด็นในการตรวจพบการเกิดขึ้นของเหตุการณ์ด้านความปลอดภัยหลายประการ"/>
+
+
+
+<meta property="og:title" content="Lesson Learned From Australian National University (ANU) Data Breach Incident Report" />
+<meta property="og:description" content="ในช่วงสัปดาห์ที่ผ่านมา Australian National University (ANU) ได้มีการเปิดเผยถึงรายละเอียดการโจมตีทางไซเบอร์ผ่านทาง Incident report ซึ่งรายงานถึงกรณีของการละเมิดข้อมูล (Data breach) และการเข้าถึงระบบซึ่งมีความสำคัญสูงตั้งแต่ช่วงปลายปีที่ผ่านมา รายงานฉบับนี้มีการเผยให้เห็นพฤติกรรมและเทคนิคของผู้โจมตี (Tradecraft) รวมไปถึงประเด็นในการตรวจพบการเกิดขึ้นของเหตุการณ์ด้านความปลอดภัยหลายประการ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/lesson-learned-from-anu-data-breach/" />
+<meta property="article:published_time" content="2019-10-05T22:29:00+07:00" />
+<meta property="article:modified_time" content="2019-10-05T22:29:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Lesson Learned From Australian National University (ANU) Data Breach Incident Report</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2019-10-05
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>ในช่วงสัปดาห์ที่ผ่านมา Australian National University (ANU) ได้มีการเปิดเผยถึงรายละเอียดการโจมตีทางไซเบอร์ผ่านทาง <a href="https://www.anu.edu.au/news/all-news/vcs-message-release-of-the-data-breach-incident-report">Incident report</a> ซึ่งรายงานถึงกรณีของการละเมิดข้อมูล (Data breach) และการเข้าถึงระบบซึ่งมีความสำคัญสูงตั้งแต่ช่วงปลายปีที่ผ่านมา รายงานฉบับนี้มีการเผยให้เห็นพฤติกรรมและเทคนิคของผู้โจมตี (Tradecraft) รวมไปถึงประเด็นในการตรวจพบการเกิดขึ้นของเหตุการณ์ด้านความปลอดภัยหลายประการ</p>
+<p><img src="https://1.bp.blogspot.com/-qFX6m-5bIAk/XZizM3CNxII/AAAAAAAATSg/lSqUlIOh67EEwfrkReQxzwdnV77C-O3WQCLcBGAsYHQ/s1600/Annotation%2B2019-10-05%2B221336.png" alt=""></p>
+<p>ดังนั้นในโพสต์นี้เราจะมาพูดถึงประเด็นที่น่าสนใจจากรายงานฉบับนี้กันครับ</p>
+<ul>
+<li>Dwell time หรือช่วงเวลาที่ผู้โจมตีอยู่ใน ANU Network ก่อนจะถูกตรวจจับได้นั้นกินเวลาประมาณ 6 สัปดาห์ โดยผู้โจมตีถูกตรวจพบผ่าน Threat hunting exercise ที่ทำให้ทีมของผู้ดูแลระบบตรวจพบพฤติกรรมทางเครือข่ายที่ผิดปกติ</li>
+<li>เทคนิคในขั้นตอน Initial access ในหลายครั้งมีการอ้างถึง Interaction-less spearphishing ซึ่งหมายถึงลักษณะของอีเมลหลอกลวงที่เป้าหมายไม่จำเป็นต้องมีปฏิสัมพันธ์ด้วยแต่ก็ยังสามารถทำให้ผู้โจมตีบรรลุจุดประสงค์ในการเข้าถึงระบบเป้าหมายได้ อ้างอิงจากรายงานนั้น คาดว่ารูปแบบของ Interaction-less spearphishing มีการฝังสคริปต์ ซึ่งจากคาดเดาของผม อาจมีความเป็นไปได้ที่ผู้โจมตีจะใช้เทคนิคในการบังคับให้มีการเชื่อมต่อไปยัง SMB server ภายนอกเพื่อดักเอาค่าแฮช NTLM</li>
+<li>ผู้โจมตีถูกระบุว่ามีการใช้เทคนิคในกลุ่ม Operation security (OPSEC) หลายประการ หนึ่งในนั้นคือการติดต่อกับเซิร์ฟเวอร์ที่ใช้ออกคำสั่งและควบคุมภายเครือข่าย TOR ทั้งนี้ในความคิดเห็นของผม เนื่องจากเราสามารถระบุตำแหน่งของ TOR exit node ได้อย่างแน่ชัดในช่วงเวลาที่กำหนด ดังนั้นจึงมีความเป็นไปได้สูงที่เราอาจสามารถตรวจจับการโจมตีได้ก่อนหากมีการเฝ้าระวังการติดต่อในลักษณะที่มีปลายทางอยู่ในรายการของ TOR exit node</li>
+<li>กระบวนการ Lateral movement โดยส่วนใหญ่ถูกระบุว่าทำสำเร็จได้โดยการใช้ข้อมูลสำหรับยืนยันตัวตนที่ขโมยมา ทั้งนี้ยังมีความเป็นไปได้อยู่อีกหนึ่งกรณีซึ่งยากต่อการยืนยันและพิสูจน์คือการโจมตีช่องโหว่บางอย่างซึ่งทำให้เกิดผลลัพธ์ในรูปแบบของการยกระดับสิทธิ์และการเข้าถึงระบบ ซึ่งรายงานได้มีการระบุถึงความเป็นไปได้ในขั้นตอนนี้เอาไว้ด้วย</li>
+<li>เพื่อหลบหลีกการตรวจจับ เครื่องมือโดยส่วนใหญ่ซึ่งผู้โจมตีจะมีการใช้งานได้ถูกดาวโหลดเข้ามายัง ANU network ก่อนจะนำมาคอมไพล์และใช้งานในระบบภายหลังเพื่อหลีกเลี่ยงการตรวจจับ</li>
+<li>ผู้โจมตีมีการดาวโหลดไฟล์สำหรับติดตั้ง Windows XP และ Kali Linux ผ่าน BitTorrent จากนั้นจึงใช้ความสามารถของระบบในการดักจับข้อมูลที่เกี่ยวข้องกับการพิสูจน์ตัวตน และเช่นเดียวกัน มีความเป็นไปได้สูงที่เราจะสามารถตรวจจับการกระทำในลักษณะนี้ผ่านทางการระบุพฤติกรรมการใช้งานเครือข่ายที่ผิดปกติ</li>
+<li>ผู้โจมตีมีการใช้เครื่องมือในรูปแบบของภาษาสคริปต์หลายอย่างเพื่อสร้าง Tunnel สำหรับการโอนถ่ายข้อมูลออกและติดต่อกับเซิร์ฟเวอร์ออกคำสั่งและควบคุม</li>
+<li>ผู้โจมตีมีการตั้งค่าให้ระบบทำการลบหลักฐานและบันทึกการใช้งานออกไปในช่วงเวลาที่กำหนดเพื่อหลีกเลี่ยงการตรวจจับ ดังนั้นในกรณีเพื่อที่จะรักษาบันทึกการใช้งานเอาไว้ การส่งบันทึกการทำงานของระบบไปจัดเก็บไว้ในระบบอื่นแม้จะไม่มีการนำมาวิเคราะห์หรือตรวจหาการโจมตีก็ยังคงเป็นข้อปฏิบัติที่ควรดำเนินการ</li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/hunting-attack-campaigns-exploit-vpn-vuln/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Hunting Attack Campaigns Exploiting VPN Vulnerabilities</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/ask-andrew-wk/">
+                  <span class="button__text">Ask Andrew W.K.: My Dad Is a Right-Wing Asshole</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

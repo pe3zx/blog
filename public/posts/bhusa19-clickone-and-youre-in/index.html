@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        BHUSA19: ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="This a summary for BlackHat USA 2019 talk, ClickOnce and You&amp;rsquo;re In - When Appref-ms Abuse is Operating as Intended, by William J. Burke IV from U.S. Department of Homeland Security. The presentation of this talk is available here.
+ The first thing I want to point out is how the research was conducted and its objectives. The main objective of this research is to develop a new method for initial access and code execution with the following requirements (which might be related to operation requirements)  Must utilize Cobalt Strike framework for command &amp;amp; control Must evade Windows Defender Must work on both Windows 10 and Windows 7 environments and Must not use previously disclosed delivery mechanisms   According to the main objective, the researcher develops an interesting test environment and variables which consist of both attacker and victim environment."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/bhusa19-clickone-and-youre-in/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="BHUSA19: ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended"/>
+<meta name="twitter:description" content="This a summary for BlackHat USA 2019 talk, ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended, by William J. Burke IV from U.S. Department of Homeland Security. The presentation of this talk is available here."/>
+
+
+
+<meta property="og:title" content="BHUSA19: ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended" />
+<meta property="og:description" content="This a summary for BlackHat USA 2019 talk, ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended, by William J. Burke IV from U.S. Department of Homeland Security. The presentation of this talk is available here." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/bhusa19-clickone-and-youre-in/" />
+<meta property="article:published_time" content="2019-10-14T16:17:00+07:00" />
+<meta property="article:modified_time" content="2019-10-14T16:17:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">BHUSA19: ClickOnce and You&rsquo;re In - When Appref-ms Abuse is Operating as Intended</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2019-10-14
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>This a summary for BlackHat USA 2019 talk, <strong>ClickOnce and You&rsquo;re In - When Appref-ms Abuse is Operating as Intended</strong>, by William J. Burke IV from U.S. Department of Homeland Security. The presentation of this talk is <a href="https://i.blackhat.com/USA-19/Wednesday/us-19-Burke-ClickOnce-And-Youre-In-When-Appref-Ms-Abuse-Is-Operating-As-Intended.pdf">available here</a>.</p>
+<ul>
+<li>The first thing I want to point out is how the research was conducted and its objectives. The main objective of this research is to develop a new method for initial access and code execution with the following requirements (which might be related to operation requirements)
+<ul>
+<li>Must utilize Cobalt Strike framework for command &amp; control</li>
+<li>Must evade Windows Defender</li>
+<li>Must work on both Windows 10 and Windows 7 environments and</li>
+<li>Must not use previously disclosed delivery mechanisms</li>
+</ul>
+</li>
+<li>According to the main objective, the researcher develops an interesting test environment and variables which consist of both attacker and victim environment. Here are points I found interesting
+<ul>
+<li>There are anti-malware solutions installed on the victim&rsquo;s side. Windows Defender for Windows 10 and Symantec Antivirus for Windows 7. Even it&rsquo;s not EDR or next-gen AV solutions, there&rsquo;s still a bunch of work needed to do to evade the security protection.</li>
+<li>The payload used in this research is known, signed (required by .NET framework 4.5), delivered via e-mail as the <code>.appref-ms</code> filetype.</li>
+</ul>
+</li>
+<li>Microsoft ClickOnce with <code>.appref-ms</code> is the only application focused on this research. By the way, the researcher discovered other file extensions and executables that were still permitted for use as an OLE file (Object Linking &amp; Embedding).</li>
+<li>Microsoft ClickOnce is an application deployment technology that allows users to create self-updating applications with minimal user interaction. When an application is published as &ldquo;Online &amp; Offline Availability&rdquo;, it can be installed by the user remotely from a file share with a <code>.appref-ms</code> file generated and available with the user&rsquo;s start menu.</li>
+<li>The core technology of an application deployed by Microsoft ClickOnce is C#. Because Microsoft ClickOnce will prompt the user with an application install prompt and <code>.appref-ms</code> file will need to be generated, there are changes that need to be made to C# code to hide the execution of the payload and its malicious activity, such as deletion of start menu items (<code>.appref-ms</code> file) and lure the user with false errors.</li>
+<li>Another possible scenario for payload delivery is to use <code>.appref-ms</code> file for OLE delivery via phishing. It&rsquo;s also possible to deliver <code>.application</code> file (the file which will run the installation via Microsoft&rsquo;s ClickOnce) directly to target via hyperlink or HTA. For HTA, <em><code>Dfshim.dll</code> is the library that ClickOnce uses to manage application downloads and updates. Through a Visual Basic script, <code>rundll32.exe</code> can be called to invoke dfshim.dll and run the application</em></li>
+<li><code>.appref-ms</code> file could also be used to establish persistence on the compromised system by placing in startup folder as part of the deployment process.</li>
+<li>Due to an ability to check into the deployment server for a new version of installed application and run any updates without user interaction, the attacker can just deliver a non-malicious application in the initial installation phase to establishing a foothold, then update with a malicious one.</li>
+<li>Because the domain for application deployment and a C&amp;C domain name is different. The attacker has given a backup channel for command and control and deploys the application if it&rsquo;s detected with an ability to push a malicious application with a new C&amp;C.</li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/bhusa19-flying-a-false-flag/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/bhusa19-worm-charming/">
+                  <span class="button__text">BHUSA19: Worm Charming - Harvesting Malware Lures for Fun and Profit</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

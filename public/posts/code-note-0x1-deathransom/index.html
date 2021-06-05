@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Code Note 0x1: DeathRansom ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอตามจุดประสงค์ของแต่ละโครงการ
+ Code Note ฉบับแรกที่ 0x1 จะขอเริ่มต้นด้วยโค้ดจากโครงการ DeathRansom ซึ่งเป็นโครงการมัลแวร์เรียกค่าไถ่ที่ผู้พัฒนาชื่อ ReddyyZ มีการนำซอร์สโค้ดของโครงการมาเผยแพร่บน GitHub และไม่ได้มีระบุจุดประสงค์อย่างชัดเจนถึงการปล่อยซอร์สโค้ดในลักษณะนี้
+เนื่องจากซอร์สโค้ดของโครงการนั้นชัดเจนว่าสามารถนำมาประกอบร่างให้กลายเป็นมัลแวร์เรียกค่าไถ่ที่สามารถใช้งานจริงได้ แนวทางในการทำ Code Note ของเราวันนี้จึงจะเป็นการทำในแนวทางของการวิเคราะห์ภัยคุกคามหรือโปรแกรมที่เป็นอันตราย โดยพุ่งเป้าไปที่การอธิบายฟังก์ชันการทำงานของมัลแวร์ วิธีการทำมัลแวร์ใช้ในสร้างเงื่อนไขเพื่อขู่กรรโชกและเรียกค่าไถ่ วิธีการที่มัลแวร์ใช้ในการหลบหลีกการตรวจจับ และปัญหาซึ่งอาจเกิดขึ้นในการทำงานของมัลแวร์และอาจนำไปสู่ผลการกระทบที่คาดไม่ถึงได้
+รายละเอียดหัวข้อย่อยใน Code Note 0x1: DeathRansom มีตามรายการด้านล่างครับ
+ Project Overiew Functions  Anti-Analysis Files Encryption Post-Infection   Comments  Project Overiew ข้อมูลจาก GitHub แสดงให้เห็นว่าโครงการนี้ทั้งหมดถูกพัฒนาด้วยโค้ดในภาษา Python เวอร์ชัน 2 และ 3 โครงการนี้มีโครงสร้างของไฟล์และไดเรกทอรีตามแผนภาพด้านล่างครับ
+. ├── LICENSE ├── README.md ├── Ransom Request │ ├── main.py │ ├── main.ui │ ├── resources."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/code-note-0x1-deathransom/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Code Note 0x1: DeathRansom"/>
+<meta name="twitter:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในตอนแรกนี้จะเป็นการโค้ดจากโครงการมัลแวร์เรียกค่าไถ่แบบโอเพนซอร์ส DeathRansom มาทำการตรวจสอบและวิเคราะห์ครับ"/>
+
+
+
+<meta property="og:title" content="Code Note 0x1: DeathRansom" />
+<meta property="og:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในตอนแรกนี้จะเป็นการโค้ดจากโครงการมัลแวร์เรียกค่าไถ่แบบโอเพนซอร์ส DeathRansom มาทำการตรวจสอบและวิเคราะห์ครับ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/code-note-0x1-deathransom/" />
+<meta property="article:published_time" content="2020-05-23T12:46:17+07:00" />
+<meta property="article:modified_time" content="2020-05-23T12:46:17+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Code Note 0x1: DeathRansom</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-05-23
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <blockquote>
+<p><strong>Code Note</strong> คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอตามจุดประสงค์ของแต่ละโครงการ</p>
+</blockquote>
+<p>Code Note ฉบับแรกที่ 0x1 จะขอเริ่มต้นด้วยโค้ดจากโครงการ <strong>DeathRansom</strong> ซึ่งเป็นโครงการมัลแวร์เรียกค่าไถ่ที่ผู้พัฒนาชื่อ <strong>ReddyyZ</strong> มีการนำซอร์สโค้ดของโครงการมาเผยแพร่บน GitHub และไม่ได้มีระบุจุดประสงค์อย่างชัดเจนถึงการปล่อยซอร์สโค้ดในลักษณะนี้</p>
+<p>เนื่องจากซอร์สโค้ดของโครงการนั้นชัดเจนว่าสามารถนำมาประกอบร่างให้กลายเป็นมัลแวร์เรียกค่าไถ่ที่สามารถใช้งานจริงได้ แนวทางในการทำ Code Note ของเราวันนี้จึงจะเป็นการทำในแนวทางของการวิเคราะห์ภัยคุกคามหรือโปรแกรมที่เป็นอันตราย โดยพุ่งเป้าไปที่การอธิบายฟังก์ชันการทำงานของมัลแวร์ วิธีการทำมัลแวร์ใช้ในสร้างเงื่อนไขเพื่อขู่กรรโชกและเรียกค่าไถ่ วิธีการที่มัลแวร์ใช้ในการหลบหลีกการตรวจจับ และปัญหาซึ่งอาจเกิดขึ้นในการทำงานของมัลแวร์และอาจนำไปสู่ผลการกระทบที่คาดไม่ถึงได้</p>
+<p>รายละเอียดหัวข้อย่อยใน Code Note 0x1: DeathRansom มีตามรายการด้านล่างครับ</p>
+<ul>
+<li><a href="#project-overiew">Project Overiew</a></li>
+<li><a href="#functions">Functions</a>
+<ul>
+<li><a href="#anti-analysis">Anti-Analysis</a></li>
+<li><a href="#files-encryption">Files Encryption</a></li>
+<li><a href="#post-infection">Post-Infection</a></li>
+</ul>
+</li>
+<li><a href="#comments">Comments</a></li>
+</ul>
+<h1 id="project-overiew">Project Overiew</h1>
+<p>ข้อมูลจาก GitHub แสดงให้เห็นว่าโครงการนี้ทั้งหมดถูกพัฒนาด้วยโค้ดในภาษา Python เวอร์ชัน 2 และ 3 โครงการนี้มีโครงสร้างของไฟล์และไดเรกทอรีตามแผนภาพด้านล่างครับ</p>
+<pre><code>.
+├── LICENSE
+├── README.md
+├── Ransom Request
+│   ├── main.py
+│   ├── main.ui
+│   ├── resources.qrc
+│   └── resources_rc.py
+├── deathransom.py
+├── modules
+│   ├── __init__.py
+│   ├── bypass
+│   │   ├── __init__.py
+│   │   ├── anti_debugger.py
+│   │   ├── anti_sandbox.py
+│   │   └── anti_vm.py
+│   ├── generate_key.py
+│   ├── learn_key.py
+│   └── rsa.py
+├── requirements.txt
+└── time_script.py
+</code></pre><p>การตรวจสอบไฟล์แต่ละรายการที่ปรากฎในโครงสร้างของโครงการทำให้เรารู้หน้าที่และจุดประสงค์ของโค้ดที่อยู่ในไฟล์ ได้แก่</p>
+<ul>
+<li>ไฟล์ในไดเรกทอรี <code>Ransom Request</code> รับผิดชอบการแสดงหน้าต่าง ransom note หลังจากที่ DeathRansom ดำเนินการเสร็จ
+<ul>
+<li>ไฟล์ <code>main.py</code> จัดเก็บโค้ดซึ่งควบคุมลักษณะของหน้าต่าง ransom note โดยการใช้ PyQt เป็นผลมาจากการนำไฟล์ <code>main.ui</code> มาทำการแปลง</li>
+<li>ไฟล์ <code>main.ui</code> โค้ดใน XML ซึ่งเป็นผลลัพธ์มาจากการใช้ Qt Designer</li>
+<li>ไฟล์ <code>resources.qrc</code> เก็บการอ้างอิงไปยัง resource อื่นๆ ที่ใช้ในโครงการ</li>
+<li>ไฟล์ <code>resources_rc.py</code> โค้ดซึ่งจัดเก็บข้อมูล resource จริงๆ ในลักษณะไบนารีของโครงการเอาไว้ เป็นผลมาจากการนำไฟล์ <code>resources.qrc</code> มาทำการแปลง</li>
+</ul>
+</li>
+<li>ไฟล์ <code>deathransom.py</code> จัดเก็บโค้ดการทำงานหลักของ DeathRansom โดยประกอบไปด้วยโค้ดซึ่งสั่งการให้ฟังก์ชัน Anti-analysis ทำงาน, โค้ดที่ทำให้มีการสร้างกุญแจสำหรับเข้ารหัสและทำการเข้ารหัสไฟล์ และโค้ดที่สั่งการฟังก์ชันซึ่งรับผิดชอบการสร้าง ransom note</li>
+<li>ไฟล์ในไดเรกทอรี <code>modules</code>: จัดเก็บโค้ดซึ่งเป็นโมดูลอื่นๆ ของ DeathRansom
+<ul>
+<li>ไฟล์ในไดเรกทอรี <code>bypass</code>: จัดเก็บโค้ดที่เกี่ยวกับการ Anti-analysis
+<ul>
+<li>ไฟล์ <code>anti_debugger.py</code> โค้ดสำหรับตรวจจับว่ามีการใช้งาน debugger อยู่หรือไม่ผ่านฟังก์ชัน <code>IsDebuggerPresent()</code></li>
+<li>ไฟล์ <code>anti_sandbox.py</code> รวมฟังก์ชันการตรวจจับว่าโค้ดทำงานอยู่ใน sandbox หรือไม่</li>
+<li>ไฟล์ <code>anti_vm.py</code> เก็บฟังก์ชันการตรวจจับว่าโค้ดทำงานอยู่ใน virtualized environment หรือไม่</li>
+</ul>
+</li>
+<li>ไฟล์ <code>generate_key.py</code> เป็นไฟล์ซึ่งเก็บชุดคำสั่งสำหรับสร้างคู่กุญแจด้วยอัลกอริธึม RSA แบบ 4096 บิต</li>
+<li>ไฟล์ <code>learn_key.py</code> เก็บฟังก์ชันซึ่งสร้าง HTTP GET request ไปยังพาธบนอินเตอร์เน็ตเพื่อเอาข้อมูลกุญแจสาธารณะของผู้พัฒนามัลแวร์</li>
+<li>ไฟล์ <code>rsa.py</code> เก็บฟังก์ชันสำหรับกระบวนการเข้ารหัสไฟล์</li>
+</ul>
+</li>
+<li>ไฟล์ <code> time_script.py</code>: เก็บโค้ดจับเวลาซึ่งจะทำการลบไฟล์ที่ถูกเข้ารหัสเมื่อถึงเวลาที่กำหนด</li>
+</ul>
+<p>อ้างอิงจากไฟล์ <code>README.md</code> กระบวนการ build โครงการนี้จะประกอบไปด้วยขั้นตอนดังต่อไปนี้</p>
+<ol>
+<li>ลง dependencies ตามที่ปรากฎในไฟล์ <code>requirements.txt</code> และลง <code>PyQt5</code></li>
+<li>ผู้ควบคุมมัลแวร์ทำการสร้างคู่กุญแจสาธารณะ และทำการอัปโหลดกุญแจสาธารณะไปยังบริการซึ่งมัลแวร์สามารถเข้าไปอ่านค่าของกุญแจสาธารณะได้ และให้เปลี่ยนตำแหน่งภายในสคริปต์ให้สอดคล้องกับตำแหน่งที่อัปโหลดไฟล์ไปไว้ด้วย</li>
+<li>ใช้โมดูล <code>pyinstaller</code> ในการเปลี่ยนโค้ดในภาษาไพธอนไปเป็นไฟล์ portable executable โดยต้องเปลี่ยนทั้งไฟล์ <code>time_script.py</code> และ <code>main.py</code> ในพาธ <code>Ransom Request</code></li>
+<li>อัปโหลดไฟล์ portable executable จากขั้นตอนที่ 3 ไปไว้ในบริการอัปโหลดไฟล์ที่มัลแวร์สามารถดาวโหลดมาแสดงได้ แก้ไขสคริปต์เพื่อระบุพาธที่จะให้มัลแวร์ทำการดาวโหลด</li>
+<li>ใช้โมดูล <code>pyinstaller</code> ในการเปลี่ยนโค้ดในภาษาไพธอนของไฟล์ <code>deathransom.py</code> ไปเป็นไฟล์ portable executable และนำผลลัพธ์ที่ได้ไปเอ็กซีคิวต์ในระบบเป้าหมาย</li>
+</ol>
+<h1 id="functions">Functions</h1>
+<h2 id="anti-analysis">Anti-Analysis</h2>
+<p>ฟังก์ชัน <code>anti_disassembly()</code> ยังไม่มีลักษณะของโค้ดที่ป้องกันการถูก disassembly ได้จริง</p>
+<p>ฟังก์ชันในกลุ่มของการตรวจสอบว่าโปรแกรมถูกรันอยู่ใน sandbox หรือไม่ประกอบไปด้วยการตรวจสอบ 6 เงื่อนไข ซึ่งค่าเริ่มต้นในโค้ดของโครงการไม่ได้ตั้งค่าให้เช็คทุกเงื่อนไข โดย 6 เงื่อนไขที่จะมีการตรวจสอบได้แก่</p>
+<ol>
+<li>ใช้การตรวจสอบหาโปรเซสจากรายการของโปรเซสที่มักพบใน sandbox หรือที่เกี่ยวข้องกับการวิเคราะห์มัลแวร์ด้วยฟังก์ชัน <code>check_sandbox_in_process()</code> กระบวนการนี้ใช้การตรวจสอบจากผลของการใช้คำสั่ง <code>tasklist</code> ไม่ได้เป็นการตรวจสอบจากผลลัพธ์ของการใช้ WinAPI</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check_sandbox_in_process</span>():
+    EvidenceOfSandbox <span style="color:#f92672">=</span> []
+    sandbox_processes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;vmsrvc&#34;</span>, <span style="color:#e6db74">&#34;tcpview&#34;</span>, <span style="color:#e6db74">&#34;wireshark&#34;</span>, <span style="color:#e6db74">&#34;visual basic&#34;</span>, <span style="color:#e6db74">&#34;fiddler&#34;</span>, <span style="color:#e6db74">&#34;vmware&#34;</span>, <span style="color:#e6db74">&#34;vbox&#34;</span>, <span style="color:#e6db74">&#34;process explorer&#34;</span>, <span style="color:#e6db74">&#34;autoit&#34;</span>, <span style="color:#e6db74">&#34;vboxtray&#34;</span>, <span style="color:#e6db74">&#34;vmtools&#34;</span>, <span style="color:#e6db74">&#34;vmrawdsk&#34;</span>, <span style="color:#e6db74">&#34;vmusbmouse&#34;</span>, <span style="color:#e6db74">&#34;vmvss&#34;</span>, <span style="color:#e6db74">&#34;vmscsi&#34;</span>, <span style="color:#e6db74">&#34;vmxnet&#34;</span>, <span style="color:#e6db74">&#34;vmx_svga&#34;</span>, <span style="color:#e6db74">&#34;vmmemctl&#34;</span>, <span style="color:#e6db74">&#34;df5serv&#34;</span>, <span style="color:#e6db74">&#34;vboxservice&#34;</span>, <span style="color:#e6db74">&#34;vmhgfs&#34;</span>, <span style="color:#e6db74">&#34;vmtoolsd&#34;</span>
+    runningProcess <span style="color:#f92672">=</span> []
+    <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>popen(<span style="color:#e6db74">&#34;tasklist&#34;</span>)<span style="color:#f92672">.</span>read()<span style="color:#f92672">.</span>splitlines()[<span style="color:#ae81ff">4</span>:]:
+        runningProcess<span style="color:#f92672">.</span>append(item<span style="color:#f92672">.</span>split())
+    <span style="color:#66d9ef">for</span> process <span style="color:#f92672">in</span> runningProcess:
+        <span style="color:#66d9ef">for</span> sandbox_process <span style="color:#f92672">in</span> sandbox_processes:
+            <span style="color:#66d9ef">if</span> sandbox_process <span style="color:#f92672">in</span> process:
+                <span style="color:#66d9ef">if</span> process <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> EvidenceOfSandbox:
+                    EvidenceOfSandbox<span style="color:#f92672">.</span>append(process)
+                    <span style="color:#66d9ef">break</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> EvidenceOfSandbox:
+        <span style="color:#66d9ef">return</span> True
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> False
+</code></pre></div><ol start="2">
+<li>ฟังก์ชัน <code>check_sleep_acceleration()</code> ทำงานและส่งผลให้มัลแวร์จะหยุดกระบวนการทำงานเป็นเวลา 60 วินาที หลังจากช่วงเวลาดังกล่าวแล้วมัลแวร์จะทำการตรวจสอบเวลาจากเซิร์ฟเวอร์ NTP เพื่อระบุหาการทำ sleep acceleration ของ sandbox</li>
+</ol>
+<blockquote>
+<p>Sleep acceleration เป็นฟีเจอร์ของ sandbox บางประเภทซึ่งทำหน้าปลอมเวลาของระบบเพื่อเร่งให้มัลแวร์ซึ่งกำลังถูกวิเคราะห์อยู่และมีการหยุดการทำงานในช่วงเวลาหนึ่งเอาไว้นั้นเชื่อว่าเวลาได้ผ่านไปแล้ว การตรวจสอบการมีอยู่ของฟีเจอร์นี้จึงมักจะถูกดำเนินการโดยการเปรียบเทียบกับแหล่งที่มาของเวลาจากภายนอก แทนที่จะอ่านค่าจากของระบบซึ่งอาจถูกปลอมแปลงได้</p>
+</blockquote>
+<ol start="3">
+<li>ฟังก์ชัน <code>display_prompt()</code> ทำงาน โดยฟังก์ชันนี้มีสมมติฐานว่าในสภาพแวดล้อมซึ่งเป็น sandbox นั้นจะไม่มีการควบคุมจากผู้ใช้งาน ฟังก์ชันนี้จึงรับหน้าที่ในการสร้างหน้าต่าง pop-up ขึ้นมาและตรวจสอบว่าเกิดการมีปฏิสัมพันธ์กับหน้าต่างนี้หรือไม่</li>
+<li>ฟังก์ชัน <code>check_idle_time()</code> ทำงาน ฟังก์ชันนี้ใช้สมมติฐานเดียวกับฟังก์ชัน <code>display_prompt()</code> คือการตรวจสอบว่าภายในช่วงเวลาที่กำหนดนั้น ผู้ใช้งานมีปฏิสัมพันธ์กับระบบใดไม่ว่าจะเป็นลักษณะใดๆ หรือไม่ โดยมัลแวร์มีการกำหนดไว้ว่าผู้ใช้งานจะต้องมีปฏิสัมพันธ์ใดๆ กับระบบในช่วงระยะเวลาไม่เกิน 60 วินาที</li>
+<li>ฟังก์ชัน <code>check_click()</code> ทำงาน ฟังก์ชันใช้วิธีการตรวจสอบจำนวนการคลิกเมาส์ที่เกิดขึ้นเพื่อยืนยันว่าผู้ใช้งานมีปฏิสัมพันธ์กับระบบ โดยมีเงื่อนไขว่าผู้ใช้งานจะต้องคลิกเป็นจำนวน 10 ครั้งมัลแวร์ถึงจะเริ่มทำงาน</li>
+<li>ฟังก์ชัน <code>check_cursor_pos()</code> ทำงาน ฟังก์ชันนี้ตรวจสอบว่ามีการเลื่อนของเคอร์เซอร์หรือไม่เพื่อระบุการมีปฏิสัมพันธ์ของผู้ใช้กับระบบ</li>
+</ol>
+<p>ในส่วนต่อมามัลแวร์จะเรียกใช้ฟังก์ชัน <code>anti_debugger.check()</code> เพื่อตรวจสอบหาการมีอยู่ของ debugger ผ่านทางการเรียกใช้ฟังก์ชัน <code>windll.kernel32.IsDebuggerPresent()</code></p>
+<p>ฟังก์ชัน <code>anti_vm.check()</code> ทำงานเป็นฟังก์ชันสุดท้าย โดยฟังก์ชันใช้วืธีการระบุว่าโปรแกรมมัลแวร์ทำงานอยู้ใน virtualized environment หรือไม่ด้วยการตรวจสอบ MAC address ของเน็ตเวิร์กอินเตอร์เฟสว่ามีค่าตรงกับรายการที่ฝังมากับมัลแวร์หรือไม่ ค่า MAC address เหล่านี้โดยส่วนใหญ่เป็นของ MAC address ของซอฟต์แวร์ virtualization ซึ่งค่อนข้างตายตัวทั้งหมด</p>
+<h2 id="files-encryption">Files Encryption</h2>
+<p>ส่วนของโค้ดซึ่งเกี่ยวข้องกับการเข้ารหัสไฟล์จะถูกดำเนินการถัดมาหลังจากที่มัลแวร์ผ่านการตรวจสอบระบบเรียบร้อยแล้วในขั้นตอนก่อนหน้า โดยมัลแวร์จะถูกระบุให้ดำเนินการค้นหาไฟล์และเข้ารหัสเฉพาะภายใต้พาธ <code>%USERPROFILE%</code> รวมไปถึงมีการกำหนดนามสกุลของไฟล์ที่จะเข้ารหัสเอาไว้ด้วย</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">valid_extension <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;.pl&#34;</span>,<span style="color:#e6db74">&#34;.7z&#34;</span>,<span style="color:#e6db74">&#34;.rar&#34;</span>,<span style="color:#e6db74">&#34;.m4a&#34;</span>,<span style="color:#e6db74">&#34;.wma&#34;</span>,<span style="color:#e6db74">&#34;.avi&#34;</span>,<span style="color:#e6db74">&#34;.wmv&#34;</span>,<span style="color:#e6db74">&#34;.d3dbsp&#34;</span>,<span style="color:#e6db74">&#34;.sc2save&#34;</span>,<span style="color:#e6db74">&#34;.sie&#34;</span>,<span style="color:#e6db74">&#34;.sum&#34;</span>,<span style="color:#e6db74">&#34;.bkp&#34;</span>,<span style="color:#e6db74">&#34;.flv&#34;</span>,<span style="color:#e6db74">&#34;.js&#34;</span>,<span style="color:#e6db74">&#34;.raw&#34;</span>,<span style="color:#e6db74">&#34;.jpeg&#34;</span>,<span style="color:#e6db74">&#34;.tar&#34;</span>,<span style="color:#e6db74">&#34;.zip&#34;</span>,<span style="color:#e6db74">&#34;.tar.gz&#34;</span>,<span style="color:#e6db74">&#34;.cmd&#34;</span>,<span style="color:#e6db74">&#34;.key&#34;</span>,<span style="color:#e6db74">&#34;.DOT&#34;</span>,<span style="color:#e6db74">&#34;.docm&#34;</span>,<span style="color:#e6db74">&#34;.txt&#34;</span>, <span style="color:#e6db74">&#34;.doc&#34;</span>, <span style="color:#e6db74">&#34;.docx&#34;</span>, <span style="color:#e6db74">&#34;.xls&#34;</span>, <span style="color:#e6db74">&#34;.xlsx&#34;</span>, <span style="color:#e6db74">&#34;.ppt&#34;</span>, <span style="color:#e6db74">&#34;.pptx&#34;</span>, <span style="color:#e6db74">&#34;.odt&#34;</span>, <span style="color:#e6db74">&#34;.jpg&#34;</span>, <span style="color:#e6db74">&#34;.png&#34;</span>, <span style="color:#e6db74">&#34;.csv&#34;</span>, <span style="color:#e6db74">&#34;.sql&#34;</span>, <span style="color:#e6db74">&#34;.mdb&#34;</span>, <span style="color:#e6db74">&#34;.sln&#34;</span>, <span style="color:#e6db74">&#34;.php&#34;</span>, <span style="color:#e6db74">&#34;.asp&#34;</span>, <span style="color:#e6db74">&#34;.aspx&#34;</span>, <span style="color:#e6db74">&#34;.html&#34;</span>, <span style="color:#e6db74">&#34;.xml&#34;</span>, <span style="color:#e6db74">&#34;.psd&#34;</span>, <span style="color:#e6db74">&#34;.bmp&#34;</span>]
+</code></pre></div><p>มัลแวร์จะไม่เข้ารหัสไฟล์ที่ปรากฎนามสกุลไฟล์เป็น <code>.wannadie</code> ซึ่งหมายถึงไฟล์ที่ถูกเข้ารหัสโดย DeathRansom ไปแล้ว</p>
+<p>กระบวนการเข้ารหัสไฟล์จะเริ่มต้นโดยการเรียกใช้ฟังก์ชัน <code>rsa.encryptar()</code> ซึ่งมีการระบุพารามิเตอร์ 2 รายการ ได้แก่ พาธของไฟล์และค่ากุญแจสาธารณะของผู้โจมตีซึ่งถูกดาวโหลดมาจากอินเตอร์เน็ต</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encryptar</span>(FileName,public_key):
+    <span style="color:#66d9ef">try</span>:
+        public_key <span style="color:#f92672">=</span> RSA<span style="color:#f92672">.</span>importKey(public_key)
+        encryptor <span style="color:#f92672">=</span> PKCS1_OAEP<span style="color:#f92672">.</span>new(public_key)
+        OutputFile <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(FileName), <span style="color:#e6db74">&#34;(encrypted)&#34;</span> <span style="color:#f92672">+</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>basename(FileName) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.wannadie&#39;</span>)
+        <span style="color:#66d9ef">with</span> open(FileName,<span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> initial_file:
+            text <span style="color:#f92672">=</span> initial_file<span style="color:#f92672">.</span>read()
+            initial_file<span style="color:#f92672">.</span>close()
+            encrypted <span style="color:#f92672">=</span> encryptor<span style="color:#f92672">.</span>encrypt(text)
+        <span style="color:#66d9ef">with</span> open(FileName,<span style="color:#e6db74">&#39;wb&#39;</span>) <span style="color:#66d9ef">as</span> output_file:
+            output_file<span style="color:#f92672">.</span>write(encrypted)
+            output_file<span style="color:#f92672">.</span>close()
+        os<span style="color:#f92672">.</span>rename(FileName,OutputFile)
+        <span style="color:#66d9ef">return</span> True
+    <span style="color:#66d9ef">except</span>:
+        <span style="color:#66d9ef">return</span> False
+</code></pre></div><p>ภายใต้ฟังก์ชัน <code>rsa.encryptar()</code> มัลแวร์เรียกค่าไถ่ DeathRansom จะดำเนินการเข้ารหัสไฟล์ตามขั้นตอนดังนี้</p>
+<ol>
+<li>มัลแวร์นำกุญแจสาธารณะของผู้โจมตีมาผ่านฟังก์ชันเพื่อสร้าง object สำหรับการเข้ารหัสข้อมูลด้วยอัลกอริธึม RSA แบบ PKCS#1 OAEP</li>
+<li>สร้างสตริงซึ่งเก็บชื่อไฟล์ใหม่หลังจากที่ถูกเข้ารหัสแล้ว</li>
+<li>เปิดไฟล์ตามพาธที่ถูกส่งเข้ามา อ่านเนื้อหาในไฟล์ หลังจากนั้นใช้ object ซึ่งเกิดขึ้นจากการนำเข้ากุญแจสาธารณะมาทำการเข้ารหัสเนื้อหาไฟล์</li>
+<li>เปิดไฟล์เดิมใหม่อีกครั้ง แล้วเขียนข้อมูลที่ถูกเข้ารหัสแล้วทับลงไป</li>
+<li>เปลี่ยนชื่อไฟล์เป็นชื่อใหม่ตามที่ได้สร้างไว้ในขั้นตอนที่ 2</li>
+</ol>
+<p>ถ้าเกิดข้อผิดพลาดใดๆ ในขั้นตอนเหล่านี้ กระบวนการเข้ารหัสไฟล์ในพาธดังกล่าวนี้จะไม่เกิดขึ้นทันที</p>
+<h2 id="post-infection">Post-Infection</h2>
+<p>หลังจากกระบวนเข้ารหัสไฟล์เสร็จสิ้น มัลแวร์จะมีการสร้างไฟล์สคริปต์ไว้ที่พาธ <code>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\delete_ransom.bat</code> ไฟล์ดังกล่าวจะมีจัดเก็บคำสั่งสำหรับการลบไฟล์โปรแกรมของมัลแวร์เอาไว้</p>
+<p>หลังจากนั้นมัลแวร์จะทำการดาวโหลดโปรแกรมซึ่งจะทำการแสดง ransom note มาทำงานในระบบด้วยฟังก์ชัน <code>download_ransomware_request</code></p>
+<p>ท้ายที่สุดมัลแวร์จะทำการป้องกันไม่ให้ผู้ใช้สามารถเปิดใช้งานโปรแกรม Registry editor, Task manager และ Command prompt ได้ ก่อนจะบังคับให้ระบบทำรีสตาร์ทตัวเอง</p>
+<h1 id="comments">Comments</h1>
+<ol>
+<li>โครงการนี้ใช้ไลบรารีในการอิมพลีเมนต์อัลกอริธึมการเข้ารหัสและถอดรหัสซ้ำซ้อนกัน โดยมีการปรากฎของไลบรารีทั้ง <code>Crypto</code> และ <code>pycryptodome</code> ในไฟล์ <code>requirements.txt</code> ซึ่งสามารถเลือกใช้อย่างใดอย่างหนึ่งได้ อีกทั้งไม่มีการระบุโมดูล <code>PyQt5</code> ในไฟล์ <code>requirements.txt</code></li>
+<li>กระบวนการเข้ารหัสไม่จำเป็นต้องที่จะต้องมีการดาวโหลดกุญแจสาธารณะของผู้ควบคุมัลแวร์ก่อน เนื่องจากหากกระบวนการดาวโหลดไม่สำเร็จหรือถูกตรวจจับได้ก่อน มัลแวร์จะไม่สามารถทำง่นได้ มัลแวร์เรียกค่าไถ่อย่าง WannaCry ใช้วิธีการฝังค่ากุญแจสาธารณะของผู้โจมตีเข้าไปไว้ในโค้ดของมัลแวร์เลย</li>
+<li>โครงการไม่ได้รวมหน้าต่าง Ransom note ไว้ในโค้ดของมัลแวร์ทำให้มีขั้นตอนเพิ่มในการเตรียมการที่ไม่จำเป็นและไม่สมเหตุสมผล</li>
+<li>การตรวจสอบว่าโปรแกรมทำงานอยู่ใน sandbox หรือไม่ด้วยการตรวจสอบจากรายการโปรเซสเป็นวิธีการตรวจสอบที่ไม่สมบูรณ์  malware analyst สามารถเปลี่ยนชื่อของโปรแกรมซึ่งจะส่งผลให้ชื่อโปรเซสเปลี่ยนไปได้</li>
+<li>มีพาธของโค้ดซึ่งจะไม่ทำงานเนื่องจากโค้ดถูกบังคับให้จบการทำงานก่อน โดยเฉพาะอย่างยิ่งในส่วนของกระบวนการตรวจสอบหาความพยายามวิเคราะห์โปรแกรม</li>
+<li><strong>การเข้ารหัสข้อมูลในไฟล์เพื่อเรียกค่าไถ่โดยการใช้ค่ากุญแจสาธารณะนั้นจะทำให้มัลแวร์ทำงานได้ช้าลง และหากคู่ของกุญแจสาธารณะถูกส่งมาเหยื่อเพื่อถอดรหัสไฟล์ เหยื่อจะสามารถทำการคัดลอกค่าดังกล่าวและแจกจ่ายไปยังเหยื่อคนอื่นๆ เพื่อให้สามารถถอดรหัสไฟล์ได้โดยที่ไม่ต้องจ่ายทันที</strong></li>
+</ol>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/the-incident-response-hierarchy-of-needs/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">The Incident Response Hierarchy of Needs</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/cve-2020-0796-scanner-scripts-issues/">
+                  <span class="button__text">Problems in CVE-2020-0796 Scanner Scripts</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        SHA-1 is a Shambles ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="ยังไม่ได้อ่านเปเปอร์ SHA-1 is a Shambles จนเข้าใจแต่ก็พอได้ fact บางอย่างซึ่งคิดว่าน่าจะเอาไปใช้เพื่อเป็นเหตุผลหรือคำอธิบายว่ามันเกิดอะไรขึ้นและเราควรทำยังไงต่อได้ ดังนั้นจึงขอเอามาทดไว้เป็นอีกซีรีส์หนึ่งของบล็อกชุดกระดาษทดด้านล่างครับ
+Cryptographic Hash Properties เวลาเราพูดถึงฟังก์ชัน hash เราจะกร่อนคำคุณศัพท์ข้างหน้าโดยทั่วไปกันจนชินจนบางทีก็อาจลืมไปถึงคุณสมบัติสำคัญที่เจ้าฟังก์ชัน hash มันพึงมี โดยคำคุณศัพท์ข้างหน้าที่หายไปนั้นคือคำว่า cryptographic หรือ secure ซึ่งในที่นี้จะขอย่อเป็น CHF เพื่อความง่ายในการพิมพ์ครับ
+อย่างที่คนซึ่งสามารถแยกได้ว่าอัลกอริธึมอย่าง MD5/SHA1 ไม่ใช่การเข้ารหัส (encryption) ทราบกันดี CHF มีคุณสมบัติซึ่งจำเป็นต้องมีถึงจะถูกเรียกได้ว่าเป็น CHF อยู่หลัก 3 อย่าง ได้แก่
+ คุณสมบัติ Pre-image resistance (ขอย่อว่า PIR) เป็นคุณสมบัติที่ระบุว่า ถ้ากำหนด \(H\) คือฟังก์ชันแฮช, \(m\) คือ message หรือข้อความ, และ \(h\) คือค่าแฮชซึ่งเป็นผลลัพธ์จากการเอา message ไปผ่านฟังก์ชันแฮชหรือ \(h = H(m)\) มันจะต้องยากที่จะหาข้อความอันเดิมอันนั้นก่อนผ่านฟังก์ชันแฮชโดยที่เรารู้แค่ค่าแฮช คุณสมบัติ Second pre-image resistance (ขอย่อว่า SPIR) เป็นคุณสมบัติที่ระบุว่า ถ้าเรามี \(m_1\) คือ message และ \(h_1\) คือค่าแฮชของ \(H(m_1)\) มันจะต้องยากที่จะหา \(m_2\) ที่ทำให้ได้ \(h_1\) จาก \(H(m_1)\) และต้องเป็น \(h_1\) ของ \(m_1\) นั้น คุณสมบัติ Collision resistance (ขอย่อว่า CR) เป็นคุณสมบัติว่าจะต้องเป็นเรื่องยากในการคู่ random message ใดๆ คือ \(m_1\) และ \(m_2\) ที่ทำให้ \(H(m_1) = H(m_2)\)  เวลาเราบอกว่าเป็นเรื่องยาก คำว่ายากมีความหมายซ่อนอยู่ในตัวมันอีกหลายความหมายซึ่งในทางทฤษฎีส่วนใหญ่จะใช้คณิตศาสตร์มาพิสูจน์"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/sha1-is-a-shambles/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SHA-1 is a Shambles"/>
+<meta name="twitter:description" content="ยังไม่ได้อ่านเปเปอร์ SHA-1 is a Shambles จนเข้าใจแต่ก็พอได้ fact บางอย่างซึ่งคิดว่าน่าจะเอาไปใช้เพื่อเป็นเหตุผลหรือคำอธิบายว่ามันเกิดอะไรขึ้นและเราควรทำยังไงต่อได้ ดังนั้นจึงขอเอามาทดไว้เป็นอีกซีรีส์หนึ่งของบล็อกชุดกระดาษทดด้านล่างครับ"/>
+
+
+
+<meta property="og:title" content="SHA-1 is a Shambles" />
+<meta property="og:description" content="ยังไม่ได้อ่านเปเปอร์ SHA-1 is a Shambles จนเข้าใจแต่ก็พอได้ fact บางอย่างซึ่งคิดว่าน่าจะเอาไปใช้เพื่อเป็นเหตุผลหรือคำอธิบายว่ามันเกิดอะไรขึ้นและเราควรทำยังไงต่อได้ ดังนั้นจึงขอเอามาทดไว้เป็นอีกซีรีส์หนึ่งของบล็อกชุดกระดาษทดด้านล่างครับ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/sha1-is-a-shambles/" />
+<meta property="article:published_time" content="2020-01-21T19:04:00+07:00" />
+<meta property="article:modified_time" content="2020-01-21T19:04:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">SHA-1 is a Shambles</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-01-21
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>ยังไม่ได้อ่านเปเปอร์ <a href="https://sha-mbles.github.io/">SHA-1 is a Shambles</a> จนเข้าใจแต่ก็พอได้ fact บางอย่างซึ่งคิดว่าน่าจะเอาไปใช้เพื่อเป็นเหตุผลหรือคำอธิบายว่ามันเกิดอะไรขึ้นและเราควรทำยังไงต่อได้ ดังนั้นจึงขอเอามาทดไว้เป็นอีกซีรีส์หนึ่งของบล็อกชุดกระดาษทดด้านล่างครับ</p>
+
+<h2 id="cryptographic-hash-properties">Cryptographic Hash Properties</h2>
+
+<p>เวลาเราพูดถึงฟังก์ชัน hash เราจะกร่อนคำคุณศัพท์ข้างหน้าโดยทั่วไปกันจนชินจนบางทีก็อาจลืมไปถึงคุณสมบัติสำคัญที่เจ้าฟังก์ชัน hash มันพึงมี โดยคำคุณศัพท์ข้างหน้าที่หายไปนั้นคือคำว่า cryptographic หรือ secure ซึ่งในที่นี้จะขอย่อเป็น CHF เพื่อความง่ายในการพิมพ์ครับ</p>
+
+<p>อย่างที่คนซึ่งสามารถแยกได้ว่าอัลกอริธึมอย่าง MD5/SHA1 ไม่ใช่การเข้ารหัส (encryption) ทราบกันดี CHF มีคุณสมบัติซึ่งจำเป็นต้องมีถึงจะถูกเรียกได้ว่าเป็น CHF อยู่หลัก 3 อย่าง ได้แก่</p>
+
+<ol>
+<li>คุณสมบัติ <strong>Pre-image resistance</strong> (ขอย่อว่า PIR) เป็นคุณสมบัติที่ระบุว่า ถ้ากำหนด <span  class="math">\(H\)</span> คือฟังก์ชันแฮช, <span  class="math">\(m\)</span> คือ message หรือข้อความ, และ <span  class="math">\(h\)</span> คือค่าแฮชซึ่งเป็นผลลัพธ์จากการเอา message ไปผ่านฟังก์ชันแฮชหรือ <span  class="math">\(h = H(m)\)</span> มันจะต้องยากที่จะหาข้อความอันเดิมอันนั้นก่อนผ่านฟังก์ชันแฮชโดยที่เรารู้แค่ค่าแฮช</li>
+<li>คุณสมบัติ <strong>Second pre-image resistance</strong> (ขอย่อว่า SPIR) เป็นคุณสมบัติที่ระบุว่า ถ้าเรามี <span  class="math">\(m_1\)</span> คือ message และ <span  class="math">\(h_1\)</span> คือค่าแฮชของ <span  class="math">\(H(m_1)\)</span> มันจะต้องยากที่จะหา <span  class="math">\(m_2\)</span> ที่ทำให้ได้ <span  class="math">\(h_1\)</span> จาก <span  class="math">\(H(m_1)\)</span> และต้องเป็น <span  class="math">\(h_1\)</span> ของ <span  class="math">\(m_1\)</span> นั้น</li>
+<li>คุณสมบัติ <strong>Collision resistance</strong> (ขอย่อว่า CR) เป็นคุณสมบัติว่าจะต้องเป็นเรื่องยากในการคู่ random message ใดๆ คือ <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> ที่ทำให้ <span  class="math">\(H(m_1) = H(m_2)\)</span></li>
+</ol>
+
+<p>เวลาเราบอกว่า<strong>เป็นเรื่องยาก</strong> คำว่ายากมีความหมายซ่อนอยู่ในตัวมันอีกหลายความหมายซึ่งในทางทฤษฎีส่วนใหญ่จะใช้คณิตศาสตร์มาพิสูจน์</p>
+
+<p>SPIR และ CR ซึ่งมีนิยามใกล้เคียงกันนั้นมีจุดแตกต่างกันอยู่ที่ทำให้คุณสมบัติ SPIR ถูกเรียกว่าเป็น Weak collision resistance ส่วน CR ถูกเรียกว่าเป็น Strong collision resistance ซึ่งจุดแตกต่างอยู่ที่ <span  class="math">\(m\)</span> ที่ใช้กับฟังก์ชันแฮช โดยในกรณีของ SPIR นั้น <span  class="math">\(m_1\)</span> คือตัวตั้งเพื่อนำไปสู่การหา <span  class="math">\(m_2\)</span> ที่มีค่า <span  class="math">\(h\)</span> เดียวกันซึ่งทำให้ผลลัพธ์ที่เกี่ยวข้องกับการที่ <span  class="math">\(m_1\)</span> เป็นค่านั้นเสมอ แต่ในกรณีของ CR นั้น <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> สามารถเป็นค่าใดๆ ก็ได้ที่แตกต่างกันซึ่งนำไปสู่การผ่านฟังก์ชันแฮชและทำให้ได้ค่าแฮชเดียวกัน</p>
+
+<p>เนื่องจากฟังก์ชันที่เราเรียกว่า CHF นั้นเป็น deterministic function  ซึ่งหมายความว่า <span  class="math">\(m_1\)</span> ซึ่งผ่านฟังก์ชัน <span  class="math">\(H\)</span> จะทำให้ได้ <span  class="math">\(h_1\)</span> เสมอ และ <span  class="math">\(m_2\)</span> ซึ่งผ่านฟังก์ชัน <span  class="math">\(H\)</span> จะทำให้ได้ <span  class="math">\(h_2\)</span> เสมอจะเป็น <span  class="math">\(h_1\)</span> หรือ <span  class="math">\(h_n\)</span> ที่ไม่ใช่ <span  class="math">\(h_2\)</span> ไม่ได้ ฟังก์ชันแฮชในลักษณะนี้จึงมีปัญหาซึ่งไม่สามารถหลีกเลี่ยงให้ไม่เกิดขึ้นได้เสมอคือปัญหาที่ <span  class="math">\(h\)</span> ทั้งหมดที่เป็นไปได้จะถูกใช้จนหมด และนั่นคือจังหวะที่การชน (collision) เกิดขึ้น</p>
+
+<p>ถ้าเรามีฟังก์ชันแฮชหนึ่งฟังก์ชัน แล้วเราพยายามใส่ <span  class="math">\(m\)</span> ในทุกรูปแบบที่เป็นไปได้จนถึง &quot;ขีดสุด&quot; ของฟังก์ชันแฮชที่มันจะสร้าง <span  class="math">\(h\)</span> สำหรับค่า <span  class="math">\(m\)</span> ซักค่าหนึ่งได้ ฟังก์ชันอาจสร้างค่า <span  class="math">\(h\)</span> ที่เคยสร้างไปแล้ว ทำลายคุณสมบัติ PIR และ SPIR ลง มันก็ไม่อาจจะถูกเรียกได้ว่าเป็น CHF อีก และจะส่งผลกระทบโดยตรงต่อ &quot;trust&quot; ที่ถูกยืนยันภายใต้พื้นฐานของฟังก์ชันแฮชดังกล่าว</p>
+
+<h2 id="collision-attack">Collision Attack</h2>
+
+<p>ลักษณะของการที่เรามี h ที่จำกัดแต่กลับมี m ที่ไม่จำกัดนั้นมีชื่อว่า <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">Pigeonhole principle</a></p>
+
+<p>Pigeonhole principle นำไปสู่ความพยายามในการประเมินและวัดผลความเป็นไปได้ที่จะเกิดเงื่อนไขดังกล่าวในทฤษฎีความน่าจะเป็นภายใต้ชื่อเรียกว่า <a href="https://en.wikipedia.org/wiki/Birthday_problem">Birthday problem หรือ Birthday paradox</a></p>
+
+<p>Birthday problem เมื่อนำมาใช้เพื่อโจมตีในมุมของวิทยาการเข้ารหัสจึงถูกเรียกว่า Birthday attack ซึ่งระบุไว้ว่าถ้าค่าแฮชมีขนาดเป็น n แล้ว การชนกันของแฮชจะเกิดขึ้นเมื่อเราลองใส่ m ไปจนถึง <span  class="math">\({\textstyle {\sqrt {2^{n}}}=2^{n/2}}\)</span> หรือครึ่งหนึ่งของขนาดของค่าแฮชนั้น ซึ่ง Birthday attack จะถูกเอามาใช้ในการประเมินหาโอกาสที่ควรจะเป็นในการเกิด collision ตามขนาด <span  class="math">\(n\)</span> หรือจำนวนบิตด้วย</p>
+
+<p>มีวิธีการมากมายที่จะใช้เพื่อพิสูจน์คุณสมบัติของ CHF ซึ่งนับรวมไปถึงการทำ brute force attack ไปเรื่อยๆ โดยในกรณีของอัลกอริธึมของ SHA-1 นั้น มันถูกกำหนดความแข็งแกร่งไว้ที่ <span  class="math">\(2^{80}\)</span> (ครึ่งหนึ่งของจำนวนบิตทั้งหมด) หรือเป็นตัวเลขคือ 1,208,925,819,614,629,174,706,176 operation ซึ่งเป็นเรื่องยากที่จะทำได้แบบ practical (โดยไม่พึ่ง quantum computer)</p>
+
+<p>อย่างไรก็ตามการ cryptanalysis กับ SHA-1 ให้ผลลัพธ์ที่น่าประหลาดใจ โดยในปี 2017 กูเกิลและ Centrum Wiskunde &amp; Informatica ประกาศว่าสามารถสร้างไฟล์ PDF ที่แตกต่างกันแต่มีค่าแฮช SHA-1 ที่เหมือนกันได้ภายใน <span  class="math">\(2^{63.1}\)</span> operation กับฟังก์ชันแฮช SHA-1 ที่ไม่ลดทอนหรือถูกตัดคุณสมบัติใดๆ โดยการโจมตีนั้นเกิดขึ้นได้จากระบบที่มี processing power มหาศาล ซึ่งเทียบเท่ากับการใช้คอมพิวเตอร์ที่มี CPU เพียงหน่วยเดียวทั้งหมด 6,500 ปี และคอมพิวเตอร์ที่มี GPU เพียงหน่วยเดียวทั้งหมด 110 ปี (ดู Shattered)</p>
+
+<p>การ collision ของ SHA-1 ก่อนหน้า Shattered มีมาก่อนแล้วทั้งในทางทฤษฎีและทางปฏิบัติ อย่างไรก็ตามการ collision ที่เกิดขึ้นโดยส่วนใหญ่นั้นไม่ได้เกิดกับฟังก์ชันแฮช SHA-1 แบบเต็ม หรือมีการเกิดขึ้นกับฟังก์ชันที่มีลดทอนหรือถูกตัดคุณสมบัติใดๆ ออก</p>
+
+<h2 id="sha1-is-shambles">SHA-1 is Shambles</h2>
+
+<p>งานวิจัย SHA-1 is Shambles ไม่ได้ดำเนินตามรอย Shattered แต่ทำสิ่งที่แตกต่างออกไปในการทำให้เกิดการ collision โดยแทนที่จะหา <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> หรือ <span  class="math">\(m_n\)</span> ใดๆ ที่แตกต่างและไม่เกี่ยวข้องกันเพื่อหา <span  class="math">\(h\)</span> ค่าเดียวกัน งานวิจัย SHA-1 is Shambles สามารถทำให้เกิดการ collision ของ SHA-1 ได้โดยการเติมค่าใดๆ ไปก็ได้กับ <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> โดยค่าที่เติมไปไม่จำเป็นต้องเหมือนกัน ซึ่งเมื่อ <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> ถูกเติมค่าดังกล่าวไปแล้ว จะทำให้ค่าแฮชของทั้ง <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> เป็นค่าเดียวกันเมื่อผ่านฟังก์ชัน SHA-1</p>
+
+<p>วิธีการโจมตีในลักษณะนี้ถูกเรียกว่า Chosen-prefix collision attack โดย prefix หมายถึงค่า <span  class="math">\(p_1\)</span> และ <span  class="math">\(p_2\)</span> ที่ถูกเลือก (chosen) เอาไปเติมใส่ <span  class="math">\(m_1\)</span> และ <span  class="math">\(m_2\)</span> และทำให้เกิดค่า <span  class="math">\(h\)</span> เดียวกันได้</p>
+
+<p>การโจมตีในลักษณะนี้เคยเกิดขึ้นและถูกนำมาใช้ในการโจมตีทางไซเบอร์จริงมาแล้วบนอัลกอริธึมของฟังก์ชันแฮช MD5 ซึ่งมัลแวร์ Flame ใช้ในการปลอม digital signature ของไมโครซอฟต์และทำให้ข้ามผ่านการตรวจสอบไปได้</p>
+
+<p>Chosen-prefix collision attack สำหรับ SHA-1 เกิดขึ้นตั้งแต่เดือนเมษายน 2019 โดยงานวิจัย SHA-1 is a Shambles นำเสนอเวอร์ชันปรับปรุงของการโจมตีดังกล่าวที่ทำให้จำนวน operation ของการหาการ collision ลดลง (ทำได้ง่ายขึน) และสามารถทำได้โดยใช้เงิน 1.3 ล้านบาทสำหรับค่า processing power</p>
+
+<h2 id="future">Future?</h2>
+
+<p>ถ้ามองในมุมของปัญหา collision attack ที่หลีกเลี่ยงไม่ได้ สิ่งที่ดูเหมือนจะเป็นทางเลือกเดียวในการจัดการกับปัญหาและทำให้คุณสมบัติ CR ยังคงมีประสิทธิภาพคือการที่ฟังก์ชันแฮชจำเป็นต้องชนะ processing power ที่อาจเพิ่มสูงมากขึ้นในเวลาอันใกล้</p>
+
+<p>ผมจะขอไม่พูดถึงตัวเลือกอย่าง Keccak หรือ BLAKE2 ด้วย internal ของอัลกอริธึมที่ต่างออกไปและส่งผลในคุณสมบัติ CR ด้วย ซึ่งหากมีเวลาได้อ่านแล้วและไม่ขี้เกียจที่จะมาบันทึกไว้ อาจจะได้พูดถึงมันในเร็วๆ นี้ครับ</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/enhancing-host-file-with-portproxy/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Enhancing Host File with PortProxy</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/diaghub-exploit/">
+                  <span class="button__text">Arbitrary File Write and DiagHub Exploit</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

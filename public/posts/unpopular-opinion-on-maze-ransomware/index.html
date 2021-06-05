@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Unpopular Opinion: On Maze Ransomware ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Business model ที่เปลี่ยนไปของอาชญากรไซเบอร์ซึ่งใช้ประโยชน์จากเงื่อนไขต่างๆ เพื่อนำมาขู่กรรโชกสร้างการเปลี่ยนแปลงที่น่าสนใจในหลายมุมมอง โดยเฉพาะอย่างยิ่งการเกิดขึ้นของ Business model ที่มัลแวร์เรียกค่าไถ่ (Ransomware) ถูกใช้เพื่อสร้างผลกระทบในขั้นตอนสุดท้ายหลังจากที่การบุกรุกระบบเสร็จสิ้น (Post-compromise)
+ผมได้พูดถึงความแตกต่างและข้อสังเกตในประเด็นทั่วไปของ Classical ransomware campaign กับ Human-operated ransomware หรือ Post-compromise ransomware ไว้ในบล็อกรายละเอียดภัยคุกคามและปฏิบัติการของ Maze Ransomwareของไอ-ซีเคียว ดังนั้นในโพสต์ผมจะมาพูดถึง Unpopular opinion ในประเด็นเชิงเทคนิคอื่นๆ ที่เกี่ยวข้องกับประเภทของภัยคุกคามกลุ่มนี้กันครับ
+ข้อคิดเห็นเหล่านี้ได้รับอิทธิพลอย่างสูงมาจากการทำความเข้าใจพฤติกรรมของกลุ่ม Maze จากรายงานการวิเคราะห์ของ FireEye Mandiant
+Exposed Risks for Initial Access Opinion: แนวคิดการรักษาความมั่นคงปลอดภัยโดยส่วนใหญ่ให้นิยามกับ Asset ว่าเป็นกลางโดยพื้นฐาน หรือมักอยู่บนพื้นฐานของแนวคิด &amp;ldquo;ป้องกันไม่ให้ถูกแฮก&amp;rdquo; ซึ่งทำให้เราเพิกเฉยข้อเท็จจริงว่า Asset ที่เราจำเป็นต้องปกป้องหรือรักษาความปลอดภัยนั้นได้รับการสืบทอดความเสี่ยงบางอย่างมา หรืออาจเคยได้รับผลกระทบไปแล้ว ส่งผลให้การจัดการความเสี่ยงทำได้อย่างไม่สมบูรณ์หรือมีประสิทธิภาพ
+รายงานของ FireEye Mandiant มีการระบุถึงข้อเท็จจริงที่น่าสนใจ 2 ประเด็นคือ
+ รูปแบบหนึ่งของ Initial access vector ซึ่งพบบ่อยครั้งในปฏิบัติการของ Maze คือการเข้าถึงระบบจากระยะไกลผ่านทางช่องทางซึ่งเหยื่ออนุญาตให้เข้าถึงอยู่แล้ว อย่างไรก็ตามไม่สามารถระบุได้ว่าผู้โจมตีได้มาซึ่งข้อมูลสำหรับยืนยันตัวตนได้อย่างไร Organization ของ Maze มีลักษณะของการรวมกลุ่มของผู้ที่มีประสบการณ์แตกต่างกัน เช่น ผู้พัฒนามัลแวร์เรียกค่าไถ่, กลุ่มซึ่งมีช่องทางในการแพร่กระจายมัลแวร์และกลุ่มซึ่งสามารถให้ช่องทางในการเข้าถึงระบบภายในขององค์กรใดๆ ได้ รวมไปถึงมีการแบ่งผลประโยชน์อย่างเหมาะสมระหว่างกันด้วย  สมมติฐานหนึ่งซึ่งเป็นไปได้ตามข้อสังเกตจากรายงานการวิเคราะห์ฉบับนี้คือกลุ่มซึ่งคอยจัดหาช่องทางในการเข้าถึงระบบได้ไม่ได้มีเพียงแต่กลุ่มซึ่งใช้กำลังคนเพื่อเสาะหาช่องโหว่และสร้างช่องทางในการยืดครอง แต่รวมไปถึงผู้ใช้กำลังของเงินในการซื้อช่องทางในการเข้าถึงใดๆ ด้วย ช่องทางเหล่านี้เป็นช่องทางที่ง่ายและมีประสิทธิภาพในการให้กลุ่มซึ่งมีศักยภาพในการเข้าถึงระบบอื่นที่สูงนั้นสามารถจดจ่อกับเป้าหมายที่มีความสำคัญและมูลค่าที่คู่ควร"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/unpopular-opinion-on-maze-ransomware/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unpopular Opinion: On Maze Ransomware"/>
+<meta name="twitter:description" content="ความเห็นต่อพฤติกรรมและเทคนิคการโจมตีของ Maze Ransomware ซึ่งส่งผลกระทบต่อประสิทธืภาพในการตรวจจับและรับมือภัยคุกคาม"/>
+
+
+
+<meta property="og:title" content="Unpopular Opinion: On Maze Ransomware" />
+<meta property="og:description" content="ความเห็นต่อพฤติกรรมและเทคนิคการโจมตีของ Maze Ransomware ซึ่งส่งผลกระทบต่อประสิทธืภาพในการตรวจจับและรับมือภัยคุกคาม" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/unpopular-opinion-on-maze-ransomware/" />
+<meta property="article:published_time" content="2020-06-18T14:06:27+07:00" />
+<meta property="article:modified_time" content="2020-06-18T14:06:27+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Unpopular Opinion: On Maze Ransomware</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-06-18
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>Business model ที่เปลี่ยนไปของอาชญากรไซเบอร์ซึ่งใช้ประโยชน์จากเงื่อนไขต่างๆ เพื่อนำมาขู่กรรโชกสร้างการเปลี่ยนแปลงที่น่าสนใจในหลายมุมมอง โดยเฉพาะอย่างยิ่งการเกิดขึ้นของ Business model ที่มัลแวร์เรียกค่าไถ่ (Ransomware) ถูกใช้เพื่อสร้างผลกระทบในขั้นตอนสุดท้ายหลังจากที่การบุกรุกระบบเสร็จสิ้น (Post-compromise)</p>
+<p>ผมได้พูดถึงความแตกต่างและข้อสังเกตในประเด็นทั่วไปของ <strong>Classical ransomware campaign</strong> กับ <strong>Human-operated ransomware</strong> หรือ <strong>Post-compromise ransomware</strong> ไว้ในบล็อก<a href="https://www.i-secure.co.th/2020/06/threat-information-maze-ransomware/">รายละเอียดภัยคุกคามและปฏิบัติการของ Maze Ransomware</a>ของไอ-ซีเคียว ดังนั้นในโพสต์ผมจะมาพูดถึง Unpopular opinion ในประเด็นเชิงเทคนิคอื่นๆ ที่เกี่ยวข้องกับประเภทของภัยคุกคามกลุ่มนี้กันครับ</p>
+<p><em>ข้อคิดเห็นเหล่านี้ได้รับอิทธิพลอย่างสูงมาจากการทำความเข้าใจพฤติกรรมของกลุ่ม Maze จาก<a href="https://www.fireeye.com/blog/threat-research/2020/05/tactics-techniques-procedures-associated-with-maze-ransomware-incidents.html">รายงานการวิเคราะห์ของ FireEye Mandiant</a></em></p>
+<h2 id="exposed-risks-for-initial-access">Exposed Risks for Initial Access</h2>
+<p><strong>Opinion</strong>: แนวคิดการรักษาความมั่นคงปลอดภัยโดยส่วนใหญ่ให้นิยามกับ Asset ว่าเป็นกลางโดยพื้นฐาน หรือมักอยู่บนพื้นฐานของแนวคิด &ldquo;ป้องกันไม่ให้ถูกแฮก&rdquo; ซึ่งทำให้เราเพิกเฉยข้อเท็จจริงว่า Asset ที่เราจำเป็นต้องปกป้องหรือรักษาความปลอดภัยนั้นได้รับการสืบทอดความเสี่ยงบางอย่างมา หรืออาจเคยได้รับผลกระทบไปแล้ว ส่งผลให้การจัดการความเสี่ยงทำได้อย่างไม่สมบูรณ์หรือมีประสิทธิภาพ</p>
+<p>รายงานของ FireEye Mandiant มีการระบุถึงข้อเท็จจริงที่น่าสนใจ 2 ประเด็นคือ</p>
+<ol>
+<li>รูปแบบหนึ่งของ Initial access vector ซึ่งพบบ่อยครั้งในปฏิบัติการของ Maze คือการเข้าถึงระบบจากระยะไกลผ่านทางช่องทางซึ่งเหยื่ออนุญาตให้เข้าถึงอยู่แล้ว อย่างไรก็ตามไม่สามารถระบุได้ว่าผู้โจมตีได้มาซึ่งข้อมูลสำหรับยืนยันตัวตนได้อย่างไร</li>
+<li>Organization ของ Maze มีลักษณะของการรวมกลุ่มของผู้ที่มีประสบการณ์แตกต่างกัน เช่น ผู้พัฒนามัลแวร์เรียกค่าไถ่, กลุ่มซึ่งมีช่องทางในการแพร่กระจายมัลแวร์และ<strong>กลุ่มซึ่งสามารถให้ช่องทางในการเข้าถึงระบบภายในขององค์กรใดๆ ได้</strong> รวมไปถึงมีการแบ่งผลประโยชน์อย่างเหมาะสมระหว่างกันด้วย</li>
+</ol>
+<p>สมมติฐานหนึ่งซึ่งเป็นไปได้ตามข้อสังเกตจากรายงานการวิเคราะห์ฉบับนี้คือกลุ่มซึ่งคอยจัดหาช่องทางในการเข้าถึงระบบได้ไม่ได้มีเพียงแต่กลุ่มซึ่งใช้กำลังคนเพื่อเสาะหาช่องโหว่และสร้างช่องทางในการยืดครอง แต่รวมไปถึงผู้ใช้กำลังของเงินในการซื้อช่องทางในการเข้าถึงใดๆ ด้วย ช่องทางเหล่านี้เป็นช่องทางที่ง่ายและมีประสิทธิภาพในการให้กลุ่มซึ่งมีศักยภาพในการเข้าถึงระบบอื่นที่สูงนั้นสามารถจดจ่อกับเป้าหมายที่มีความสำคัญและมูลค่าที่คู่ควร</p>
+<p><img src="https://i.imgur.com/zstTunD.png" alt="Access as a Service"></p>
+<p>ในปัจจุบันมีบริการมากมายซึ่งจัดหาและขายช่องทางในการเข้าถึงระบบไม่ว่าจะข้อมูลสำหรับยืนยันตัวตนของบัญชีอีเมลซึ่งมักถูกใช้กับกรณี Business email compromise (BEC) หรือช่องทางการเข้าระบบใดๆ จากระยะไกลตามรูปภาพด้านบน การซื้อขายสามารถเกิดขึ้นได้โดยง่ายภายใต้ราคาซึ่งไม่สูงมาก ทำให้การลงทุนเสี่ยงกับการใช้ข้อมูลในลักษณะนี้เป็นต้นทุนในการโจมตีที่อาจคุ้มค่า</p>
+<p>การรั่วไหลหรือการซื้อขายข้อมูลสำหรับการเข้าถึงระบบหรือบัญชีผู้ใช้งานยังสะท้อนให้เห็นถึงการข้อจำกัดในการระบุหาต้นตอและที่มาของการโจมตีอีกด้วย เพราะเมื่อใดก็ตามที่ข้อมูลสำหรับยืนยันตัวตนของบุคคลในองค์กรซึ่งมีตัวตนอยู่จริงถูกใช้โดยผู้ไม่ประสงค์ดีเพื่อแสวงหาประโยชน์ และถูกใช้อย่างมีประสิทธิภาพ (เช่น เข้าถึงเฉพาะช่วงเวลา Business-hour ขององค์กรและจากหมายเลขไอพีแอดเดรสซึ่งจะไม่บ่งชี้ความผิดปกติ) กระบวนการในการตรวจจับความผิดปกติ รวมไปถึงการระบุหาที่มาและต้นตอของการโจมตีย่อมเป็นไปได้ยากขึ้นเช่นกัน</p>
+<p>ท้ายที่สุดแล้วการระบุหาความเสี่ยงควรกระทำภายใต้แนวคิดของการตรวจสอบอดีตว่าไม่มีผลต่อกระทบต่อปัจจุบัน และรักษาปัจจุบันเพื่อการันตีอนาคต ซึ่งอาจดำเนินการภายใต้ความสำคัญและปัจจัยทางด้านทรัพยากรที่แตกต่างกันไปในแต่ละองค์กร</p>
+<h2 id="attribution-blurred-line">Attribution Blurred Line</h2>
+<p><strong>Opinion</strong>: ความมีประสิทธิภาพในการเชื่อมโยงพฤติกรรมและเทคนิคของผู้โจมตี (TTP) ไปยังกลุ่มของผู้โจมตีและเป้าหมายของการโจมตีจะยากขึ้นเนื่องจากลักษณะขององค์กรที่ผสมความมีส่วนร่วมของอาชญากรไซเบอร์หลายกลุ่ม</p>
+<p>รายงานของ FireEye Mandiant มีการระบุถึงความแตกต่างของพฤติกรรมและเทคนิคที่ผู้โจมตีใช้ในการโจมตีออกเป็น 3 กลุ่ม และมีการระบุถึงการมีส่วนร่วมของกลุ่ม FIN6 ในปฏิบัติการของมัลแวร์เรียกค่าไถ่ Maze</p>
+<p><img src="https://i.imgur.com/mgCiWOl.png" alt="Maze Group 3 (FIN6) TTP"></p>
+<p>อ้างอิงจาก<a href="https://attack.mitre.org/groups/G0037/">ฐานข้อมูล MITRE ATT&amp;CK</a> ซึ่งมีการระบุรายละเอียดโดยคร่าวของกลุ่ม FIN6 กลุ่มอาชญากรไซเบอร์กลุ่มนี้ถูกระบุว่ามีกลุ่มเป้าหมายอยู่ที่การโจมตีเพื่อให้ได้มาซึ่งข้อมูลรหัสบัตรเครดิตซึ่งจะถูกนำไปขายในฟอรั่มใต้ดิน โดยกลุ่ม FIN6 มักจะพุ่งเป้าไปที่กลุ่มธุรกิจบริการและผู้ขายสินค้าซึ่งมีการใช้ระบบ Point of sale (PoS) และมีพฤติกรรมการโจมตีและเทคนิคที่ใช้ตามที่ระบุไว้ใน <a href="https://mitre-attack.github.io/attack-navigator/enterprise/#layerURL=https%3A%2F%2Fattack.mitre.org%2Fgroups%2FG0037%2FG0037-enterprise-layer.json">MITRE ATT&amp;CK Navigator</a></p>
+<p>การสรุปถึงการมีส่วนร่วมของกลุ่ม FIN6 ในปฏิบัติการของ Maze นั้นดูขัดแย้งกับข้อมูลของกลุ่ม FIN6 ที่มีอยู่ใน MITRE ATT&amp;CK อยู่พอสมควร ไม่ว่าจะเป็นข้อมูลเกี่ยวกลุ่มเป้าหมายและพฤติกรรมการโจมตี (ดูเพิ่มเติม<a href="https://gist.github.com/pe3zx/6c667a5eec90d066d30a4fb0a352a006#file-maze_group_3_fin6-json">ข้อมูลของ Maze (FIN6) ใน ATT&amp;CK Navigator</a>) ความขัดแย้งนี้สร้างแนวทางความเป็นไปได้ออกเป็น 2 ทาง คือการประเมินของ FireEye Mandiant นั้นผิด หรืออีกทางหนึ่งคือ FireEye Mandiant มีหลักฐานบางประการซึ่งทำให้เชื่อว่าสมมติฐานนี้เป็นจริง</p>
+<p>เนื่องจากเราไม่สามารถที่จะพิสูจน์แนวทางใดแนวทางหนึ่งได้อย่างถึงที่สุด การนำไปใช้งานจึงขึ้นอยู่กับว่าแนวทางไหนให้ประโยชน์ได้อย่างเหมาะสมกว่ากัน ท้ายที่สุดเราจึงอาจจำเป็นต้องพนันกับการประเมินของทีม FireEye Mandiant ว่าหนึ่งในผู้อยู่เบื้องหลังปฏิบัติการของ Maze คือกลุ่ม FIN6</p>
+<p>เมื่อเราไม่ได้มีศักยภาพที่มากพอในการที่จะเชื่อมโยงพฤติกรรมของผู้โจมตีเข้ากับกลุ่มผู้โจมตีซึ่งเป็นที่รู้จักอยู่แล้ว การตอบสนองและรับมือเหตุการณ์จะไม่สามารถเกิดขึ้นได้อย่างมีประสิทธิภาพหรือนำไปสู่การระบุต้นตอและพฤติกรรมของผู้โจมตีได้อย่างชัดเจน และนั่นทำการกระบวนการตอบสนองและรับมือไม่มีทางที่จะบรรลุจุดประสงค์ของมันได้ ข้อเท็จจริงเหล่านี้ยังคงตอกย้ำถึงความสำคัญของการมีข้อมูลซึ่งสามารถถูกนำมาใช้ในการประกอบการตัดสินใจ เชื่อมโยงและกำหนดทิศทางในการตอบสนองและรับมือภัยคุกคามได้</p>
+<p>ท้ายที่สุดผู้ที่เป็นฝ่ายเพลี่ยงพล้ำในการต่อสู้มักจะเป็นผู้ที่ศึกษาศัตรูมาน้อยกว่าเสมอ</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/experience-and-seniority/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Experience and Seniority</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/the-incident-response-hierarchy-of-needs/">
+                  <span class="button__text">The Incident Response Hierarchy of Needs</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

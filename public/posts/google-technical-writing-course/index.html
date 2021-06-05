@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Google Technical Writing Course ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Words  Noun Acronyms Pronoun   Active Voice Clear Sentence Short Sentence Lists and tables Paragraphs Audience Documents Punctuation  Comma Semicolon Em-Dashes Parentheses    Words Noun  ระวังการมีอยู่ของคำหรือศัพท์ที่ target audience จะไม่คุ้นเคย ในกรณีที่มีการใช้คำหรือศัพท์เหล่านั้น จะมีทางเลือกที่เป็นไปได้ 2 ทางได้แก่  ถ้าคำหรือศัพท์ดังกล่าวมีคำอธิบายหรือการให้ความหมายที่เหมาะสมแล้ว ให้เชื่อมโยงคำหรือศัพท์ไปยังความหมายที่มีอยู่ ถ้าคำหรือศัพท์ดังกล่าวถูกนำเสนอในเอกสารเป็นครั้งแรก ให้อธิบายหรือให้ความหมายคำหรือศัพท์เหล่านั้น ในกรณีที่คำหรือศัพท์ดังกล่าวมีเป็นจำนวนมาก การอธิบายหรือให้ความหมายจะต้องถูกรวบรวมอยู่ในหัวข้ออภิธานศัพท์ (glossary) แทน   พยายามใช้คำอย่างคงเส้นคงวา อย่าพูดถึงคำที่เรายังไม่ได้มีการแนะนำแก่ผู้อ่านแม้ว่าจะสามารถทำความเข้าใจถึงความเชื่อมโยงได้ ในกรณีที่เราสามารถอธิบายความเชื่อมโยงระหว่างคำได้ ให้กำหนด อธิบายและนำเสนอให้ผู้อ่านก่อนทันทีก่อนจะนำไปใช้ในส่วนอื่นของเอกสาร ตัวอย่างเช่น แม้จะเป็นที่เข้าใจกันว่า Protocol Buffers สามารถถูกย่อได้เป็น protobufs เราก็จำเป็นที่จะต้องแสดงให้เห็นถึงความเชื่อมโยงระหว่างสองคำนี้ก่อน เช่นเดียวกับการใช้ acronym หรือตัวย่อด้วย   Wrong: Protocol Buffers provide their own definition language."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/google-technical-writing-course/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Google Technical Writing Course"/>
+<meta name="twitter:description" content="สรุปข้อควรทราบในการสร้างพฤติกรรม Technical Writing ที่ดีจากบทเรียน Google Technical Writing Course"/>
+
+
+
+<meta property="og:title" content="Google Technical Writing Course" />
+<meta property="og:description" content="สรุปข้อควรทราบในการสร้างพฤติกรรม Technical Writing ที่ดีจากบทเรียน Google Technical Writing Course" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/google-technical-writing-course/" />
+<meta property="article:published_time" content="2020-08-12T14:37:28+07:00" />
+<meta property="article:modified_time" content="2020-08-12T14:37:28+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Google Technical Writing Course</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-08-12
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <ul>
+<li><a href="#words">Words</a>
+<ul>
+<li><a href="#noun">Noun</a></li>
+<li><a href="#acronyms">Acronyms</a></li>
+<li><a href="#pronoun">Pronoun</a></li>
+</ul>
+</li>
+<li><a href="#active-voice">Active Voice</a></li>
+<li><a href="#clear-sentence">Clear Sentence</a></li>
+<li><a href="#short-sentence">Short Sentence</a></li>
+<li><a href="#lists-and-tables">Lists and tables</a></li>
+<li><a href="#paragraphs">Paragraphs</a></li>
+<li><a href="#audience">Audience</a></li>
+<li><a href="#documents">Documents</a></li>
+<li><a href="#punctuation">Punctuation</a>
+<ul>
+<li><a href="#comma">Comma</a></li>
+<li><a href="#semicolon">Semicolon</a></li>
+<li><a href="#em-dashes">Em-Dashes</a></li>
+<li><a href="#parentheses">Parentheses</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="words">Words</h2>
+<h3 id="noun">Noun</h3>
+<ol>
+<li>ระวังการมีอยู่ของคำหรือศัพท์ที่ target audience จะไม่คุ้นเคย ในกรณีที่มีการใช้คำหรือศัพท์เหล่านั้น จะมีทางเลือกที่เป็นไปได้ 2 ทางได้แก่
+<ul>
+<li>ถ้าคำหรือศัพท์ดังกล่าวมีคำอธิบายหรือการให้ความหมายที่เหมาะสมแล้ว ให้เชื่อมโยงคำหรือศัพท์ไปยังความหมายที่มีอยู่</li>
+<li>ถ้าคำหรือศัพท์ดังกล่าวถูกนำเสนอในเอกสารเป็นครั้งแรก ให้อธิบายหรือให้ความหมายคำหรือศัพท์เหล่านั้น ในกรณีที่คำหรือศัพท์ดังกล่าวมีเป็นจำนวนมาก การอธิบายหรือให้ความหมายจะต้องถูกรวบรวมอยู่ในหัวข้ออภิธานศัพท์ (glossary) แทน</li>
+</ul>
+</li>
+<li>พยายามใช้คำอย่างคงเส้นคงวา อย่าพูดถึงคำที่เรายังไม่ได้มีการแนะนำแก่ผู้อ่านแม้ว่าจะสามารถทำความเข้าใจถึงความเชื่อมโยงได้ ในกรณีที่เราสามารถอธิบายความเชื่อมโยงระหว่างคำได้ ให้กำหนด อธิบายและนำเสนอให้ผู้อ่านก่อนทันทีก่อนจะนำไปใช้ในส่วนอื่นของเอกสาร ตัวอย่างเช่น แม้จะเป็นที่เข้าใจกันว่า Protocol Buffers สามารถถูกย่อได้เป็น protobufs เราก็จำเป็นที่จะต้องแสดงให้เห็นถึงความเชื่อมโยงระหว่างสองคำนี้ก่อน เช่นเดียวกับการใช้ acronym หรือตัวย่อด้วย</li>
+</ol>
+<blockquote>
+<p>Wrong: <strong>Protocol Buffers</strong> provide their own definition language. Blah, blah, blah. And that&rsquo;s why <strong>protobufs</strong> have won so many county fairs.</p>
+</blockquote>
+<blockquote>
+<p>Correct: <strong>Protocol Buffers</strong> (or <strong>protobufs</strong> for short) provide their own definition language. Blah, blah, blah. And that&rsquo;s why <strong>protobufs</strong> have won so many county fairs.</p>
+</blockquote>
+<h3 id="acronyms">Acronyms</h3>
+<p>ข้อควรระวังเพิ่มเติมในการใช้ acronym หรือตัวย่อคือ</p>
+<ul>
+<li>ไม่ควรบัญญัติตัวย่อเพิ่มขึ้นมาหากจะมีการใช้งานเพียงไม่กี่ครั้ง เนื่องจากผู้อ่านจำเป็นต้องขยายตัวย่อนั้นด้วยตัวเอง การขยายโดยไม่มีความจำเป็นจะเป็นการสร้างภาระในการทำความเข้าใจ</li>
+<li>หากจะมีการใช้ตัวย่อ ต้องแน่ใจว่าตัวย่อนั้นสั้นอย่างมีนัยยะสำคัญกว่าคำเต็ม และจะถูกใช้ในส่วนตัวไปของเอกสารอีกหลายครั้ง</li>
+</ul>
+<h3 id="pronoun">Pronoun</h3>
+<p>เช่นเดียวกับการใช้ acronym หรือตัวย่อ คำสรรพนามเป็นคำซึ่งชี้กลับไปยังคำนามที่ได้มีการนำเสนอไปก่อนหน้า ดังนั้นเงื่อนไขและสิ่งที่ควรจะเป็นเมื่อมีการใช้คำสรรพนามจึงมีลักษณะคล้ายกับเงื่อนไขของการใช้ตัวย่อ ดังนี้</p>
+<ul>
+<li>คำสรรพนามจะใช้ได้ก็ต่อเมื่อเราได้มีการยกหรือพูดถึงคำนามมาแล้วก่อนหน้า อย่าใช้สรรพนามลอยๆ โดยที่ยังไม่ยกหรือพูดถึงคำนามโดยเด็ดขาด</li>
+<li>แนะนำให้มีการใช้คำสรรพนามให้ใกล้ต่อคำนามมากที่สุดเพื่อหลีกเลี่ยงปัญหาในการเชื่อมโยง โดยทั่วไปในภาษาอังกฤษ หากมีการใช้คำระหว่างคำนามและคำสรรพนามเกิน 5 คำ ควรพิจารณาในการใช้คำนามอีกครั้งแทนการใช้คำสรรพนามเพื่ออ้างถึง</li>
+<li>ในกรณีที่มีการยกคำนามคำที่สองขึ้นมาระหว่างการใช้คำนามแรกและการใช้คำสรรพนามเพื่ออ้างถึงคำนามแรก ควรมีการใช้คำนามแรกอีกครั้งและหลีกเลี่ยงการใช้คำสรรพนามในการอ้างอิงคำนามแรกเพื่อป้องกันความสับสน</li>
+</ul>
+<h2 id="active-voice">Active Voice</h2>
+<p>Google แนะนำให้การเขียนเอกสารนั้นมีการใช้ active voice เป็นหลักแทนการใช้ passive voice โดยมีการให้เหตุผล อาทิ</p>
+<ul>
+<li>บางครั้ง passive voice ไม่สมบูรณ์ในใจความว่าใครเป็นผู้ทำอะไรต่อสิ่งใด</li>
+<li>ผู้อ่านจะทำความเข้าใจรูปประโยคแบบ passive voice โดยการเปลี่ยนเป็น active voice โดยที่ไม่รู้ตัว ดังนั้นการใช้ active voice เป็นหลักจะช่วยลดกระบวนการจัดรูปแบบและช่วยให้ผู้อ่านเข้าถึงใจความได้เร็วขึ้นกว่า</li>
+<li>ประโยคที่ใช้ active voice จะสั้นและสื่อสารได้ตรงประเด็นมากกว่าประโยคแบบ passive voice</li>
+</ul>
+<h2 id="clear-sentence">Clear Sentence</h2>
+<ol>
+<li>ลดการใช้ verb ทั่วไปที่ไม่แสดงให้เห็นชัดเจนถึงการกระทำ โดยเฉพาะ verb รูปแบบของ be หรือคำว่า occur และ happen โดยเปลี่ยนการใช้ verb เหล่านี้ไปเป็นการใช้ verb ซึ่งแสดงให้เห็นถึงการกระทำที่ชัดเจนกว่าแทน อาทิ
+<ul>
+<li>จาก The error <strong>occurs</strong> when clicking the Submit button. เปลี่ยนเป็น Clicking the Submit button <strong>triggers</strong> the error.</li>
+<li>จาก We <strong>are</strong> very careful to ensure&hellip; เปลี่ยนเป็น We carefully <strong>ensure</strong>&hellip;</li>
+</ul>
+</li>
+<li>ในกรณีของคำนาม การใช้ there is หรือ there are มีลักษณะของปัญหาใกล้เคียงกับกรณีของ verb ทั่วไป แนะนำให้ทำการเปลี่ยนการใช้คำเหล่านี้เป็นการอ้างถึงคำนามที่เฉพาะเจาะจงกว่าแทน</li>
+<li>คน technical มักมี bias กับความเกินจริงของ marketing material ซึ่งความ marketing เหล่านั้นถูกนำเสนอผ่านการใช้คำขยายที่เกินจริง และไม่สอดคล้องต่อการทำความเข้าใจคำขยายเหล่านี้ในมุมมองส่วนบุคลล ดังนั้นในกรณีของเอกสารเชิงเทคนิค ผู้เขียนควรหลีกเลี่ยงการใช้ adjective หรือ adverb โดยควรเลือกที่จะนำเสนอข้อมูลหรือข้อเท็จจริงไปเลยแทน เช่น</li>
+</ol>
+<blockquote>
+<p>Marketing: Setting this flag makes the application run <strong>screamingly fast</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Technical: Setting this flag makes the application run <strong>225-250% faster</strong>.</p>
+</blockquote>
+<h2 id="short-sentence">Short Sentence</h2>
+<ol>
+<li>หนึ่งประโยคควรอธิบายแนวคิดหรือเหตุการณ์เพียงหนึ่งเหตุการณ์ ให้พิจารณาแยกแนวคิดหรือเหตุการณ์ออกเป็นประโยคที่ขาดจากกันและยกขึ้นมาเชื่อมกันเฉพาะเมื่อมีความจำเป็นเท่านั้น</li>
+<li>ในกรณีที่ประโยคมีความยาวและมีการใช้คำสันธานหรือ conjunction ในการเชื่อม พิจารณาการแตกเนื้อหาดังกล่าวออกเป็นรายการทั้งที่มีลำดับหรือไม่มีลำดับเพื่อให้สามารถทำความเข้าใจได้ง่ายยิ่งขึ้น</li>
+<li>หมั่นฝึกมองหาการใช้คำขยะที่เพิ่มความยาวของประโยคโดยไม่จำเป็น และแทนที่คำเหล่านั้นด้วยคำกริยาทั่วไปตรงๆ แทนเพื่อให้เข้าใจง่ายขึ้น อาทิ
+<ul>
+<li>จาก at this point in time เป็น now</li>
+<li>จาก determine the location of เป็น find</li>
+<li>จาก is able to เป็น can</li>
+</ul>
+</li>
+<li>หลีกเลี่ยงการใช้ประโยคเสริมหรืออนุประโยคเพื่อขยายความประโยคหลักหากประโยคเสริมนั้นนำเสนอประเด็นที่แตกต่างกันออกไป สังเกตได้จากการใช้ which, that, because, whose, until, unless และ since พิจารณาแยกเป็นประโยคใหม่หากประโยคย่อยไม่สอดคล้องกับประโยคหลัก</li>
+<li>ใน American English การใช้ which นั้นเป็นการใช้สำหรับการเชื่อมโยงไปยังประโยคเสริมที่ไม่มีความสำคัญ และใช้ that สำหรับการเชื่อมโยงไปยังประโยคเสริมที่มีความสำคัญตามตัวอย่างด้านล่าง หรือสามารถสังเกตได้จากถ้าผู้อ่านหยุดก่อนอ่านประโยคเสริมให้ใช้ which แต่ถ้าอ่านประโยคเสริมต่อจากประโยคหลักให้ใช้ that</li>
+<li>ใส่ comma เฉพาะก่อนหน้า which ไม่ต้องใส่ในกรณีที่ใช้ that</li>
+</ol>
+<h2 id="lists-and-tables">Lists and tables</h2>
+<ul>
+<li>ใช้ bulleted list สำหรับรายการที่ไม่มีลำดับ การสลับเปลี่ยนรายการไม่มีผลต่อความหมาย และใช้ numbered list สำหรับรายการที่มีลำดับ เมื่อการสลับเปลี่ยนรายการมีผลต่อใจความหรือความหมาย</li>
+<li>ลำดับในรายการจะต้องแสดงให้เห็นการสอดคล้องกัน เช่น หากเป็นลำดับของการกระทำ แต่ละรายการต้องแสดงให้เห็นถึงการกระทำ ไม่ใช่ผลลัพธ์ที่เกิดจากการกระทำ</li>
+<li>พิจารณาขึ้นต้น numbered list ด้วย imperative verb หรือคำกริยาที่สั่งให้ทำเสมอ</li>
+<li>ถ้าเนื้อหาในรายการเป็นประโยค การ capitalization และ punctuation ก็ควรต้องเป็นแบบประโยค คือขึ้นต้นด้วยตัวใหญ่และลงท้ายด้วยจุด เช่นเดียวกันในกรณีที่ไม่ใช่ประโยค และของ capitalization และ punctuation แบบประโยคก็ไม่จำเป็นต้องใช้</li>
+<li>คุณลักษณะของตารางที่ดีคือ หัวคอลัมน์ชัดเจน ในตารางไม่มีตัวอักษรเยอะจนเกินไป (ไม่ควรเกิน 2 ประโยค) และคงความเป็น parallelism เอาไว้ในลักษณะที่คอลัมน์นั้นควรแสดงข้อมูลที่มีลักษณะสอดคล้องกัน</li>
+<li>เมื่อใดก็ตามที่จะมีการแสดงรายการหรือตาราง ผู้เขียนจะต้องมีการเกริ่นถึงสิ่งที่รายการหรือตารางจะนำเสนอเสมอ</li>
+</ul>
+<h2 id="paragraphs">Paragraphs</h2>
+<ul>
+<li>เขียนประโยคเปิดหรือพารากราฟเปิดให้มีพลังซึ่งหมายถึงสามารถนำเสนอใจความสำคัญของเนื้อหาส่วนอื่นๆ ต่อไปได้</li>
+<li>หนึ่งพารากราฟหรือหนึ่งย่อหน้าควรนำเสนอหนึ่งประเด็นหรือไอเดีย ถ้าพารากราฟนั้นพูดถึงปัจจุบัน การพูดถึงอดีตและอนาคตในพารากราฟดังกล่าวก็ถือเป็นสิ่งต้องห้าม และควรแยกออกไปเป็นพารากราฟอื่น และไม่ควรยาวหรือสั้นจนเกินไปด้วย</li>
+<li>พารากราฟที่ดีจะต้องอธิบาย 3 ประเด็นนี้ได้คือ
+<ul>
+<li>What: อะไรที่เราอยากบอกแก่ผู้อ่าน</li>
+<li>Why: ทำไมประเด็นนี้จึงสำคัญกับผู้อ่าน</li>
+<li>How: ผู้อ่านจะเอาสิ่่งที่รู้ไปใช้ได้อย่างไร หรือผู้อ่านจะรู้ได้อย่างไรว่าประเด็นที่นำเสนอเป็นจริง</li>
+</ul>
+</li>
+</ul>
+<h2 id="audience">Audience</h2>
+<blockquote>
+<p>good documentation = knowledge and skills your audience needs to do a task − your audience&rsquo;s current knowledge and skills</p>
+</blockquote>
+<ul>
+<li>การจัดการสารให้สอดคล้องกับผู้ต้องการของรับสารนั้นมักจะอยู่ที่กำหนดผู้รับว่ามี background เป็นอย่างไรส ประเมินความต้องการของผู้รับสารและสร้างสารที่เหมาะสมกับผู้รับ</li>
+<li>ให้ระวัง <strong>curse of knowledge</strong> หรือประเด็นในเรื่องของการมีพื้นฐานความเข้าใจที่แตกต่างกันระหว่าง expert และ novice โดยส่วนใหญ่ novice จะไม่ได้รู้สิ่งที่ expert รู้อยู่แล้วซึ่งทำให้การอธิบายในมุมของ expert ยากที่จะถูกเข้าใจจากในมุม novice</li>
+<li>พยายามสร้างเนื้อหาที่สามารถเข้าถึงได้จากทุกวัฒนธรรม หลีกเลี่ยงการเปรียบเปรยหรือการยกตัวอย่างที่สามารถทำความเข้าใจได้จากผู้คนซึ่งมาจากวัฒนธรรมเดียว โดยเฉพาะอย่างยิ่งการใช้ idiom หรือสำนวน</li>
+</ul>
+<h2 id="documents">Documents</h2>
+<ul>
+<li>เมื่อเราจัดทำเอกสารระบุให้ชัดเจนว่าเอกสารดังกล่าวจัดทำขึ้นมาด้วยจุดประสงค์ใด มี target audience เป็นใคร มีขอบเขตการอธิบายอย่างไร และประเด็นใดไม่อยู่ในขอบเขตการอธิบายของเอกสารนี้</li>
+<li>ไม่มีใครอยากอ่านเอกสารทั้งหมดเพื่อทำความเข้าใจ การสร้างเอกสารจึงควรมีเอกสารหนึ่งหน้าที่สรุปใจความสำคัญเอาไว้ในลักษณะทั้งแบบ Executive summary หรือ TLDR</li>
+<li>เราควรกำหนด target audience เพื่อใช้ในการกำหนดและจัดการเนื้อหาในเอกสาร โดยควรเริ่มจากสิ่งที่ผู้อ่านควรต้องรู้ก่อนจึงจะเข้าใจประเด็นสำคัญของเอกสารได้ แยกหัวข้อตามใจความสำคัญอย่างชัดเจน</li>
+</ul>
+<h2 id="punctuation">Punctuation</h2>
+<h3 id="comma">Comma</h3>
+<ul>
+<li>ใส่ comma ในจุดที่ผู้อ่านควรหยุดอ่านชั่วคราวเมื่ออ่านประโยค ตระหนักไว้เสมอว่าการหยุดจาก comma นั้นมีช่วงหยุดสั้นกว่าการหยุดโดย period หรือจุดที่ใส่ท้ายประโยค</li>
+<li>ในกรณีที่ประโยคนำเสนอเงื่อนไขและผลจากเงื่อนไขนั้น ให้ใส่ command ระหว่างเงื่อนไขและผลลัพธ์ของการทำตามเงื่อนไข เช่น</li>
+<li>หลีกเลี่ยงการใช้ comma เพื่อเชื่อมประโยคหรือใจความที่ไม่สัมพันธ์กัน</li>
+</ul>
+<h3 id="semicolon">Semicolon</h3>
+<ul>
+<li>เครื่องหมาย semicolon มีไว้ใช้เพื่อนรวมใจความที่คล้ายคลึงกันไว้ด้วยกัน โดยส่วนที่อยู่หลังเครื่องหมาย semicolon จะต้องเป็นประโยคที่มีไวยากรณ์ถูกต้อง</li>
+<li>การตรวจสอบการว่าการใช้ semicolon ถูกต้องหรือไม่สามารถทำได้จากการทดลองสลับตำแหน่งของส่วนที่อยู่หน้าและหลังเครื่องหมาย semicolon หากใจความยังเป็นเหมือนเดิมและเป็นประโยคที่ถูกต้องตามไวยากรณ์ก็แสดงให้เห็นว่าการใช้ semicolon ทำได้ถูกต้อง</li>
+<li>หากมีการใช้ semicolon ตามด้วยคำเชื่อมหรือ transition word ให้ตาม transition word ดังกล่าวด้วย comma</li>
+</ul>
+<h3 id="em-dashes">Em-Dashes</h3>
+<ul>
+<li>Em-dashes หรือเครื่องหมาย — ใช้นำเสนอการหยุดซึ่งมีช่วงหยุดยาวกว่า comma แต่สั้นกว่าจุดท้ายประโยค โดยส่วนใหญ่การใช้ em-dashe จะเป็นไปในลักษณะของการขยายความ หรือแทรกเนื้อหาอื่นที่อาจไม่สอดคล้องตามประเด็นที่นำเสนออยู่ลงไป</li>
+<li>ไม่มีการกำหนดอย่างชัดเจนว่าในสถานการณ์ไหนควรใช้ comma หรือ em-dash</li>
+</ul>
+<h3 id="parentheses">Parentheses</h3>
+<p>เครื่องหมายวงเล็บใช้เพื่อเสนอประเด็นย่อย ประเด็นเสริมหรือเนื้อหาที่ไม่สอดคล้องกับประเด็นหลัก เนื่องจากประเด็นส่วนใหญ่ที่นำเสนอในวงเล็บนั้นมีความสำคัญต่ำ ในบางครั้งเราจึงอาจไม่จำเป็นต้องใช้วงเล็บหรือลดการใช้ลงไปได้</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/iphone-ios-anti-forensics-note/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">iPhone/iOS Anti-Forensics Note</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/ghostwriter-campaign-note/">
+                  <span class="button__text">Ghostwriter Campaign Note</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

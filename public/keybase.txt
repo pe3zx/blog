@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/pe3z
+--------------------------------------------------------------------
+
+I hereby claim:
+
+* I am an admin of https://pandora.sh
+* I am pe3z (https://keybase.io/pe3z) on keybase.
+* I have a public key ASCNnon4rUVMVWUHOLOYXgads-N6hBLcWMQssRCBL6wKpAo
+
+To do so, I am signing this object:
+
+{
+"body": {
+"key": {
+"eldest_kid": "0120f0bdfb6a326c05ce4d834dbaab9257b0e4cb8a63cd80c3281cd89cfc74b9170a0a",
+"host": "keybase.io",
+"kid": "01208d9e89f8ad454c55650738b3985e069db3e37a8412dc58c42cb110812fac0aa40a",
+"uid": "2191c630a87c1da717d19095755ae919",
+"username": "pe3z"
+},
+"merkle_root": {
+"ctime": 1586022660,
+"hash": "28743e9e0fdf2ab5d6ba6b5e37686789a5cb9b6df482cbc4b034195ec6331152b9db6327395cfb4ab1b1b064e18c8564080a453d3eb92fca48975f1e94ca0b62",
+"hash_meta": "4d048b7564a0cca8d5e1a65401df78c461df9f242dcf59836beb6c8dcce46553",
+"seqno": 15765373
+},
+"service": {
+"entropy": "SLGPJvNrm9lNTabc5LJ9svL3",
+"hostname": "pandora.sh",
+"protocol": "https:"
+},
+"type": "web_service_binding",
+"version": 2
+},
+"client": {
+"name": "keybase.io go client",
+"version": "5.3.0"
+},
+"ctime": 1586022682,
+"expire_in": 504576000,
+"prev": "04e21ff36074999c1795b1d23950a26f5832d3a59d45422c7c68a64855a78ae3",
+"seqno": 104,
+"tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgjZ6J+K1FTFVlBzizmF4GnbPjeoQS3FjELLEQgS+sCqQKp3BheWxvYWTESpcCaMQgBOIf82B0mZwXlbHSOVCib1gy06WdRUIsfGimSFWniuPEIEUjt7UA8xtbyqvQiPcOfyOTbcvldjBcm+csmB5peIRpAgHCo3NpZ8RAVQIH7kN8GdBp0mXKwx6FLbv+nPfq+0L94Q/4wnIC2QGeebndHwrdey75Znsr+aQlOU8tupW6aNyzTHSsFY17C6hzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIBD/frOO5DoSLsX3G+zjMwE2VKn7GTb02naRfRWWE3Wio3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/pe3z
+
+==================================================================

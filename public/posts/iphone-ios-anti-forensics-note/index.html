@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        iPhone/iOS Anti-Forensics Note ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="สรุปเนื้อหาจากบทความ Playing devil’s advocate: iPhone anti-forensics โดย Vladimir Katalov จาก ElcomSoft
+Hardware  อุปกรณ์ทั้งหมดจนถึงรุ่น iPhone X ได้รับผลกระทบต่อช่วงใน BootROM ส่งผลให้สามารถชุดโค้ดสำหรับโจมตีช่องโหว่ checkm8 ในการโจมตีช่องโหว่ได้ ผลลัพธ์จากการโจมตีทำให้ผู้โจมตีสามารถเข้าถึงไฟล์บางส่วนรวมไปถึงการเอาข้อมูลจาก keychain แม้จะไม่รู้ passcode ซึ่งมีส่วนในการถูกใช้เพื่อเข้ารหัสข้อมูล อุปกรณ์ที่มีการใช้ CPU ตั้งแต่รุ่น A12 เป็นต้นมาจะไม่ได้รับผลกระทบจากช่องโหว่นี้ นั่นคืออุปกรณ์ตั้งแต่รุ่น iPhone Xr, iPhone Xs, iPhone Xs Max, iPhone 11, iPhone 11 Pro, iPhone 11 Pro Max และ iPhone SE (2020)  Software  ตรวจสอบให้แน่ใจว่าใช้ iOS รุ่นล่าสุดเสมอ อย่า jailbreak อุปกรณ์ การ jailbreak ใช้วิธีในการโจมตีช่องโหว่ของอุปกรณ์เพื่อละเมิดสิทธิ์ที่เหมาะสม ช่องโหว่เดียวกันนั้นสามารถใช้ในทางที่ไม่ปลอดภัยต่อผู้ใช้งานได้เช่นกัน ตั้งรหัสผ่านสำหรับข้อมูล backup ให้ปลอดภัย ทำความคุ้นเคยกับฟีเจอร์ใหม่ของ iOS เช่น ฟีเจอร์ในการแจ้งเตือนหากแอปพลิเคชันมีการร้องขอสิทธิ์ที่ต้องสงสัย เปิดใช้งานฟีเจอร์ MAC address randomization เพื่อเพิ่มความเป็นส่วนตัวในการใช้งาน  Device Unlocking  เปิดใช้งานการตั้ง passcode สำหรับฟีเจอร์ Screen Time ในหัวข้อ Settings และ Screen Time โดยจะต้องตั้ง passcode ให้ปลอดภัยและเป็น passcode ซึ่งแตกต่างจาก passcode ในการปลดล็อคหน้าจอ เมื่อมีการตั้ง passcode พยายามตั้ง passcode แบบ complex ให้ได้เสมอ (ไม่ใช่ basic passcode ที่มีรูปแบบเป็นตัวเลข 4 ตัว) ตั้งค่าให้มีการล็อคอุปกรณ์โดยอัตโนมัติตามเวลาที่เหมาะสม ตั้งค่าไม่ให้สามารถเข้าถึงข้อมูล อาทิ Notification Centre, Control Centre และ USB Accessories ได้ระหว่างที่อุปกรณ์ยังถูกล็อคอยู่ฃ ตั้งค่าให้เมื่อมีการล็อคอุปกรณ์ การปลดล็อคอุปกรณ์จะต้องมีการใช้ passcode ในทันที พิจารณา threat model ส่วนบุคคลเพื่อเลือกใช้วิธีการปลดล็อคอุปกรณ์อย่างเหมาะสม ในบางกรณีการพิสูจน์ตัวตนด้วยฟีเจอร์ Touch ID หรือ Face ID อาจไม่เหมาะสมในบางสถานการณ์  Applications  พิจารณาความปลอดภัยของแอปที่ใช้งานอยู่เสมอโดยเฉพาะอย่างยิ่งแอปซึ่งอ้างความปลอดภัยและความเป็นส่วนตัว แอปในกลุ่มนี้มักจะต้องมีการทำ security audit และเปิดเผยผลลัพธ์ให้แก่ผู้ใช้งานทราบ การติดตามการค้นพบและแก้ไขปัญหาสามารถใช้เพื่อบ่งชี้ความสามารถในการจัดการความเสี่ยงของผู้พัฒนาแอปได้ การใช้งานแอปพลิเคชันอย่าง MDM มีส่วนที่ช่วยสร้างความปลอดภัยในการใช้งาน และในขณะเดียวกันก็อาจมีผลเสียต่อความเป็นส่วนตัวของผู้ใช้งานด้วย แนะนำให้พิจารณาโซลูชัน MDM และมีกระบวนการในการควบคุมการใช้งานให้เหมาะสม  USB Connection  ในการเชื่อมต่ออุปกรณ์กับคอมพิวเตอร์ ตรวจสอบให้แน่ใจว่าสายที่ใช้ในการเชื่อมต่อนั้นมีใบรับรองหรือถูกผลิตมาจากแหล่งที่เชื่อถือได้ เนื่องจากมีความเป็นไปได้ที่ผู้โจมตีจะมีการสลับสับเปลี่ยนสายซึ่งมีความสามารถในการขโมยข้อมูล อาทิ MG Cable หรือ USB Ninja เช่นเดียวกัน ตรวจสอบอุปกรณ์ USB charger ว่าเป็นอุปกรณ์ที่มีใบรับรองหรือถูกผลิตมาจากแหล่งที่เชื่อถือได้ FBI เคยมีการแจ้งเตือนถึงอุปกรณ์ USB charger แบบดัดแปลงซึ่งมีความสามารถในการขโมยข้อมูล เมื่อจำเป็นต้องมีการเชื่อมต่อผ่านฮาร์ดแวร์ที่ยังไม่ได้ตรวจสอบ ระมัดระวังการให้ &amp;ldquo;Trust relationship&amp;rdquo; การเชื่อมต่อเพื่อชาร์จไฟโดยปกติจะไม่มีการแจ้งเตือนเพื่อขอการอนุญาต การขออนุญาตจะเกิดขึ้นเมื่อมีการเชื่อมต่อกับอุปกรณ์ลักษณะอื่นเสมอ รักษาระบบที่อุปกรณ์จะทำการเชื่อมต่อให้ปลอดภัยด้วยเช่นกัน  SOS Feature  เรียนรู้การใช้งานฟีเจอร์ S."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/iphone-ios-anti-forensics-note/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="iPhone/iOS Anti-Forensics Note"/>
+<meta name="twitter:description" content="A summary in Thai of a guideline by ElcomSoft to configure iPhone and Apple devices for anti-forensics purpose"/>
+
+
+
+<meta property="og:title" content="iPhone/iOS Anti-Forensics Note" />
+<meta property="og:description" content="A summary in Thai of a guideline by ElcomSoft to configure iPhone and Apple devices for anti-forensics purpose" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/iphone-ios-anti-forensics-note/" />
+<meta property="article:published_time" content="2020-10-02T14:00:00+07:00" />
+<meta property="article:modified_time" content="2020-10-02T14:00:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">iPhone/iOS Anti-Forensics Note</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-10-02
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>สรุปเนื้อหาจากบทความ <a href="https://blog.elcomsoft.com/2020/09/playing-devils-advocate-iphone-anti-forensics/">Playing devil’s advocate: iPhone anti-forensics โดย Vladimir Katalov จาก ElcomSoft</a></p>
+<h1 id="hardware">Hardware</h1>
+<ul>
+<li>อุปกรณ์ทั้งหมดจนถึงรุ่น iPhone X ได้รับผลกระทบต่อช่วงใน BootROM ส่งผลให้สามารถชุดโค้ดสำหรับโจมตีช่องโหว่ checkm8 ในการโจมตีช่องโหว่ได้</li>
+<li>ผลลัพธ์จากการโจมตีทำให้ผู้โจมตีสามารถเข้าถึงไฟล์บางส่วนรวมไปถึงการเอาข้อมูลจาก keychain แม้จะไม่รู้ passcode ซึ่งมีส่วนในการถูกใช้เพื่อเข้ารหัสข้อมูล</li>
+<li>อุปกรณ์ที่มีการใช้ CPU ตั้งแต่รุ่น A12 เป็นต้นมาจะไม่ได้รับผลกระทบจากช่องโหว่นี้ นั่นคืออุปกรณ์ตั้งแต่รุ่น iPhone Xr, iPhone Xs, iPhone Xs Max, iPhone 11, iPhone 11 Pro, iPhone 11 Pro Max และ iPhone SE (2020)</li>
+</ul>
+<h1 id="software">Software</h1>
+<ul>
+<li>ตรวจสอบให้แน่ใจว่าใช้ iOS รุ่นล่าสุดเสมอ</li>
+<li>อย่า jailbreak อุปกรณ์ การ jailbreak ใช้วิธีในการโจมตีช่องโหว่ของอุปกรณ์เพื่อละเมิดสิทธิ์ที่เหมาะสม ช่องโหว่เดียวกันนั้นสามารถใช้ในทางที่ไม่ปลอดภัยต่อผู้ใช้งานได้เช่นกัน</li>
+<li>ตั้งรหัสผ่านสำหรับข้อมูล backup ให้ปลอดภัย</li>
+<li>ทำความคุ้นเคยกับฟีเจอร์ใหม่ของ iOS เช่น ฟีเจอร์ในการแจ้งเตือนหากแอปพลิเคชันมีการร้องขอสิทธิ์ที่ต้องสงสัย</li>
+<li>เปิดใช้งานฟีเจอร์ MAC address randomization เพื่อเพิ่มความเป็นส่วนตัวในการใช้งาน</li>
+</ul>
+<h2 id="device-unlocking">Device Unlocking</h2>
+<ul>
+<li>เปิดใช้งานการตั้ง passcode สำหรับฟีเจอร์ Screen Time ในหัวข้อ Settings และ Screen Time โดยจะต้องตั้ง passcode ให้ปลอดภัยและเป็น passcode ซึ่งแตกต่างจาก passcode ในการปลดล็อคหน้าจอ</li>
+<li>เมื่อมีการตั้ง passcode พยายามตั้ง passcode แบบ complex ให้ได้เสมอ (ไม่ใช่ basic passcode ที่มีรูปแบบเป็นตัวเลข 4 ตัว)</li>
+<li>ตั้งค่าให้มีการล็อคอุปกรณ์โดยอัตโนมัติตามเวลาที่เหมาะสม</li>
+<li>ตั้งค่าไม่ให้สามารถเข้าถึงข้อมูล อาทิ Notification Centre, Control Centre และ USB Accessories ได้ระหว่างที่อุปกรณ์ยังถูกล็อคอยู่ฃ</li>
+<li>ตั้งค่าให้เมื่อมีการล็อคอุปกรณ์ การปลดล็อคอุปกรณ์จะต้องมีการใช้ passcode ในทันที</li>
+<li>พิจารณา threat model ส่วนบุคคลเพื่อเลือกใช้วิธีการปลดล็อคอุปกรณ์อย่างเหมาะสม ในบางกรณีการพิสูจน์ตัวตนด้วยฟีเจอร์ Touch ID หรือ Face ID อาจไม่เหมาะสมในบางสถานการณ์</li>
+</ul>
+<h2 id="applications">Applications</h2>
+<ul>
+<li>พิจารณาความปลอดภัยของแอปที่ใช้งานอยู่เสมอโดยเฉพาะอย่างยิ่งแอปซึ่งอ้างความปลอดภัยและความเป็นส่วนตัว แอปในกลุ่มนี้มักจะต้องมีการทำ security audit และเปิดเผยผลลัพธ์ให้แก่ผู้ใช้งานทราบ การติดตามการค้นพบและแก้ไขปัญหาสามารถใช้เพื่อบ่งชี้ความสามารถในการจัดการความเสี่ยงของผู้พัฒนาแอปได้</li>
+<li>การใช้งานแอปพลิเคชันอย่าง MDM มีส่วนที่ช่วยสร้างความปลอดภัยในการใช้งาน และในขณะเดียวกันก็อาจมีผลเสียต่อความเป็นส่วนตัวของผู้ใช้งานด้วย แนะนำให้พิจารณาโซลูชัน MDM และมีกระบวนการในการควบคุมการใช้งานให้เหมาะสม</li>
+</ul>
+<h1 id="usb-connection">USB Connection</h1>
+<ul>
+<li>ในการเชื่อมต่ออุปกรณ์กับคอมพิวเตอร์ ตรวจสอบให้แน่ใจว่าสายที่ใช้ในการเชื่อมต่อนั้นมีใบรับรองหรือถูกผลิตมาจากแหล่งที่เชื่อถือได้ เนื่องจากมีความเป็นไปได้ที่ผู้โจมตีจะมีการสลับสับเปลี่ยนสายซึ่งมีความสามารถในการขโมยข้อมูล อาทิ <a href="https://shop.hak5.org/products/o-mg-cable">MG Cable</a> หรือ <a href="https://usbninja.com/">USB Ninja</a></li>
+<li>เช่นเดียวกัน ตรวจสอบอุปกรณ์ USB charger ว่าเป็นอุปกรณ์ที่มีใบรับรองหรือถูกผลิตมาจากแหล่งที่เชื่อถือได้ FBI เคยมี<a href="https://thehackernews.com/2016/05/usb-charger-keylogger.html">การแจ้งเตือน</a>ถึงอุปกรณ์ USB charger แบบดัดแปลงซึ่งมีความสามารถในการขโมยข้อมูล</li>
+<li>เมื่อจำเป็นต้องมีการเชื่อมต่อผ่านฮาร์ดแวร์ที่ยังไม่ได้ตรวจสอบ ระมัดระวังการให้ &ldquo;Trust relationship&rdquo; การเชื่อมต่อเพื่อชาร์จไฟโดยปกติจะไม่มีการแจ้งเตือนเพื่อขอการอนุญาต การขออนุญาตจะเกิดขึ้นเมื่อมีการเชื่อมต่อกับอุปกรณ์ลักษณะอื่นเสมอ</li>
+<li>รักษาระบบที่อุปกรณ์จะทำการเชื่อมต่อให้ปลอดภัยด้วยเช่นกัน</li>
+</ul>
+<h1 id="sos-feature">SOS Feature</h1>
+<ul>
+<li>เรียนรู้การใช้งานฟีเจอร์ S.O.S ในอุปกรณ์ เมื่อเปิดใช้งานฟีเจอร์ดังกล่าวแล้ว อุปกรณ์จะมีการบังคับลบรหัสผ่านหรือข้อมูลสำหรับพิสูจน์ตัวตนออกจากหน่วยความจำของระบบทันที รวมไปถึงทำให้การปลดล็อคอุปกรณ์โดยอาศัย biometric ไม่สามารถทำได้</li>
+<li>การเปิดใช้งานฟีเจอร์ S.O.S ยังทำให้อุปกรณ์ปิดการใช้ต่อผ่านพอร์ต Lightning ซึ่งส่งผลให้การเชื่อมต่อกับอุปกรณ์ภายนอกเพื่อทำการดึงข้อมูลนั้นไม่สามารถทำได้</li>
+</ul>
+<h1 id="icloud">iCloud</h1>
+<ul>
+<li>ควบคุมการซิงค์ข้อมูลกับ iCloud ให้เหมาะสม ในกรณีที่ไม่มีความจำเป็นต้องซิงค์ข้อมูล ให้ปิดการใช้งานถ้าเป็นไปได้ ในบางกรณีหน่วยงานผู้บังคับใช้กฎหมายสามารถเข้าถึงข้อมูลใน iCloud ได้ผ่าน <a href="https://www.apple.com/privacy/government-information-requests/">Law Enforcement Support Program</a> ของแอปเปิล</li>
+<li>ตั้งรหัสผ่านสำหรับบัญชี iCloud ให้มีความปลอดภัย</li>
+<li>เปิดใช้งานฟีเจอร์ Find My <em><!-- raw HTML omitted --></em></li>
+<li>เปิดใช้งานฟีเจอร์ยืนยันตัวตนสองขั้นตอน</li>
+</ul>
+<h1 id="iot">IoT</h1>
+<p>หากผู้ใช้งานอุปกรณ์มีการใช้อุปกรณ์อื่น เช่น Apple Watch ซึ่งมีความสามารถในการปลดล็อคอุปกรณ์อื่น ๆ ได้ ตรวจสอบให้แน่ใจว่า Apple Watch มีการตั้งรหัสผ่านให้กับอุปกรณ์ด้วยเสมอ</p>
+<p>Apple TV ดูจะยังไม่มีวิธีในการให้ผู้ใช้งานสามารถตั้งค่าความปลอดภัยให้เหมาะสมในขณะนี้ เนื่องจากอุปกรณ์ยังไม่สามารถกำหนดแม้กระทั่ง passcode wfh</p>
+<h1 id="considerations">Considerations</h1>
+<ul>
+<li>Built-in SDK ที่มากับระบบ เช่น Facebook หรือแอปพลิเคชันในกลุ่มของ Google มีการส่งข้อมูลการใช้งานกลับไปให้ผู้พัฒนาแอปพลิเคชันเป็นจำนวนมาก เช่นเดียวกับผู้ให้บริการเครือข่ายซึ่งจำเป็นต้องมีการบันทึกข้อมูลจราจรทางคอมพิวเตอร์ตามกฎหมายเช่นเดียวกัน</li>
+<li>แม้อุปกรณ์จะปิดการใช้งานอยู่ แต่หากอุปกรณ์ยังคงเชื่อมต่อกับแหล่งพลังงานภายในอุปกรณ์ การเปิดใช้งานบางฟีเจอร์ของอุปกรณ์จากระยะไกล เช่น ไมโครโฟน ก็ยังสามารถทำได้</li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/apt-41-indictments/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">APT 41 Indictments</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/google-technical-writing-course/">
+                  <span class="button__text">Google Technical Writing Course</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

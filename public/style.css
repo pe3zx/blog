@@ -1,28 +1,22 @@
-:root {
-    /* light theme color */
-    --light-background: #fff;
-    --light-background-secondary: #eaeaea;
-    --light-header: #fafafa;
-    --light-color: #222;
-    --light-color-secondary: #999;
-    --light-border-color: #dcdcdc;
-
-    /* variables for js, must be the same as these in @custom-media queries */
-    --phoneWidth: (max-width: 684px);
-    --tabletWidth: (max-width: 900px);
-}
+/* Global */
 
 body {
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI, Sarabun, Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Sarabun, Helvetica, Apple Color Emoji, Segoe UI Emoji;
 }
 
-body.dark-theme {
-    --background: #181a1b;
-    --background-secondary: #444;
-    --header: #252627;
-    --color: #e8e6e3;
-    --color-secondary: #aaa;
-    --border-color: #aaa;
+.header {
+    --header: #090a0b;
+    color: #fff;
+}
+
+.post-meta {
+    color: #92a3ab;
+}
+
+.post {
+    font-size: 20px;
+    line-height: 32px;
+    font-weight: 400;
 }
 
 h1 {
@@ -33,19 +27,12 @@ h2 {
     font-size: 1.5rem;
 }
 
+p {
+    margin-bottom: 32px;
+}
+
 .logo__cursor {
     display: none;
-}
-
-.post {
-    font-size: 16px;
-    text-align: left;
-    line-height: 1.5;
-    font-weight: 400;
-}
-
-.post-title {
-    font-size: 2rem;
 }
 
 img[src$='#center'] {
@@ -54,6 +41,42 @@ img[src$='#center'] {
   max-width: 100%;
   height: auto;
 }
+
+/* White theme */
+
+:root {
+    --light-background: #fff;
+    --color: #313b3f;
+}
+
+:root a:link {
+    color: #000;
+}
+
+:root .footer {
+    color: #000;
+}
+
+/* Dark theme */
+
+body.dark-theme {
+    --background: #191b1f;
+    --color: rgba(255, 255, 255, 0.75);
+}
+
+body.dark-theme a:link {
+    color: #fff;
+}
+
+body.dark-theme .post-title {
+    color: #fff;
+}
+
+body.dark-theme .footer {
+    color: #fff;
+}
+
+/* Font */
 
 /* thai */
 

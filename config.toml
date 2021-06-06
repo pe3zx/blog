@@ -8,14 +8,13 @@ paginate = 5
   contentTypeName = "posts"
   defaultTheme = "dark"
   showMenuItems = 3
-  showReadingTime = false
+  showReadingTime = true
 
 [languages]
   [languages.en]
     title = "Pandora's Box"
-    subtitle = ""
-    keywords = ""
-    copyright = ""
+    keywords = "Blog by P. Boonyakarn"
+    copyright = "P. Boonyakarn © 2018 - 2021 CC-BY"
     menuMore = "Show more"
     writtenBy = "Written by"
     readMore = "Read more"
@@ -27,7 +26,7 @@ paginate = 5
     dateFormatList = "2006-01-02"
 
     [languages.en.params.logo]
-      logoText = "Pandora's Box"
+      logoText = "PANDORA'S BOX"
       logoHomeLink = "/"
 
     [languages.en.menu]

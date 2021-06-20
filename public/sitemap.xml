@@ -3,17 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://pandora.sh/posts/operation-neptune-spear/</loc>
-    <lastmod>2021-05-09T18:23:33+07:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://pandora.sh/</loc>
-    <lastmod>2021-05-09T18:23:33+07:00</lastmod>
+    <lastmod>2021-06-20T19:56:51+07:00</lastmod>
   </url>
   
   <url>
     <loc>https://pandora.sh/posts/</loc>
+    <lastmod>2021-06-20T19:56:51+07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://pandora.sh/posts/process-ghosting/</loc>
+    <lastmod>2021-06-20T19:56:51+07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://pandora.sh/posts/operation-neptune-spear/</loc>
     <lastmod>2021-05-09T18:23:33+07:00</lastmod>
   </url>
   

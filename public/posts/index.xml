@@ -10,10 +10,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>P. Boonyakarn © 2018 - 2021 CC-BY</copyright>
-    <lastBuildDate>Sun, 09 May 2021 18:23:33 +0700</lastBuildDate>
+    <lastBuildDate>Sun, 20 Jun 2021 19:56:51 +0700</lastBuildDate>
     
 	<atom:link href="https://pandora.sh/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Process Ghosting</title>
+      <link>https://pandora.sh/posts/process-ghosting/</link>
+      <pubDate>Sun, 20 Jun 2021 19:56:51 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/process-ghosting/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          ทำความรู้จัก Process Ghosting เปลี่ยนไฟล์ให้เป็น “ผี” เพื่อหลบโปรแกรม Anti Malware
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Operation Neptune Spear</title>

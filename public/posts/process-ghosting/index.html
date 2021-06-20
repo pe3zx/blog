@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Process Ghosting ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="ในกระบวนการเพื่อระบุหาการมีอยู่ของมัลแวร์สภาพแวดล้อมที่เป็น Windows โปรแกรมในกลุ่ม anti malware มีการใช้เทคนิคหลายอย่างร่วมกันเพื่อให้แน่ใจว่าหากมีการ bypass เทคนิคใดเทคนิคหนึ่งแล้ว เทคนิคอื่นจะยังคงอยู่เพื่อทำให้การตรวจจับยังมีประสิทธิภาพ เราอาจรู้จักวิธีการที่ถูกใช้เหล่านี้ในชื่อต่าง ๆ อาทิ การทำ API hooking เพื่อตรวจหาการเรียกใช้ฟังก์ชันของระบบที่ผิดปกติ, การใช้ Event tracing for Windows (ETW) เพื่อรับข้อมูลการทำงานของระบบปฏิบัติการแล้วนำมาประมวลผล, การติดตั้งไดร์เวอร์เพื่อคอยดักจับเหตุการณ์ในระดับเคอร์เนลล์ รวมไปถึงการผสานเข้ากับฟีเจอร์บางอย่างที่ระบบปฏิบัติการมีให้เพื่อให้ได้มุมมองที่กว้างและลึกขึ้นอย่าง Antimalware Scan Interface (AMSI)
+เมื่อมองกลับมาในมุมของการ bypass แล้ว การ bypass ก็มักจะเกิดขึ้นเพื่อตอบสนองต่อแนวทางการตรวจจับที่เฉพาะ ตัวอย่างเช่นการโจมตีในกลุ่ม Tampering attack ที่พุ่งเป้าไปที่กระบวนการซึ่งเกิดขึ้นเมื่อโปรเซสกำลังจะถูกสร้างมาจากไฟล์ เพื่อให้การเกิดขึ้นของโปรเซสนั้นไม่ถูกระบุโดยโปรแกรม Anti malware ว่าเป็นอันตราย เทคนิค Process Ghosting ซึ่งเราจะมาพูดถึงกันในวันนี้ก็คือหนึ่งเทคนิคในกลุ่มนี้
+Tampering Attacks ก่อนจะไปพูดถึงเมนูหลักของเราคือ Process Ghosting การแนะนำการโจมตีในกลุ่ม Tampering attack ให้ได้รู้จักกันโดยคร่าวก่อนอาจเป็นจุดเริ่มต้นที่ทำให้เราเข้าใจเทคนิคการโจมตีในลักษณะนี้ได้ดีมากยิ่งขึ้น
+เทคนิคการโจมตีในกลุ่ม Tampering ซึ่งถูกค้นพบมาก่อนและมีอิทธิพลต่อการค้นพบ Process Ghosting มีอยู่ทั้งหมด 3 เทคนิค ได้แก่ Process Doppelgänging, Process Herpaderping และ Process reimaging"
+/>
+<meta
+  name="keywords"
+  content="Blog by P. Boonyakarn"
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/process-ghosting/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Process Ghosting"/>
+<meta name="twitter:description" content="ทำความรู้จัก Process Ghosting เปลี่ยนไฟล์ให้เป็น “ผี” เพื่อหลบโปรแกรม Anti Malware"/>
+
+
+
+<meta property="og:title" content="Process Ghosting" />
+<meta property="og:description" content="ทำความรู้จัก Process Ghosting เปลี่ยนไฟล์ให้เป็น “ผี” เพื่อหลบโปรแกรม Anti Malware" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/process-ghosting/" />
+<meta property="article:published_time" content="2021-06-20T19:56:51+07:00" />
+<meta property="article:modified_time" content="2021-06-20T19:56:51+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >PANDORA&#39;S BOX</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Process Ghosting</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-06-20
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+        <span class="post-read-time"
+          >— 2 min read</span
+        >
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>ในกระบวนการเพื่อระบุหาการมีอยู่ของมัลแวร์สภาพแวดล้อมที่เป็น Windows โปรแกรมในกลุ่ม anti malware มีการใช้เทคนิคหลายอย่างร่วมกันเพื่อให้แน่ใจว่าหากมีการ bypass เทคนิคใดเทคนิคหนึ่งแล้ว เทคนิคอื่นจะยังคงอยู่เพื่อทำให้การตรวจจับยังมีประสิทธิภาพ เราอาจรู้จักวิธีการที่ถูกใช้เหล่านี้ในชื่อต่าง ๆ อาทิ การทำ API hooking เพื่อตรวจหาการเรียกใช้ฟังก์ชันของระบบที่ผิดปกติ, การใช้ Event tracing for Windows (ETW) เพื่อรับข้อมูลการทำงานของระบบปฏิบัติการแล้วนำมาประมวลผล, การติดตั้งไดร์เวอร์เพื่อคอยดักจับเหตุการณ์ในระดับเคอร์เนลล์ รวมไปถึงการผสานเข้ากับฟีเจอร์บางอย่างที่ระบบปฏิบัติการมีให้เพื่อให้ได้มุมมองที่กว้างและลึกขึ้นอย่าง Antimalware Scan Interface (AMSI)</p>
+<p>เมื่อมองกลับมาในมุมของการ bypass แล้ว การ bypass ก็มักจะเกิดขึ้นเพื่อตอบสนองต่อแนวทางการตรวจจับที่เฉพาะ ตัวอย่างเช่นการโจมตีในกลุ่ม Tampering attack ที่พุ่งเป้าไปที่กระบวนการซึ่งเกิดขึ้นเมื่อโปรเซสกำลังจะถูกสร้างมาจากไฟล์ เพื่อให้การเกิดขึ้นของโปรเซสนั้นไม่ถูกระบุโดยโปรแกรม Anti malware ว่าเป็นอันตราย เทคนิค Process Ghosting ซึ่งเราจะมาพูดถึงกันในวันนี้ก็คือหนึ่งเทคนิคในกลุ่มนี้</p>
+<h1 id="tampering-attacks">Tampering Attacks</h1>
+<p>ก่อนจะไปพูดถึงเมนูหลักของเราคือ Process Ghosting การแนะนำการโจมตีในกลุ่ม Tampering attack ให้ได้รู้จักกันโดยคร่าวก่อนอาจเป็นจุดเริ่มต้นที่ทำให้เราเข้าใจเทคนิคการโจมตีในลักษณะนี้ได้ดีมากยิ่งขึ้น</p>
+<p>เทคนิคการโจมตีในกลุ่ม Tampering ซึ่งถูกค้นพบมาก่อนและมีอิทธิพลต่อการค้นพบ Process Ghosting มีอยู่ทั้งหมด 3 เทคนิค ได้แก่ Process Doppelgänging, Process Herpaderping และ Process reimaging</p>
+<h2 id="process-doppelgänging">Process Doppelgänging</h2>
+<p>Process Doppelgänging เป็นเทคนิคการโจมตีที่อาศัยฟีเจอร์ของ Windows ในการทำไฟล์ซึ่งควรจะถูกนำมาสร้างเป็นโปรเซสนั้นไม่ปรากฎเมื่อถูกค้นหา</p>
+<p>Process Doppelgänging อาศัยกลไกที่มีชื่อว่า Windows Transactional NTFS (TxF) ซึ่งทำให้ผู้ใช้งานสามารถสร้างสิ่งที่เรียกว่า atomic transaction บนระบบ NTFS ได้เช่นเดียวกับคอนเซ็ปต์ของ transaction ที่มีในฐานข้อมูล</p>
+<p>ในการใช้เพื่อโจมตี ผู้โจมตีจะสร้างส่วนของไฟล์ที่เรียกว่าอิมเมจซึ่งจะถูกนำไปใช้ในการสร้างเป็นโปรเซสต่อ โดยอิมเมจทที่ถูกสร้างนั้นจะถูกสร้างจากไฟล์ที่อยู่ใน transaction ซึ่งจะถูก roll back (หนึ่งในคุณสมบัติของ transaction) หลังจากที่มีการสร้างอิมเมจเสร็จสิ้น ซึ่งจะทำให้ไฟล์ไม่ปรากฎในระบบไฟล์ และส่งผลให้เมื่อมีการนำอิมเมจไปสร้างเป็นโปรเซส ความพยายามในการระบุหาไฟล์ที่เชื่อมโยงกับโปรเซสจะไม่สามารถทำได้</p>
+<h2 id="process-herpaderping">Process Herpaderping</h2>
+<p>Process Herpaderping เป็นเทคนิคการโจมตีที่จะทำให้ความพยายามในการระบุหาไฟล์ที่เชื่อมโยงกับโปรเซสนั้นปรากฎผลลัพธ์เป็นไฟล์อื่น</p>
+<p>อ้างอิงจากกระบวนการโดยทั่วไปของการเกิดขึ้นของโปรเซส ไฟล์ executable จะถูกเรียก/เปิด หลังจากนั้น handle ที่เกิดจากการเรียกไฟล์จะถูกระบุกับฟังก์ชันของระบบเพื่อสร้างเป็นอิมเมจที่จะถูกเอาไปสร้างเป็นโปรเซสต่อ Process Herpaderping จะอาศัย handle ที่ยังค้างอยู่ในหลังจากที่มีการสร้างอิมเมจแล้วในการเขียนทับไฟล์ executable ด้วยไฟล์ที่ไม่เป็นอันตราย ซึ่งส่งผลให้ไฟล์ที่ถูกเขียนใหม่และปรากฎบนดิสก์นั้นเป็นคนละไฟล์กับที่ถูกโหลดเข้าสู่หน่วยความจำ และทำให้การเชื่อมโยงไฟล์กับโปรเซสได้ผลลัพธ์ที่ไม่ถูกต้อง</p>
+<h2 id="process-reimaging">Process Reimaging</h2>
+<p>Process Reimaging เป็นเทคนิคการโจมตีที่อาศัยการโจมตีปัญหาของการ synchronize cache ที่เกิดขึ้นในเคอร์เนล ผลลัพธ์ของ Process Reimaging จะทำให้พาธของไฟล์ executable ในระบบไฟล์กับพาธของไฟล์ executable ที่อิมเมจมีการอ้างถึงนั้นไม่ตรงกัน การใช้เทคนิค Process Reimaging สามารถทำได้ง่าย ๆ ด้วยการโหลดไฟล์ DLL ในพาธที่เป็นเหยื่อล่อ, ถอนการโหลดไฟล์ DLL ออก และทำการโหลดไฟล์ DLL ที่พาธใหม่ การดำเนินการในลักษณะนี้เมื่อถูกตรวจสอบโดยฟังก์ชันของระบบบางฟังก์ชันจะได้ผลลัพธ์เป็นพาธเหยื่อล่อ</p>
+<h1 id="process-ghosting">Process Ghosting</h1>
+<p>แนวคิดหลักของเทคนิค Process Ghosting คือการเรียก executable ที่ถูกลบไปแล้วซึ่งจะทำให้การเชื่อมโยงเพื่อตรวจสอบไฟล์และโปรเซสนั้นไม่สามารถทำได้</p>
+<p>อ้างอิงจาก<a href="https://www.elastic.co/blog/process-ghosting-a-new-executable-image-tampering-attack">ต้นฉบับของงานวิจัย</a> เทคนิค Process Ghosting สามารถทำได้ตามขั้นตอนดังนี้</p>
+<ul>
+<li>ผ่านฟังก์ชัน <code>NtCreateFile</code> (อาจใช้เป็นฟังก์ชันที่เกี่ยวข้องกับการเปิดไฟล์แทนได้ เช่น <code>NtOpenFile</code>)
+<ul>
+<li>กำหนด flag <code>FILE_SUPERSEDED</code> ใน <code>IoStatusBlock</code> ความหมายของการกำหนด flag นี้กับไฟล์ที่มีอยู่แล้วจะหมายถึงการลบไฟล์ปัจจุบันและทำการสร้างไฟล์ใหม่</li>
+<li>กำหนด flag <code>FILE_DELETE_ON_CLOSE</code> ใน <code>CreateOptions</code> ความหมายของการกำหนด flag นี้จะหมายถึงให้การลบไฟล์ทันทีหาก handle สุดท้ายที่เกี่ยวข้องกับไฟล์ทุกปิด (มีการเรียกใช้ฟังก์ชัน <code>NtClose</code> กับ handle ของไฟล์</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS stat <span style="color:#f92672">=</span> NtOpenFile(<span style="color:#f92672">&amp;</span>file, 
+    DELETE <span style="color:#f92672">|</span> SYNCHRONIZE <span style="color:#f92672">|</span> GENERIC_READ <span style="color:#f92672">|</span> GENERIC_WRITE,
+    <span style="color:#f92672">&amp;</span>attr, 
+    <span style="color:#f92672">&amp;</span>status_block, 
+    FILE_SHARE_READ <span style="color:#f92672">|</span> FILE_SHARE_WRITE,
+    FILE_SUPERSEDE <span style="color:#f92672">|</span> FILE_SYNCHRONOUS_IO_NONALERT
+);
+</code></pre></div><ul>
+<li>ผ่านฟังก์ชัน <code>CreateFileW</code> (อาจใช้เป็นฟังก์ชันที่เกี่ยวข้องกับการเปิดไฟล์แทนได้ เช่น <code>OpenFile</code>)
+<ul>
+<li>กำหนด flag <code>CREATE_ALWAYS</code> ใน <code>dwCreationDisposition</code> เพื่อให้มีการสร้างไฟล์ใหม่เสมอแม้จะมีไฟล์เดิมอยู่ ซึ่งหากมีไฟล์เดิม การกำหนด flag จะเท่ากับการสร้างไฟล์ใหม่ทับไฟล์เดิม</li>
+<li>กำหนด flag <code>FILE_FLAG_DELETE_ON_CLOSE</code> ใน <code>dwFlagAndAttributes</code> เช่นเดียวกับ <code>FILE_DELETE_ON_CLOSE</code> ในกรณีของ <code>NtCreateFile</code> การกำหนด flag นี้จะหมายถึงกำหนดให้ไฟล์ถูกลบทันทีหาก handle ที่เกี่ยวข้องกับไฟล์ดังกล่าวถูกปิด</li>
+</ul>
+</li>
+<li>หลังจากมีการกำหนด flag ทั้งในกรณีที่มีการเรียกใช้ <code>NtCreateFile</code> หรือในกรณีที่มีการเรียกใช้ <code>CreateFileW</code> เสร็จแล้ว ให้ทำการเรียกใช้ฟังก์ชัน <code>NtSetInformationFile</code> ที่มีการระบุคลาส <code>FileDispositionInformation</code> เอาไว้ คลาส <code>FileDispositionInformation</code> ที่อ้างอิงมาจากสตรัคเจอร์ <code>FILE_DISPOSITION_INFORMATION</code> จะต้องมีการกำหนดค่าในฟิลด์ <code>DeleteFile</code> ให้เป็น <code>TRUE</code> ด้วย</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+info.DeleteFile <span style="color:#f92672">=</span> TRUE;
+NtSetInformationFile(hDelFile, <span style="color:#f92672">&amp;</span>status_block, <span style="color:#f92672">&amp;</span>info, <span style="color:#66d9ef">sizeof</span>(info), FileDispositionInformation);
+</code></pre></div><ul>
+<li>ทำการเขียนไฟล์จาก handle ของไฟล์ที่เราได้มาจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> ด้วยโค้ด(ของมัลแวร์)ที่เราต้องการ</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">status <span style="color:#f92672">=</span> NtWriteFile(
+        hDelFile,
+        NULL,
+        NULL,
+        NULL, 
+        <span style="color:#f92672">&amp;</span>status_block,
+        payladBuf, 
+        payloadSize,
+        <span style="color:#f92672">&amp;</span>ByteOffset,
+        NULL
+);
+</code></pre></div><ul>
+<li>เตรียมการสร้างโปรเซสด้วยการสร้างอิมเมจจากไฟล์ที่จะเป็นวัตถุดิบในการสร้างโปรเซสก่อนด้วยฟังก์ชัน <code>NtCreateSection</code> ในขั้นตอนนี้หากการสร้างอิมเมจสมบูรณ์ เราจะได้ handle ของอิมเมจมาเพื่อใช้สร้างโปรเซสต่อ</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">HANDLE hSection <span style="color:#f92672">=</span> nullptr;
+status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#f92672">&amp;</span>hSection,
+    SECTION_ALL_ACCESS,
+    NULL,
+    <span style="color:#ae81ff">0</span>,
+    PAGE_READONLY,
+    SEC_IMAGE,
+    hDelFile
+);
+</code></pre></div><ul>
+<li>ก่อนจะทำการสร้างโปรเซส เรียกใช้ฟังก์ชัน <code>NtClose</code> เพื่อปิด handle ที่เกิดจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> อ้างอิงจาก flag ที่เรากำหนดไว้ในขั้นตอนก่อนหน้า เมื่อมีการปิด handle ที่เกี่ยวข้องกับไฟล์แล้ว ไฟล์ที่ handle นี้เชื่อมโยงจะถูกลบ</li>
+<li>นำ handle ของอิมเมจที่ได้จากการเรียกใช้ฟังก์ชัน <code>NtCreateSection</code> ไปสร้างเป็นโปรเซสต่อ โดยอาจใช้ฟังก์ชันอย่าง <code>NtCreateProcessEx</code> แล้วทำการระบุพารามิเตอร์ในส่วน <code>sectionHandle</code> เป็น handle ของอิมเมจที่เรามีอยู่</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS status <span style="color:#f92672">=</span> NtCreateProcessEx(
+    <span style="color:#f92672">&amp;</span>hProcess,
+    PROCESS_ALL_ACCESS,
+    NULL,
+    NtCurrentProcess(),
+    PS_INHERIT_HANDLES,
+    hSection,
+    NULL,
+    NULL,
+    FALSE
+);
+</code></pre></div><p>สิ่งที่เราทำในขั้นตอนที่ผ่านมาทั้งหมดนั้นมีใจความสำคัญคือการสร้างไฟล์ที่มีสถานะ “กำลังจะถูกลบ” ติดอยู่ และทำการลบทันที “เมื่อมีการสร้าง section ที่เป็นอิมเมจ ก่อนที่จะนำอิมเมจไปสร้างเป็นโปรเซส”</p>
+<p>หากอ้างคำพูดในรีเสิร์ชต้นฉบับ โปรเซสซึ่งเหมือนกับวิญญาณนั้นถูกสร้างจากไฟล์ซึ่งเหมือนกับร่างที่กำลังจะตาย (ถูกลบ) เทคนิคนี้จึงถูกเรียกว่า Process Ghosting</p>
+<p>ในมุมของการพยายามตรวจสอบและเชื่อมโยงโปรเซสที่เกิดขึ้นใหม่กลับไปยังไฟล์โดยโปรแกรม Anti malware หากความพยายามในการตรวจสอบเกิดขึ้นหลังจากไฟล์ถูกลบออกไปแล้ว นั่นหมายถึงโปรแกรม Anti malware จะไม่เจอไฟล์ที่เชื่อมโยงกับโปรเซส และทำให้โปรแกรม Anti malware ไม่สามารถตรวจสอบได้</p>
+<h1 id="proof-of-concept">Proof of Concept</h1>
+<p>เทคนิค Process Ghosting มีการถูกอิมพลีเมนต์ให้พร้อมใช้งานจริงแล้วโดย hasherezade สามารถดูเพิ่มเติมได้ที่ <a href="https://github.com/hasherezade/process_ghosting">hasherezade/proess_ghosting</a></p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/operation-neptune-spear/">
+                  <span class="button__text">Operation Neptune Spear</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

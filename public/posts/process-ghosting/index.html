@@ -230,7 +230,13 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
 info.DeleteFile <span style="color:#f92672">=</span> TRUE;
-NtSetInformationFile(hDelFile, <span style="color:#f92672">&amp;</span>status_block, <span style="color:#f92672">&amp;</span>info, <span style="color:#66d9ef">sizeof</span>(info), FileDispositionInformation);
+NtSetInformationFile(
+    hDelFile,
+    <span style="color:#f92672">&amp;</span>status_block,
+    <span style="color:#f92672">&amp;</span>info,
+    <span style="color:#66d9ef">sizeof</span>(info),
+    FileDispositionInformation
+);
 </code></pre></div><ul>
 <li>ทำการเขียนไฟล์จาก handle ของไฟล์ที่เราได้มาจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> ด้วยโค้ด(ของมัลแวร์)ที่เราต้องการ</li>
 </ul>
@@ -289,6 +295,13 @@ status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#
             <hr />
           </div>
           <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://pandora.sh/posts/ransomware-tradecraft-with-lockbit/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Ransomware Tradecraft With LockBit</span>
+                </a>
+              </span>
             
             
               <span class="button next">

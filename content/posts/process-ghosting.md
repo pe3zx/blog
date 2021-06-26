@@ -61,7 +61,13 @@ NTSTATUS stat = NtOpenFile(&file,
 ```c
 FILE_DISPOSITION_INFORMATION info = { 0 };
 info.DeleteFile = TRUE;
-NtSetInformationFile(hDelFile, &status_block, &info, sizeof(info), FileDispositionInformation);
+NtSetInformationFile(
+    hDelFile,
+    &status_block,
+    &info,
+    sizeof(info),
+    FileDispositionInformation
+);
 ```
 
 - ทำการเขียนไฟล์จาก handle ของไฟล์ที่เราได้มาจาก `NtCreateFile` หรือ `CreateFileW` ด้วยโค้ด(ของมัลแวร์)ที่เราต้องการ

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Ransomware as a Service With REvil (ESXi variant) ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="หลังจาก DARKSIDE ประกาศยุติปฏิบัติการ และความเคลื่อนไหวที่ยังมีอยู่ของ DARKSIDE ในเว็บบอร์ดใต้ดินในช่วงไม่ถึงเดือนที่ผ่านมา ความเคลื่อนไหวในตลาดบริการของ Ransomware as a Service (RaaS) ก็มีอะไรน่าสนใจหลายอย่าง ส่วนหนึ่งที่ผมสามารถสังเกตเห็นได้อย่างชัดเจนคือความพยายามในการแข่งขันในบริการ Ransomware as a Service (RaaS) ให้รวมศูนย์และจบในตัวเองให้ได้ เพื่อให้บริการของตัวเองมีจุดเด่นเหนือกว่ากว่าบริการจากคู่แข่งซึ่งจะเป็นการการันตีผลประกอบการจากส่วนแบ่ง
+ความเคลื่อนไหวบางส่วนที่สามารถรีแคปมาได้มีตามประเด็นดังนี้
+ RaaS พยายามอย่างยิ่งที่จะใช้ความเร็วในการเข้ารหัสเป็นจุดขาย สอดคล้องกับประเด็น surviability ในงานวิจัย cryptovirology การสร้างข้อได้เปรียบเหนือคู่แข่งในประเด็นนี้อยู่ที่การปรับเปลี่ยนชุดอัลกอริธึมการเข้ารหัสโดยยังคงความเป็น Hybrid crypto เอาไว้ ตัวเลือกที่ DARKSIDE ใช้ในขณะนี้คือ ChaCha20 กับ RSA 4096-bit โดยใช้ประโยชน์จากความเป็น Stream cipher ของ ChaCha20 หลังจากเคยใช้ Salsa20 ในช่วงปี 2020 (ผมได้เคยเขียนประเด็นเรื่องการใช้ TEA ของมัลแวร์เรียกค่าไถ่ Phobos เอาไว้ด้วย อ่านเพิ่มเติมได้ที่นี่) การขยาย coverage เพื่อให้สามารถสร้างความเสียหายในวงกว้างที่สุดเท่าที่จะทำได้ เราจะเห็นตัวอย่างของการขยาย coverage ผ่านการทำให้มัลแวร์เรียกค่าไถ่รองรับการทำงานในอุปกรณ์และแพลตฟอร์มที่หลากหลายมากยิ่งขึ้น ในกรณีของ DARKSIDE จุดขายในส่วนนี้ถูกนำเสนอผ่านความสามารถในการเข้ารหัส NAS และ ESXi ความสามารถในการจัดการเงินค่าไถ่ บริการ RaaS พยายามจะทำให้การจัดการเงินค่าไถ่จบอย่างสมบูรณ์แบบในตัวเองผ่านการใช้งานบริการในกลุ่ม mixer/tumbler เพื่ออำพรางธุรกรรม คนใช้แพลตฟอร์ม RaaS สามารถถอนเงินได้ตามต้องการ (ไม่ระบุวิธีการ) โดยที่ตัวเลือกของสกุลเงินที่รองรับยังคงเป็น BTC และ XMR  เราต่างรู้กันดีว่าในกรณีของการโจมตี Colonial Pipeline โดย DARKSIDE นั้น FBI สามารถที่ยึดเงินค่าไถ่คืนมาได้โดยไม่ระบุวิธีการว่าทำได้อย่างไร ผมมีความสงสัยว่าประเด็นนี้อาจจะกระทบต่อจุดขายที่ 3 อยู่พอสมควร ไว้จะหาข้อมูลเพิ่มเติมในส่วนนี้ว่าตลาด RaaS มีปฏิกิริยาอย่างไรกับบริการของ DARKSIDE ที่โฆษณาออกมาในลักษณะนี้ครับ"
+/>
+<meta
+  name="keywords"
+  content="Blog by P. Boonyakarn"
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/ransomware-as-a-service-with-revil/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ransomware as a Service With REvil (ESXi variant)"/>
+<meta name="twitter:description" content="สะท้อนความเคลื่อนไหวของตลาดบริการ Ransomware as a Service ผ่านการวิเคราะห์ REvil ใหม่ที่สามารถใช้เพื่อโจมตี ESXi ได้"/>
+
+
+
+<meta property="og:title" content="Ransomware as a Service With REvil (ESXi variant)" />
+<meta property="og:description" content="สะท้อนความเคลื่อนไหวของตลาดบริการ Ransomware as a Service ผ่านการวิเคราะห์ REvil ใหม่ที่สามารถใช้เพื่อโจมตี ESXi ได้" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/ransomware-as-a-service-with-revil/" />
+<meta property="article:published_time" content="2021-06-29T20:55:33+07:00" />
+<meta property="article:modified_time" content="2021-06-29T20:55:33+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >PANDORA&#39;S BOX</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Ransomware as a Service With REvil (ESXi variant)</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-06-29
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P. Boonyakarn</span
+        >
+
+
+      
+        <span class="post-read-time"
+          >— 4 min read</span
+        >
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>หลังจาก DARKSIDE ประกาศยุติปฏิบัติการ และความเคลื่อนไหวที่ยังมีอยู่ของ DARKSIDE ในเว็บบอร์ดใต้ดินในช่วงไม่ถึงเดือนที่ผ่านมา ความเคลื่อนไหวในตลาดบริการของ Ransomware as a Service (RaaS) ก็มีอะไรน่าสนใจหลายอย่าง ส่วนหนึ่งที่ผมสามารถสังเกตเห็นได้อย่างชัดเจนคือความพยายามในการแข่งขันในบริการ Ransomware as a Service (RaaS) ให้รวมศูนย์และจบในตัวเองให้ได้ เพื่อให้บริการของตัวเองมีจุดเด่นเหนือกว่ากว่าบริการจากคู่แข่งซึ่งจะเป็นการการันตีผลประกอบการจากส่วนแบ่ง</p>
+<p>ความเคลื่อนไหวบางส่วนที่สามารถรีแคปมาได้มีตามประเด็นดังนี้</p>
+<ol>
+<li><strong>RaaS พยายามอย่างยิ่งที่จะใช้ความเร็วในการเข้ารหัสเป็นจุดขาย</strong> สอดคล้องกับประเด็น surviability ในงานวิจัย cryptovirology การสร้างข้อได้เปรียบเหนือคู่แข่งในประเด็นนี้อยู่ที่การปรับเปลี่ยนชุดอัลกอริธึมการเข้ารหัสโดยยังคงความเป็น Hybrid crypto เอาไว้ ตัวเลือกที่ DARKSIDE ใช้ในขณะนี้คือ ChaCha20 กับ RSA 4096-bit โดยใช้ประโยชน์จากความเป็น Stream cipher ของ ChaCha20 หลังจากเคยใช้ Salsa20 ในช่วงปี 2020 (ผมได้เคยเขียนประเด็นเรื่องการใช้ TEA ของมัลแวร์เรียกค่าไถ่ Phobos เอาไว้ด้วย <a href="https://pandora.sh/posts/quick-note-on-phobos-ransomware/">อ่านเพิ่มเติมได้ที่นี่</a>)</li>
+<li><strong>การขยาย coverage เพื่อให้สามารถสร้างความเสียหายในวงกว้างที่สุดเท่าที่จะทำได้</strong> เราจะเห็นตัวอย่างของการขยาย coverage ผ่านการทำให้มัลแวร์เรียกค่าไถ่รองรับการทำงานในอุปกรณ์และแพลตฟอร์มที่หลากหลายมากยิ่งขึ้น ในกรณีของ DARKSIDE จุดขายในส่วนนี้ถูกนำเสนอผ่านความสามารถในการเข้ารหัส NAS และ ESXi</li>
+<li><strong>ความสามารถในการจัดการเงินค่าไถ่</strong> บริการ RaaS พยายามจะทำให้การจัดการเงินค่าไถ่จบอย่างสมบูรณ์แบบในตัวเองผ่านการใช้งานบริการในกลุ่ม mixer/tumbler เพื่ออำพรางธุรกรรม คนใช้แพลตฟอร์ม RaaS สามารถถอนเงินได้ตามต้องการ (ไม่ระบุวิธีการ) โดยที่ตัวเลือกของสกุลเงินที่รองรับยังคงเป็น BTC และ XMR</li>
+</ol>
+<p>เราต่างรู้กันดีว่าในกรณีของการโจมตี Colonial Pipeline โดย DARKSIDE นั้น FBI สามารถที่ยึดเงินค่าไถ่คืนมาได้โดยไม่ระบุวิธีการว่าทำได้อย่างไร ผมมีความสงสัยว่าประเด็นนี้อาจจะกระทบต่อจุดขายที่ 3 อยู่พอสมควร ไว้จะหาข้อมูลเพิ่มเติมในส่วนนี้ว่าตลาด RaaS มีปฏิกิริยาอย่างไรกับบริการของ DARKSIDE ที่โฆษณาออกมาในลักษณะนี้ครับ</p>
+<p>อย่างไรก็ตาม แม้ DARKSIDE จะได้รับความสนใจเป็นอย่างมากในช่วงที่ผ่านมา การได้รับความสนใจก็ไม่ได้การันตีส่วนแบ่งในตลาด (หรือในบางทีอาจทำให้ส่วนแบ่งหายไปก็ได้) บริการ RaaS เจ้าอื่นอย่าง REvil ที่มีชื่อมานานกว่าก็ยังให้บริการอยู่ด้วยฟีเจอร์ที่คล้ายกัน</p>
+<p>ในโพสต์นี้ ผมจะทำ quick overview กับตัวอย่างมัลแวร์เรียกค่าไถ่ REvil ซึ่งถูกออกแบบมาให้สำหรับการโจมตีสภาพแวดล้อมที่เป็น ESXi ไฟล์ตัวอย่างมัลแวร์ตัวนี้มาจากการรวบรวมของทีม VX underground สำหรับใครซึ่งสนใจจะเปรียบเทียบฟีเจอร์กับฝั่งของ DARKSIDE ผมขอแนะนำ<a href="https://www.trendmicro.com/en_us/research/21/e/darkside-linux-vms-targeted.html">โพสต์จาก Trend Micro</a> ซึ่งได้มีการวิเคราะห์ไฟล์ของมัลแวร์เรียกค่าไถ่ DARKSIDE ที่ซัพพอร์ตการโจมตี ESXi ตามลิงค์ครับ</p>
+<h1 id="sample-info">Sample Info</h1>
+<p>ไฟล์ตัวอย่างของมัลแวร์ที่ถูกพูดถึงในโพสต์นี้มีค่าแฮช SHA256 คือ <code>ea1872b2835128e3cb49a0bc27e4727ca33c4e6eba1e80422db19b505f965bc4</code> ไฟล์ตัวอย่างของมัลแวร์ถูกคอมไพล์เป็น ELF 64-bit, dynamically linked, stripped ไม่มีลักษณะการ obfuscation/packing และมีการ ปรากฎ compilation banner คือ <code>GCC: (Ubuntu 4.8.4-2ubuntu1~14.04.4) 4.8.4</code></p>
+<h1 id="analysis">Analysis</h1>
+<p>REvil ในสายพันธุ์นี้เปิดช่องทางให้ผู้ใช้สามารถกำหนดลักษณะการทำงานได้ก่อนเริ่มการทำงาน ตัวเลือกซึ่งใช้เพื่อกำหนดลักษณะการทำงานมีดังนี้</p>
+<ul>
+<li>ระบุพาธในการเข้ารหัสผ่านพารามิเตอร์ <code>--path</code> หากไม่ระบุ มัลแวร์จะเข้ารหัสเฉพาะในพาธปัจจุบัน</li>
+<li>ระบุจำนวนเธรดผ่านพารามิเตอร์ <code>--threads</code> หากไม่ระบุ ค่าเริ่มต้นของมัลแวร์จะอยู่ที่ 50 เธรด</li>
+<li>ระบุ boolean flag ผ่านพารามิตเตอร์ <code>--slient</code> หากค่านี้เป็นจริง มัลแวร์เรียกค่าไถ่จะทำงานโดยไม่มีการหยุดการทำงานของ virtual machine</li>
+</ul>
+<p>เนื่องจากโค้ดของมัลแวร์ไม่ได้มีมาตรการป้องกันการวิเคราะห์เป็นพิเศษ เราสามารถเห็นการทำงานเบื้องต้นคร่าว ๆ หากไล่วิเคราะห์ฟังก์ชันซึ่งถูกเรียกเป็นลำดับไปได้ดังนี้</p>
+<p><img src="https://i.imgur.com/5Kcodmp.jpg#center" alt="main"></p>
+<ul>
+<li>ส่วนของการอ่านค่าอากิวเมนต์ที่ถูกระบุเข้ามาตอนเริ่มการทำงานของมัลแวร์</li>
+<li>ส่วนของการอ่านการตั้งค่าซึ่งถูกฝังมาอยู่แล้วกับไฟล์มัลแวร์</li>
+<li>ส่วนของการจัดการกับ virtual machine ที่ยังทำงานอยู่ ในกรณีที่ไม่ได้มีการระบุ <code>--silent</code></li>
+<li>ส่วนของการสร้างเธรด และจัดการเธรดหลังจากเข้ารหัสเสร็จสิ้น</li>
+<li>ส่วนของการไล่พาธ ซึ่งประกอบไปด้วยส่วนของการสร้างกุญแจเข้ารหัสเฉพาะในแต่ละไฟล์ ส่วนของการเข้ารหัสไฟล์และส่วนที่ใช้เพื่อสร้าง ransom note ในแต่ละไดเรกทอรี</li>
+</ul>
+<p>มัลแวร์เรียกค่าไถ่ของ REvil ในสายพันธุ์ที่พุ่งเป้าโจมตีสภาพแวดล้อม ESXi ยังคงสืบทอดความเหมือนกับมัลแวร์เรียกค่าไถ่ซึ่งปรากฎในสภาพแวดล้อมอื่น จุดหนึ่งซึ่งมีความเหมือนกันเป็นเอกลักษณ์คือส่วนการตั้งค่าของมัลแวร์ที่จะถูกฝังเอาไว้ในลักษณะของ JSON ตามรูปแบบด้านล่าง</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+   <span style="color:#f92672">&#34;pk&#34;</span>:<span style="color:#e6db74">&#34;r58UPwgbaRk5py762WpY/rEsl1jd936THXwqUwID/iM=&#34;</span>,
+   <span style="color:#f92672">&#34;pid&#34;</span>:<span style="color:#e6db74">&#34;$2a$12$V3e/gZmP0hFlQhnJLAyOM.Fsb56ksfw0p42oLlNwf2Jou485ElO4K&#34;</span>,
+   <span style="color:#f92672">&#34;sub&#34;</span>:<span style="color:#e6db74">&#34;7987&#34;</span>,
+   <span style="color:#f92672">&#34;dbg&#34;</span>:<span style="color:#66d9ef">false</span>,
+   <span style="color:#f92672">&#34;et&#34;</span>:<span style="color:#ae81ff">0</span>,
+   <span style="color:#f92672">&#34;nbody&#34;</span>:<span style="color:#e6db74">&#34;LS0tPT09IFdlbGNvbWUuIEFnYWluLiA9PT0tLS0KClsrXSBXaGF0cyBIYXBwZW4/IFsrXQoKWW91ciBmaWxlcyBhcmUgZW5jcnlwdGVkLCBhbmQgY3VycmVudGx5IHVuYXZhaWxhYmxlLiBZb3UgY2FuIGNoZWNrIGl0OiBhbGwgZmlsZXMgb24geW91ciBzeXN0ZW0gaGFzIGV4dGVuc2lvbiB7RVhUfS4KQnkgdGhlIHdheSwgZXZlcnl0aGluZyBpcyBwb3NzaWJsZSB0byByZWNvdmVyIChyZXN0b3JlKSwgYnV0IHlvdSBuZWVkIHRvIGZvbGxvdyBvdXIgaW5zdHJ1Y3Rpb25zLiBPdGhlcndpc2UsIHlvdSBjYW50IHJldHVybiB5b3VyIGRhdGEgKE5FVkVSKS4KClsrXSBXaGF0IGd1YXJhbnRlZXM/IFsrXQoKSXRzIGp1c3QgYSBidXNpbmVzcy4gV2UgYWJzb2x1dGVseSBkbyBub3QgY2FyZSBhYm91dCB5b3UgYW5kIHlvdXIgZGVhbHMsIGV4Y2VwdCBnZXR0aW5nIGJlbmVmaXRzLiBJZiB3ZSBkbyBub3QgZG8gb3VyIHdvcmsgYW5kIGxpYWJpbGl0aWVzIC0gbm9ib2R5IHdpbGwgbm90IGNvb3BlcmF0ZSB3aXRoIHVzLiBJdHMgbm90IGluIG91ciBpbnRlcmVzdHMuClRvIGNoZWNrIHRoZSBhYmlsaXR5IG9mIHJldHVybmluZyBmaWxlcywgWW91IHNob3VsZCBnbyB0byBvdXIgd2Vic2l0ZS4gVGhlcmUgeW91IGNhbiBkZWNyeXB0IG9uZSBmaWxlIGZvciBmcmVlLiBUaGF0IGlzIG91ciBndWFyYW50ZWUuCklmIHlvdSB3aWxsIG5vdCBjb29wZXJhdGUgd2l0aCBvdXIgc2VydmljZSAtIGZvciB1cywgaXRzIGRvZXMgbm90IG1hdHRlci4gQnV0IHlvdSB3aWxsIGxvc2UgeW91ciB0aW1lIGFuZCBkYXRhLCBjYXVzZSBqdXN0IHdlIGhhdmUgdGhlIHByaXZhdGUga2V5LiBJbiBwcmFjdGlzZSAtIHRpbWUgaXMgbXVjaCBtb3JlIHZhbHVhYmxlIHRoYW4gbW9uZXkuCgpbK10gSG93IHRvIGdldCBhY2Nlc3Mgb24gd2Vic2l0ZT8gWytdCgpZb3UgaGF2ZSB0d28gd2F5czoKCjEpIFtSZWNvbW1lbmRlZF0gVXNpbmcgYSBUT1IgYnJvd3NlciEKICBhKSBEb3dubG9hZCBhbmQgaW5zdGFsbCBUT1IgYnJvd3NlciBmcm9tIHRoaXMgc2l0ZTogaHR0cHM6Ly90b3Jwcm9qZWN0Lm9yZy8KICBiKSBPcGVuIG91ciB3ZWJzaXRlOiBodHRwOi8vYXBsZWJ6dTQ3d2dhemFwZHFrczZ2cmN2NnpjbmpwcGtieGJyNndrZXRmNTZuZjZhcTJubXlveWQub25pb24ve1VJRH0KCjIpIElmIFRPUiBibG9ja2VkIGluIHlvdXIgY291bnRyeSwgdHJ5IHRvIHVzZSBWUE4hIEJ1dCB5b3UgY2FuIHVzZSBvdXIgc2Vjb25kYXJ5IHdlYnNpdGUuIEZvciB0aGlzOgogIGEpIE9wZW4geW91ciBhbnkgYnJvd3NlciAoQ2hyb21lLCBGaXJlZm94LCBPcGVyYSwgSUUsIEVkZ2UpCiAgYikgT3BlbiBvdXIgc2Vjb25kYXJ5IHdlYnNpdGU6IGh0dHA6Ly9kZWNvZGVyLnJlL3tVSUR9CgpXYXJuaW5nOiBzZWNvbmRhcnkgd2Vic2l0ZSBjYW4gYmUgYmxvY2tlZCwgdGhhdHMgd2h5IGZpcnN0IHZhcmlhbnQgbXVjaCBiZXR0ZXIgYW5kIG1vcmUgYXZhaWxhYmxlLgoKV2hlbiB5b3Ugb3BlbiBvdXIgd2Vic2l0ZSwgcHV0IHRoZSBmb2xsb3dpbmcgZGF0YSBpbiB0aGUgaW5wdXQgZm9ybToKS2V5OgoKCntLRVl9CgoKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCiEhISBEQU5HRVIgISEhCkRPTlQgdHJ5IHRvIGNoYW5nZSBmaWxlcyBieSB5b3Vyc2VsZiwgRE9OVCB1c2UgYW55IHRoaXJkIHBhcnR5IHNvZnR3YXJlIGZvciByZXN0b3JpbmcgeW91ciBkYXRhIG9yIGFudGl2aXJ1cyBzb2x1dGlvbnMgLSBpdHMgbWF5IGVudGFpbCBkYW1nZSBvZiB0aGUgcHJpdmF0ZSBrZXkgYW5kLCBhcyByZXN1bHQsIFRoZSBMb3NzIGFsbCBkYXRhLgohISEgISEhICEhIQpPTkUgTU9SRSBUSU1FOiBJdHMgaW4geW91ciBpbnRlcmVzdHMgdG8gZ2V0IHlvdXIgZmlsZXMgYmFjay4gRnJvbSBvdXIgc2lkZSwgd2UgKHRoZSBiZXN0IHNwZWNpYWxpc3RzKSBtYWtlIGV2ZXJ5dGhpbmcgZm9yIHJlc3RvcmluZywgYnV0IHBsZWFzZSBzaG91bGQgbm90IGludGVyZmVyZS4KISEhICEhISAhISEA&#34;</span>,
+   <span style="color:#f92672">&#34;nname&#34;</span>:<span style="color:#e6db74">&#34;{EXT}-readme.txt&#34;</span>,
+   <span style="color:#f92672">&#34;rdmcnt&#34;</span>:<span style="color:#ae81ff">0</span>,
+   <span style="color:#f92672">&#34;ext&#34;</span>:<span style="color:#e6db74">&#34;.rhkrc&#34;</span>
+}
+</code></pre></div><p>ความเป็นเอกลักษณ์ของลักษณะการตั้งค่าของมัลแวร์เรียกค่าไถ่ REvil นั้นทำให้การทำความเข้าใจการตั้งค่าเหล่านี้ไม่ใช่เรื่องยาก พารามิเตอร์โดยส่วนใหญ่ที่ปรากฎใน variant นั้นต่างเคยถูกวิเคราะห์มาก่อนแล้วโดยบริษัทด้านความปลอดภัย อาทิ <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/mcafee-atr-analyzes-sodinokibi-aka-revil-ransomware-as-a-service-what-the-code-tells-us/">McAfee</a>, <a href="https://www.goggleheadedhacker.com/blog/post/sodinokibi-ransomware-analysis">GoogleHeadedHacker</a> และ <a href="https://intel471.com/blog/revil-ransomware-as-a-service-an-analysis-of-a-ransomware-affiliate-operation">Intel471</a> ซึ่งสามารถอธิบายความหมายของการตั้งค่าในแต่ละพารามิเตอร์ได้ดังนี้</p>
+<ul>
+<li><code>pk</code> เป็นค่าของ public key</li>
+<li><code>pid</code> เป็นค่าระบุข้อมูลเกี่ยวกับผู้ใช้งานบริการ RaaS (Affiliate)</li>
+<li><code>sub</code> เป็นค่าระบุ subaccount หรือ campaign ID</li>
+<li><code>dbg</code> เป็น boolean flag สำหรับตรวจสอบว่ามัลแวร์กำลังทำงานใน debug mode หรือไม่</li>
+<li><code>et</code> ใช้กำหนด encryption type</li>
+<li><code>nbody</code> คือเนื้อหาของ ransom note ที่ผ่าน Base64 encoding algorithm</li>
+<li><code>nname</code> คือชื่อไฟล์ ransom note ที่จะถูกเขียนไว้ที่พาธ <code>\</code>  โดยค่า <code>{EXT}</code> จะถูกแทนที่ด้วยค่าใน <code>ext</code></li>
+<li><code>rdmcnt</code> ค่าระบุจำนวนของไดเรกทอรีที่จะทำการเขียน ransom note ถ้าค่าเป็น 0 มัลแวร์จะทำการเขียน ransom note ให้กับทุกไดเรกทอรี</li>
+<li><code>ext</code> คือค่าของนามสกุลไฟล์ที่จะนำมาต่อท้ายไฟล์ที่ถูกเข้ารหัสแล้ว</li>
+</ul>
+<p>เมื่อพูดถึงจุดที่เหมือนกันไปแล้ว เรามาดูในจุดซึ่งแตกต่างกันบ้าง เนื่องจากไฟล์ตัวอย่างของมัลแวร์เรียกค่าไถ่นี้พุ่งเป้าการโจมตีที่ไปสภาพแวดล้อมใน VMware ESXi เพื่อทำให้ความเสียหายเกิดขึ้นมากที่สุดกับระบบ REvil ใน variant ได้มีการอิมพลีเมนต์ฟังก์ชันในการบังคับปิดการทำงานของ virtual machine เอาไว้ซึ่งจะทำงานหากไม่มีการระบุค่า <code>--silent</code> เมื่อเริ่มการทำงานมัลแวร์</p>
+<p><img src="https://i.imgur.com/XC2ZZ60.jpg#center" alt="force_killing_vms"></p>
+<p>กระบวนการในส่วนนี้ไม่ได้มีอะไรซับซ้อน มัลแวร์สร้างคำสั่งสำหรับเรียกใช้ <code>pkill -9</code> กับค่าสตริง <code>vmx-*</code> จากนั้นนำมารวมด้วย <code>sprintf()</code> ก่อนนำไปเอ็กซีคิวต์ เกิดผลลัพธ์เป็นการบังคับปิดโปรเซสทุกโปรเซสซึ่งมีชื่อเริ่มต้นด้วยสตริง <code>vmx-*</code> ซึ่งส่วนใหญ่คือโปรเซสของ virtual machine นอกเหนือจากการใช้ฟังก์ชัน <code>pkill</code> เราจะเห็นมัลแวร์เรียกใช้คำสั่ง <code>esxcli</code> ด้านล่างเพื่อปิด virtual machine อีกรอบด้วย</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">esxcli --formatter<span style="color:#f92672">=</span>csv --format-param<span style="color:#f92672">=</span>fields<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;WorldID,DisplayName&#34;</span> vm process list | awk -F <span style="color:#e6db74">&#34;\&#34;*,\&#34;*&#34;</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#f92672">{</span>system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;esxcli vm process kill --type=force --world-id=&#34;</span> $1<span style="color:#f92672">)}</span>
+</code></pre></div><p>การวิเคราะห์มัลแวร์เรียกค่าไถ่ REvil ของ <a href="https://intel471.com/blog/revil-ransomware-as-a-service-an-analysis-of-a-ransomware-affiliate-operation">Intel471</a> ระบุถึงการใช้ไลบรารีที่เกี่ยวข้องกับการเข้ารหัสของ REvil อยู่สองไลบรารี ไลบรารีหนึ่งเป็นไลบรารีของ <a href="https://github.com/vstakhov/opt-cryptobox/tree/master/curve25519">Curve25519</a> ตรงกัน อีกไลบรารีหนึ่งเป็นของอัลกอริธึม <a href="https://cr.yp.to/snuffle.html">Salsa20</a> แบบ <a href="https://cr.yp.to/snuffle/salsa20/merged/salsa20.c">merged</a> ที่มีการใส่โค้ดแบบ inline ของ Salsa20 core เอาไว้ อย่างไรก็ตามดูเหมือนว่าโค้ดที่ถูกเอามาใช้ในการอิมพลีเมนต์นั้นจะมาจากโค้ดแบบ <a href="https://cr.yp.to/snuffle/salsa20/ref/salsa20.c">ref</a> มากกว่า</p>
+<p><img src="https://i.imgur.com/X6prfbP.jpg#center" alt="ECRYPT_encrypt_bytes"></p>
+<p>หลักฐานซึ่งใช้บ่งชี้การใช้โค้ดแบบ <a href="https://cr.yp.to/snuffle/salsa20/ref/salsa20.c">ref</a> แทนที่แบบ <a href="https://cr.yp.to/snuffle/salsa20/merged/salsa20.c">merged</a> นั้นสามารถเห็นได้ที่ฟังก์ชัน <code>0x40fe37</code> ฟังก์ชันนี้มีลักษณะที่มีอิมพลีเมนต์ฟังก์ชัน <code>ECRYPT_encrypt_bytes()</code> มา เราจะสังเกตได้ว่าโค้ดในแบบ ref จะมีการเรียกใช้ฟังก์ชันข้างในด้วย ซึ่งหากอ้างอิงจากโค้ดหลักนั้น ฟังก์ชันดังกล่าวคือ <code>salsa20_wordtobyte()</code> ภาพทั้งหมดจะเชื่อมต่อกันหากเราลองนำโค้ดแบบ ref มาลองคอมไพล์และ disassemble เป็นตัวอย่าง</p>
+<p>ข้อควรระวังอย่างหนึ่งในการตรวจสอบมัลแวร์ประเภทนี้คือการยืนยันอัลกอริธึมที่มีการใช้งานจริง อัลกอริธึม Salsa20 แะล ChaCha ต่างมีการใช้ค่าคงที่ใน Initial state เป็นค่าเดียวคือคำว่า <code>expand 32-byte k</code> เราอาจจะพบค่าอื่น เช่น <code>expand 16-byte k</code> ด้วย ดังนั้นการพบค่าคงที่เหล่านี้เพียงอย่างเดียวนั้นไม่สามารถใช้ยืนยันอัลกอริธึมที่มีการใช้ในมัลแวร์ได้ การยืนยันอัลกอริธึมที่ใช้ควรเกิดจากการตรวจสอบข้อแตกต่างระหว่าง 2 อัลกอริธึมแทน (อ้างอิง<a href="https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant">วิกิพีเดีย</a>)</p>
+<p>ประเด็นน่าสนใจสุดท้ายซึ่งอาจเป็นแนวทางในการปรับปรุงคุณภาพของมัลแวร์เรียกค่าไถ่ต่อไปได้นั้นอยู่ในกระบวนการเข้ารหัส อ้างอิงจากโค้ดซึ่งปรากฎในตัวอย่างไฟล์ของมัลแวร์ โค้ดของมัลแวร์เรียกค่าไถ่ REvil มีเงื่อนไขในการตรวจสอบไฟล์ที่จะเข้ารหัสเพียงแค่ 2 เงื่อนไข ได้แก่</p>
+<ul>
+<li>ดำเนินการตรวจสอบว่าไฟล์ที่จะทำการเข้ารหัสนั้นถูกเข้ารหัสไปแล้วหรือไม่ การตรวจสอบนี้ทำการตรวจสอบว่าในชื่อไฟล์มี substring ที่เป็นนามสกุลไฟล์ซึ่งจะมีอยู่ก็ต่อเมื่อไฟล์ถูกเข้ารหัสแล้วหรือไม่</li>
+<li>เงื่อนไขที่สองคือการพยายามเปลี่ยน mode ของไฟล์เป็น 600 และ 700 ซึ่งหากล้มเหลว ไฟล์นั้นจะไม่ถูกเข้ารหัส (อนุมานในประเด็นนี้ไว้ว่าเป็นเรื่องของสิทธิ์ของบัญชีที่ใช้รันมัลแวร์กับสิทธิ์ของไฟล์)</li>
+</ul>
+<p><img src="https://i.imgur.com/OEx0C7N.jpg#center" alt="file_check"></p>
+<p>เนื่องจากตัวเลือกของการเข้ารหัสนั้นขึ้นอยู่กับผู้ใช้งาน ซึ่งหากไม่มีการกำหนดตัวเลือกในการเข้ารหัสนั้นมัลแวร์จะเข้ารหัสทั้งหมดในระบบ เมื่อเปรียบเทียบกับมัลแวร์เรียกค่าไถ่ DARKSIDE ซึ่งโจมตีสภาพแวดล้อม ESXi เหมือนกัน มัลแวร์เรียกค่าไถ่ DARKSIDE เลือกที่จะเข้ารหัสเฉพาะไฟล์ของ virtual machine เป็นค่าเริ่มต้น ซึ่งอาจทำให้กระบวนการเข้ารหัสและสร้างความเสียหายเป็นไปอย่างรวดเร็วขึ้น มัลแวร์เรียกค่าไถ่ DARKSIDE จะมีการเพิ่มเช็คในเรื่องของขนาดไฟล์และพื้นที่ดิสก์ที่เหลืออยู่อีกด้วย</p>
+<p>ในกรณีของ REvil ในไฟล์ตัวอย่างซึ่งทำการวิเคราะห์นี้ มัลแวร์จะทำการสร้าง ransom note ด้วยข้อความด้านล่างกับทุกไดเรกทอรี และมีเอกลักษณ์สำคัญคือเพิ่มนามสกุลของไฟล์ที่ถูกเข้ารหัสด้วย <code>.rhkrc</code></p>
+<pre><code>---=== Welcome. Again. ===---
+
+[+] Whats Happen? [+]
+
+Your files are encrypted, and currently unavailable. You can check it: all files on your system has extension {EXT}.
+By the way, everything is possible to recover (restore), but you need to follow our instructions. Otherwise, you cant return your data (NEVER).
+
+[+] What guarantees? [+]
+
+Its just a business. We absolutely do not care about you and your deals, except getting benefits. If we do not do our work and liabilities - nobody will not cooperate with us. Its not in our interests.
+To check the ability of returning files, You should go to our website. There you can decrypt one file for free. That is our guarantee.
+If you will not cooperate with our service - for us, its does not matter. But you will lose your time and data, cause just we have the private key. In practise - time is much more valuable than money.
+
+[+] How to get access on website? [+]
+
+You have two ways:
+
+1) [Recommended] Using a TOR browser!
+  a) Download and install TOR browser from this site: https://torproject.org/
+  b) Open our website: http://aplebzu47wgazapdqks6vrcv6zcnjppkbxbr6wketf56nf6aq2nmyoyd.onion/{UID}
+
+2) If TOR blocked in your country, try to use VPN! But you can use our secondary website. For this:
+  a) Open your any browser (Chrome, Firefox, Opera, IE, Edge)
+  b) Open our secondary website: http://decoder.re/{UID}
+
+Warning: secondary website can be blocked, thats why first variant much better and more available.
+
+When you open our website, put the following data in the input form:
+Key:
+
+
+{KEY}
+
+
+-----------------------------------------------------------------------------------------
+
+!!! DANGER !!!
+DONT try to change files by yourself, DONT use any third party software for restoring your data or antivirus solutions - its may entail damge of the private key and, as result, The Loss all data.
+!!! !!! !!!
+ONE MORE TIME: Its in your interests to get your files back. From our side, we (the best specialists) make everything for restoring, but please should not interfere.
+!!! !!! !!!.
+</code></pre><h1 id="conclusion">Conclusion</h1>
+<p>จากการวิเคราะห์ไฟล์ตัวอย่างของมัลแวร์เรียกค่าไถ่ REvil และข้อมูลที่เรารู้เกี่ยวกับบริการ Ransomware as a Service ในฝั่งของกลุ่ม DARKSIDE เทคโนโลยีในฝั่งของเหล่าอาชญากรไซเบอร์กำลังพัฒนาและแข่งขันกันอย่างเข้มข้นเพื่อครอบครองอัตราส่วนแบ่งของผลประโยชน์เอาไว้ให้มากที่สุด มันบังคับให้ฝั่งของผู้ที่มีโอกาสเป็นเหยื่ออย่างเราต้องก้าวตามไปให้ทันตามศักยภาพที่เรามี หวังว่าการทำความเข้าใจข้อมูลในบล็อกนี้จะเกิดขึ้นก่อนที่ทุกอย่างจะสายเกินไปครับ</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/ransomware-tradecraft-with-lockbit/">
+                  <span class="button__text">Ransomware Tradecraft With LockBit</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

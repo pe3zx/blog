@@ -98,6 +98,8 @@ esxcli --formatter=csv --format-param=fields=="WorldID,DisplayName" vm process l
 
 ในกรณีของ REvil ในไฟล์ตัวอย่างซึ่งทำการวิเคราะห์นี้ มัลแวร์จะทำการสร้าง ransom note ด้วยข้อความด้านล่างกับทุกไดเรกทอรี และมีเอกลักษณ์สำคัญคือเพิ่มนามสกุลของไฟล์ที่ถูกเข้ารหัสด้วย `.rhkrc`
 
+![in_action](https://i.imgur.com/8LTJQdF.gif#center)
+
 ```
 ---=== Welcome. Again. ===---
 

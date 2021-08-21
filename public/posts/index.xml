@@ -10,10 +10,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>P. Boonyakarn © 2018 - 2021 CC-BY</copyright>
-    <lastBuildDate>Tue, 29 Jun 2021 20:55:33 +0700</lastBuildDate>
+    <lastBuildDate>Sun, 22 Aug 2021 00:19:36 +0700</lastBuildDate>
     
 	<atom:link href="https://pandora.sh/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Conti Leak Analysis</title>
+      <link>https://pandora.sh/posts/conti-leak-analysis/</link>
+      <pubDate>Sun, 22 Aug 2021 00:19:36 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/conti-leak-analysis/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          วิเคราะห์การเปิดเผยคู่มือสำหรับผู้ปฏิบัติการของกลุ่มมัลแวร์เรียกค่าไถ่ Conti ศึกษาขั้นตอน เทคนิคและพฤติกรรมในการเจาะระบบตั้งแต่เข้าถึงจนถึงติดตั้งมัลแวร์เพื่อเรียกค่าไถ่
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Ransomware as a Service With REvil (ESXi variant)</title>

@@ -49,12 +49,20 @@ img[src$='#center'] {
     --color: #313b3f;
 }
 
-:root a:link {
+:root.footer {
     color: #000;
 }
 
-:root .footer {
+header.a:link {
+    color: #fff;
+}
+
+body.a:link {
     color: #000;
+}
+
+body.logo__text {
+    color: #fff;
 }
 
 /* Dark theme */

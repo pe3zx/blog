@@ -185,7 +185,7 @@ execute-assembly /home/user/work/Rubeus.exe asreproast /format:hashcat /outfile:
 - ใช้ mimikatz โดยใช้ฟังก์ชัน `sekurlsa::logonpasswords` และ `lsadump::sam` รวมไปถึง `lsadump::dcsync` เพื่อใช้เทคนิค DCSync
 - ใช้เทคนิค DCSync ผ่านฟีเจอร์ของ Cobalt Strike
 - สร้างไฟล์ minidump ของโปรเซส `lsass.exe` ด้วยโปรแกรม Task Manager เพื่อนำค้นหาข้อมูลสำหรับยืนยันตัวตนด้วย mimikatz ที่ระบบภายนอกต่อ
-- ใช้ [ProcDum](https://docs.microsoft.com/en-us/sysinternals/downloads/procdump) ในการสร้างไฟล์ memory dump ของโปรเซส `lsass.exe`
+- ใช้ [ProcDump](https://docs.microsoft.com/en-us/sysinternals/downloads/procdump) ในการสร้างไฟล์ memory dump ของโปรเซส `lsass.exe`
 - เรียกใช้ฟังก์ชัน `MiniDump` ในไลบรารี `comsvcs.dll` เพื่อสร้างไฟล์ memory dump ของโปรเซส `lsass.exe`
 - ใช้สคริปต์ [Net-GPPPassword](https://github.com/outflanknl/Net-GPPPassword) ในการหารหัสผ่านที่อาจมีอยู่ในไฟล์ Group Policy (สามารถเรียกใช้ได้ผ่าน `execute-assembly`)
 - ใช้โปรแกรม RouterScan เพื่อ brute force ทางเครือข่าย

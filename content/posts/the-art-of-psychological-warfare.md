@@ -5,7 +5,7 @@ author: "P. Boonyakarn"
 description: "The Art of Psychological Warfare เป็นหนึ่งในหนังสือที่อยู่ในชุดซึ่งเขียนและตีพิมพ์โดย Christopher Kingler หลายคนสามารถจดจำหนังสือในชุดนี้ได้จากหน้าปกของหนังสือที่ค่อนข้างเป็นเอกลักษณ์ หัวข้ออื่นของหนังสือที่ตีพิมพ์ก็ใช้การออกแบบหน้าปกในลักษณะนี้เช่นเดียวกัน"
 ---
 
-![The Art of Psychological Warfare](https://i.imgur.com/MShhq9k.jpg#center)
+{{< image src="https://i.imgur.com/MShhq9k.jpg" alt="" position="center" style="border-radius: 8px;" >}}
 
 The Art of Psychological Warfare เป็นหนึ่งในหนังสือที่อยู่ในชุดซึ่งเขียนและตีพิมพ์โดย Christopher Kingler หลายคนสามารถจดจำหนังสือในชุดนี้ได้จากหน้าปกของหนังสือที่ค่อนข้างเป็นเอกลักษณ์ หัวข้ออื่นของหนังสือที่ตีพิมพ์ก็ใช้การออกแบบหน้าปกในลักษณะนี้เช่นเดียวกัน
 

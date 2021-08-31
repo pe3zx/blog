@@ -3,6 +3,7 @@ languageCode = "en-us"
 title = "Pandora's box"
 theme = "hello-friend"
 paginate = 5
+rssFullText = true
 
 [params]
   contentTypeName = "posts"

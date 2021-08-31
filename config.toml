@@ -8,7 +8,6 @@ paginate = 5
   contentTypeName = "posts"
   defaultTheme = "dark"
   showMenuItems = 3
-  showReadingTime = true
 
 [languages]
   [languages.en]

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Economic of Offensive and Defensive Development ::
+        Pandora&#39;s Box
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="ช่วงนี้ด้วยพลังของ Bitcoin maximalist แห่ง ChalokeDotCom และด้วยอิทธิพลของการพยายามเข้าใจ Proof of Work ผ่าน Game theory แบบง่ายๆ ทำให้เกิดความอินที่จะรู้ต่อและลองเอาสิ่งที่รู้ไปใช้กับปัญหารูปแบบอื่น ในขณะที่ม่านของอิทธิพลนี้ยังคงฟุ้งอยู่ในหัวและรายล้อมรอบตัว ผมก็ไปเจอกับประเด็นที่น่าสนใจและมีความใกล้เคียงกันจาก HITBSecConf 2021 ซึ่งพึ่งจัดไป ประเด็นดังกล่าวอยู่ในหัวข้อ Security Technology Arms Race 2021 โดย Mark Dowd ซึ่งพูดถึงพัฒนาการของ Offensive และ Defensive ใน Cybersecurity และมีบางส่วนที่พูดถึงมูลค่าและราคาของทั้งการพัฒนาในทั้งสองฝั่งด้วย
+บล็อกนี้จึงเกิดขึ้นมาด้วยจุดประสงค์หลักสองอย่าง จุดประสงค์หลักอย่างแรกของมันคือการใช้เป็นที่สรุปความเข้าใจโดยใช้ภาษาเขียนเพื่อให้เกิดการจดจำและเข้าใจรายละเอียดของเนื้อหาอย่างมากพอที่จะเอาไปกร่อนใช้ในภาษาพูดต่อ และจุดประสงค์คือการถ่ายทอดเนื้อหาในประเด็นนี้ออกมาเป็นภาษาไทย โดยหวังว่าจะมีใครซักคนมาอ่านแล้วได้ประโยชน์ในการเข้าใจปัจจุบันและเห็นอนาคตที่จะเกิดขึ้นต่อ
+สำหรับที่สนใจฟังต้นฉบับ HITBSecConf มีการอัปโหลดเซสชันนี้เอาไว้ที่ Youtube พร้อมกับสไลด์ที่ใช้ในการบรรยายด้วย
+Asymmetry เนื้อหาส่วนแรกของการบรรยายนั้นพูดถึงความไม่สมมาตรระหว่าง Offensive และ Defensive เป็นหลัก ความไม่สมมาตรตั้งแต่เริ่มต้นส่งผลให้เกิดความได้เปรียบและเสียเปรียบระหว่างปัญหาและการแก้ปัญหา ระหว่างการโจมตีและการป้องกันหรือในมุมอื่นๆ
+การมองหาความไม่สมมาตรนั้นไม่จำเป็นไปต้องมองไปที่ไหนไกล ด้วยโลกที่เชื่อมต่อกันอยู่ในทุกวันนี้ เทคนิคการโจมตีถูกคิดค้นมาอย่างต่อเนื่อง บางครั้งเกิดขึ้นด้วยต้นทุนที่ต่ำและการเปลี่ยนแปลงที่เล็กน้อยแต่กลับส่งผลที่มากกว่าเท่าตัวได้ ในขณะที่การพัฒนาเทคนิคที่มีต้นทุนสูงก็ส่งผลที่สูงมากกว่า แค่เพียงการมองผ่านอย่างไม่ใส่ใจในรายละเอียดเท่าไหร่นัก เราจะเกิดภาพได้อย่างไม่ยากว่าเทคโนโลยีในฝั่ง Offensive นั้นเป็นผู้นำ และเทคโนโลยีในฝั่ง Defensive นั้นเป็นผู้ตาม ส่งผลให้การนำเทคโนโลยีไปใช้ก็สร้างภาพที่คล้ายคลึงกันระหว่างผู้นำและผู้ตาม
+Mark พูดถึง 6 ปัจจัยที่สำคัญซึ่งสร้างความไม่สมมาตรนี้ให้เกิดขึ้นและคงอยู่ต่อ ผมขอยุบประเด็นบางส่วนมาเนื่องจากหากอธิบายในมุมของผมแล้ว มันเป็นประเด็นที่ใกล้เคียงกันและสามารถจับกลุ่มมาอยู่ด้วยกันได้ ปัจจัยดังกล่าวมีดังนี้"
+/>
+<meta
+  name="keywords"
+  content="Blog by P. Boonyakarn"
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://pandora.sh/posts/economics-of-offensive-and-defensive-development/" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<link rel="stylesheet" href="https://pandora.sh/assets/style.css" />
+
+<link rel="stylesheet" href="https://pandora.sh/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://pandora.sh/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://pandora.sh/img/favicon.png" />
+
+
+<link href="https://pandora.sh/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://pandora.sh/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Economic of Offensive and Defensive Development"/>
+<meta name="twitter:description" content="มุมมองปัจจุบันและอนาคตของการพัฒนาศักยภาพในเชิง Offensive และ Defensive "/>
+
+
+
+<meta property="og:title" content="Economic of Offensive and Defensive Development" />
+<meta property="og:description" content="มุมมองปัจจุบันและอนาคตของการพัฒนาศักยภาพในเชิง Offensive และ Defensive " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pandora.sh/posts/economics-of-offensive-and-defensive-development/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-05T16:42:34+07:00" />
+<meta property="article:modified_time" content="2021-09-05T16:42:34+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >PANDORA&#39;S BOX</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/archive">Archive</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+      
+        <li><a href="/archive">Archive</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Economic of Offensive and Defensive Development</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-09-05
+        </span>
+
+        
+          
+        
+      
+
+      
+        <span class="post-author"
+          >— Written by P.Boonyakarn</span
+        >
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>ช่วงนี้ด้วยพลังของ <a href="https://www.youtube.com/c/ChalokeDotCom/videos">Bitcoin maximalist แห่ง ChalokeDotCom</a> และด้วยอิทธิพลของการพยายามเข้าใจ Proof of Work ผ่าน Game theory แบบง่ายๆ ทำให้เกิดความอินที่จะรู้ต่อและลองเอาสิ่งที่รู้ไปใช้กับปัญหารูปแบบอื่น ในขณะที่ม่านของอิทธิพลนี้ยังคงฟุ้งอยู่ในหัวและรายล้อมรอบตัว ผมก็ไปเจอกับประเด็นที่น่าสนใจและมีความใกล้เคียงกันจาก HITBSecConf 2021 ซึ่งพึ่งจัดไป ประเด็นดังกล่าวอยู่ในหัวข้อ Security Technology Arms Race 2021 โดย Mark Dowd ซึ่งพูดถึงพัฒนาการของ Offensive และ Defensive ใน Cybersecurity และมีบางส่วนที่พูดถึงมูลค่าและราคาของทั้งการพัฒนาในทั้งสองฝั่งด้วย</p>
+<p>บล็อกนี้จึงเกิดขึ้นมาด้วยจุดประสงค์หลักสองอย่าง จุดประสงค์หลักอย่างแรกของมันคือการใช้เป็นที่สรุปความเข้าใจโดยใช้ภาษาเขียนเพื่อให้เกิดการจดจำและเข้าใจรายละเอียดของเนื้อหาอย่างมากพอที่จะเอาไปกร่อนใช้ในภาษาพูดต่อ และจุดประสงค์คือการถ่ายทอดเนื้อหาในประเด็นนี้ออกมาเป็นภาษาไทย โดยหวังว่าจะมีใครซักคนมาอ่านแล้วได้ประโยชน์ในการเข้าใจปัจจุบันและเห็นอนาคตที่จะเกิดขึ้นต่อ</p>
+<p>สำหรับที่สนใจฟังต้นฉบับ HITBSecConf มี<a href="https://conference.hitb.org/hitbsecconf2021sin/sessions/keynote-1-security-technology-arms-race-2021-medal-event/">การอัปโหลดเซสชันนี้เอาไว้ที่ Youtube พร้อมกับสไลด์ที่ใช้ในการบรรยายด้วย</a></p>
+<h1 id="asymmetry">Asymmetry</h1>
+<p>เนื้อหาส่วนแรกของการบรรยายนั้นพูดถึงความไม่สมมาตรระหว่าง Offensive และ Defensive เป็นหลัก ความไม่สมมาตรตั้งแต่เริ่มต้นส่งผลให้เกิดความได้เปรียบและเสียเปรียบระหว่างปัญหาและการแก้ปัญหา ระหว่างการโจมตีและการป้องกันหรือในมุมอื่นๆ</p>
+<p>การมองหาความไม่สมมาตรนั้นไม่จำเป็นไปต้องมองไปที่ไหนไกล ด้วยโลกที่เชื่อมต่อกันอยู่ในทุกวันนี้ เทคนิคการโจมตีถูกคิดค้นมาอย่างต่อเนื่อง บางครั้งเกิดขึ้นด้วยต้นทุนที่ต่ำและการเปลี่ยนแปลงที่เล็กน้อยแต่กลับส่งผลที่มากกว่าเท่าตัวได้ ในขณะที่การพัฒนาเทคนิคที่มีต้นทุนสูงก็ส่งผลที่สูงมากกว่า แค่เพียงการมองผ่านอย่างไม่ใส่ใจในรายละเอียดเท่าไหร่นัก เราจะเกิดภาพได้อย่างไม่ยากว่าเทคโนโลยีในฝั่ง Offensive นั้นเป็นผู้นำ และเทคโนโลยีในฝั่ง Defensive นั้นเป็นผู้ตาม ส่งผลให้การนำเทคโนโลยีไปใช้ก็สร้างภาพที่คล้ายคลึงกันระหว่างผู้นำและผู้ตาม</p>
+<p>Mark พูดถึง 6 ปัจจัยที่สำคัญซึ่งสร้างความไม่สมมาตรนี้ให้เกิดขึ้นและคงอยู่ต่อ ผมขอยุบประเด็นบางส่วนมาเนื่องจากหากอธิบายในมุมของผมแล้ว มันเป็นประเด็นที่ใกล้เคียงกันและสามารถจับกลุ่มมาอยู่ด้วยกันได้ ปัจจัยดังกล่าวมีดังนี้</p>
+<ol>
+<li>Security ไม่ได้เป็นคุณสมบัติที่ถูกคำนึงถึงเป็นอันดับแรกๆ ในการออกแบบและพัฒนา ในขณะที่เทคโนโลยีที่เกิดขึ้นมาใหม่ยังคงเพิกเฉยต่อแนวคิดของกลยุทธ์และสมมติฐานเพื่อเพิ่มความปลอดภัยจาก Defensive</li>
+<li>Security boundary ไม่ได้ถูกกำหนดขึ้นมาหรือถูกกำหนดขึ้นมาอย่างไม่เหมาะสม ส่งผลให้เมื่อเทคโนโลยีเปลี่ยน Security boundary ไม่สามารถที่จะขยับตามได้</li>
+<li>การวิจัยเพื่อเพิ่มความปลอดภัยโดยส่วนใหญ่ในสมัยก่อนอย่างเป็นสิ่งที่ใหม่และยังไม่มีประสิทธิภาพ เช่น การศึกษารูปแบบของช่องโหว่, การทำ Static analysis และ Decompilation, แนวคิดของการหาช่องโหว่แบบ Fuzzing หรือการปรับใช้ Best practice ในการพัฒนาซอฟต์แวร์</li>
+<li>สภาพแวดล้อมของ Defensive เริ่มต้นและเติบโตด้วยอัตราที่ไม่สามารถชดเชยผลกระทบของ Offensive ได้ ตัวอย่างเช่น แนวคิดของ Patch management ซึ่งในบางเงื่อนไขนั้นเป็นเรื่องที่ยากและจะยากยิ่งขึ้นหากปริมาณระบบที่ต้องอัปเดตนั้นมากขึ้น หรือความสามารถในตรวจจับและระบุหาการโจมตีที่มีความซับซ้อนด้วยเช่นกัน</li>
+<li>การพัฒนา Defensive ขาดซึ่งมุมมองแบบ Offensive นั้นทำได้ยาก ดังนั้นประสิทธิภาพของ Defensive จำเป็นต้องพึ่งพาผู้ซึ่งมีความเข้าใจใน Offensive อย่างถ่องแท้เสียก่อน</li>
+</ol>
+<p>เราอาจจะเคยได้ยินว่าฝั่ง Offensive แค่ถูกเพียงครั้งเดียวก็ชนะแล้ว ในขณะที่ฝั่ง Defensive นั้น ชัยชนะจะต้องเกิดจากการไม่ผิดเลยซักครั้งไปตลอดเท่านั้น</p>
+<p>ด้วยแรงจูงใจที่เหมาะสม ความง่ายที่จะทำให้เกิดขึ้นจริงและผลกระทบที่ต่ำหากลงมือทำจริงอย่างดีพอ ความไม่สมมาตรของ Offensive และ Defensive จึงเกิดขึ้นและเปลี่ยนแปลงไปในทาง Defensive นั้นเสียผลประโยชน์มากกว่าในที่สุด</p>
+<h1 id="defensive-goals">Defensive Goals</h1>
+<p>แม้จะเริ่มออกตัวช้ากว่า แต่ Defensive ก็มาในทิศทางที่มีประสิทธิภาพและมีอัตราเร่งที่ดีขึ้นอยู่เสมอ เมื่อพูดทิศทางที่มีประสิทธิภาพที่ Defensive กำลังพัฒนาไป Mark จัดกลุ่มเป้าหมายที่ Defensive กำลังมุ่งไปหาออกเป็น 3 กลุ่มได้แก่</p>
+<ol>
+<li>ทำให้การโจมตีโดยใช้เครื่องมือ Offensive นั้นแพงขึ้น</li>
+<li>จำกัดและควบคุมความเสียหายที่เกิดจากการโจมตี</li>
+<li>ระบุหาการโจมตีที่สำเร็จไปแล้ว</li>
+</ol>
+<p><strong>ในประเด็นแรกที่มีเป้าหมายให้การโจมตีมีราคาแพงขึ้น</strong> เนื่องจากพื้นเพของ Mark นั้นคือ Vulnerability research and development การพูดถึงราคาจึงเกิดขึ้นในมุมของการช่องโหว่และการนำมาใช้เพื่อโจมตีเป็นหลัก ราคาในส่วนนี้ประกอบไปด้วยราคาอีก 3 ส่วนได้แก่ราคาหรือมูลค่าที่นำไปสู่การค้นพบ (Discovery cost), ราคาหรือมูลค่าที่นำมาสู่การพัฒนา (Development cost) และราคาหรือมูลค่าที่ทำให้การใช้ช่องโหว่เพื่อโจมตีนั้นยังคงสามารถเกิดขึ้นได้ (Maintenance cost)</p>
+<p>ลองเจาะเข้าไปในราคาแต่ละส่วน ราคาในส่วนแรกอย่าง Discovery cost มีคุณลักษณะที่น่าสนใจ คือคุณลักษณะที่ราคาหริอมูลค่าจะสูงขึ้นในการค้นพบช่องโหว่แรก หลังจากนั้นราคาหรือมูลค่าจะลดลงเนื่องจากการนำรูปแบบหรือวิธีการมาใช้ซ้ำ</p>
+<p>การทำให้ราคา มูลค่าหรือทรัพยากรที่ต้องใช้สูงขึ้นจนทำให้การค้นหาเป็นไปได้ยากจึงเกิดขึ้นในลักษณะ เช่น โครงการ fuzzing ขนาดใหญ่โดยผู้พัฒนาซอฟต์แวร์เองหรือการ fuzzing โครงการโอเพนซอร์สซึ่งทำให้รูปแบบของช่องโหว่ที่มีลักษณะคล้ายกันถูกค้นพบก่อน และบีบให้การค้นหาช่องโหว่ในซอฟต์แวร์เดียวกันภายหลังมี Discovery cost ที่สูงขึ้น</p>
+<p>การทำให้ช่องโหว่ไม่สามารถถูกใช้เพื่อโจมตีได้โดยการใช้กลไกทางเทคนิคก็เป็นส่วนหนึ่งซึ่งส่งผลให้ช่องโหว่ที่ถูกค้นพบนั้นไม่สามารถนำไปทำอะไรต่อได้เช่นกัน</p>
+<p>ถัดมากับ Development cost หรือราคา มูลค่าและทรัพยากรที่ถูกใช้เพื่อการพัฒนาโค้ดสำหรับช่องโหว่นั้นๆ ความพยายามเพื่อเพิ่ม Development cost เกิดขึ้นในลักษณะ อาทิ การบังคับทำ Code signing หรือฟีเจอร์อย่าง ASLR ที่ทำให้โค้ดสำหรับโจมตีช่องโหว่จะต้องถูกเพิ่มด้วยเทคนิคสำหรับหลบหลีกกลไกในการป้องกัน ในบางกรณีนั้นเทคนิคที่ช่วยสนับสนุนให้โค้ดสำหรับโจมตีช่องโหว่สามารถทำงานได้อย่างปกติแทบจะกลายเป็นสิ่งไร้ค่าและส่งผลให้ Development cost นั้นเพิ่มสูงเป็นอย่างมากสำหรับฝั่ง Offensive</p>
+<p>Maintenance cost เป็นประเด็นที่ถูกพูดถึงน้อยที่สุดแต่อย่างไรก็ตามมันก็กำลังถูกจัดการด้วยกลไกของการอัปเดตซอฟต์แวร์อย่างบ่อยครั้งซึ่งส่งผลให้อายุของช่องโหว่นั้นสั้นลงและเพิ่ม Maintenance cost ไปในตัว</p>
+<p>ผลลัพธ์ของการเพิ่มขึ้นของราคา มูลค่าและทรัพยากรเพื่อให้การพัฒนาโค้ดสำหรับช่องโหว่ให้สามารถใช้งานได้จริงและตอบสนองความต้องการของผู้ใช้บริการส่งผลอย่างเห็นได้ชัดต่อตลาดที่ซื้อขายช่องโหว่</p>
+<p>ประเด็นหนึ่งที่น่าสนใจแต่ผมไม่พบว่าถูกพูดถึงในการบรรยายนี้คือการโครงการ Bug bounty ซึ่งผมเชื่อว่าหากทำอย่างถูกต้องแล้วมันจะมีส่วนช่วยสำคัญ โครงการอย่าง Bug bounty นำเสนอ profit ซึ่งสามารถดึงผู้เล่นในตลาดเหล่านี้มาหาตนได้ด้วยคอนเซ็ปต์พื้นฐานอย่างการให้รางวัล</p>
+<p>บทบาทของโครงการ Bug bounty นั้นภายใต้เงื่อนไขและรางวัลที่เหมาะสม มันสามารถถูกใช้เป็นเครื่องมือของผู้ผลิตซอฟต์แวร์สำหรับบทของการเป็นพระเอก (ให้รางวัลหากยอมทำตาม) โดยไม่จำเป็นต้องเล่นเป็นบทตัวร้ายซึ่งอาจสร้างผลกระทบในแง่ร้ายได้มากกว่า (ลงโทษหากไม่ยอมทำตาม) และปล่อยให้หน้าที่ของการบีบบังคับนั้นเกิดขึ้นจากสภาพแวดล้อมที่กดดันให้ Cost ทุกอย่างเพิ่มขึ้นเอง</p>
+<p><strong>มาต่อกับประเด็นที่สองในเรื่องของการจำกัดและควบคุมความเสียหายที่เกิดจากการโจมตี</strong> กลไกสำคัญที่ในกลุ่มนี้ทั้งหมดคือกลไกเชิงเทคนิคที่ถูกเพิ่มหรือเสริมไปในระบบปฏิบัติการเพื่อทำให้การโจมตีช่องโหว่นั้นมีโอกาสสำเร็จน้อยลง จากการใช้เทคนิคไม่กี่เทคนิคเพื่อให้การโจมตีสำเร็จถูกเปลี่ยนเป็นการต้องหาช่องโหว่เพิ่มเพื่อให้ช่องโหว่ของเรานั้นทำงานได้ปกติเนื่องจากกลไกด้านความปลอดภัยปิดช่องทางที่เป็นไปได้เดิมออกทั้งหมด</p>
+<p>Mark ยกตัวอย่างผ่านช่องโหว่ในเว็บเบราว์เซอร์ของ iPhone ด้วยเทคโนโลยีปัจจุบัน Attack surface ที่เป็นไปได้ถูกจำกัดให้อยู่ในลักษณะของ Phishing ที่เหยื่อมีโอกาสที่จะไม่คลิกหรือเปิดลิงค์ ถัดมาแม้ผู้ใช้งานจะเปิดลิงค์ที่มีโค้ดสำหรับโจมตีช่องโหว่อยู่ในเว็บเพจ ผู้โจมตีก็ได้สิทธิ์ที่จำกัดในการเข้าถึงหน่วยความจำและไม่มีสิทธิ์ในการเอ็กซีคิวต์โค้ดอื่น ความพยายามในการใช้โปรเซสอื่นในการเอ็กซีคิวต์โค้ดผ่านเทคนิค Process injection ก็ถูกจำกัดด้วยฟีเจอร์อย่าง Page Protection Layer (PPL) และท้ายที่สุดคือความยากในการฝังตัวและทำให้การเข้าถึงด้วยช่องโหว่นั้นยังคงอยู่รอดหากเป้าหมายมีการรีสตาร์ทอุปกรณ์</p>
+<p><strong>เป้าหมายสุดท้ายของ Defensive คือการตรวจจับและระบุหาการโจมตีที่สำเร็จ</strong> เราต่างรู้กันว่านี่คือไม้เบื่อไม้เมาของชาว Defensive อยู่เสนอทั้งในเรื่องประสิทธิภาพของวิธีการ อย่างไรก็ตามในช่วงไม่กี่ปีที่ผ่านมา เราเห็นความพยายามหลายอย่างในการเผยแพร่และแบ่งปันข้อมูลเพื่อให้การตรวจจับและระบุหาเป็นไปอย่างรวดเร็วและมีประสิทธิภาพมากยิ่งขึ้น ยกตัวอย่างเช่น โครงการ <a href="https://googleprojectzero.github.io/0days-in-the-wild/">0-days In-the-Wild</a> ของ Project Zero และการพัฒนาด้านศักยภาพของ APT hunting team</p>
+<h1 id="future">Future</h1>
+<p>เมื่อเครื่องมือและศักยภาพในเชิง Offensive ถูกชะลอจากความก้าวหน้าของ Defensive คำถามที่สำคัญต่อจากนี้คือแล้วมันจะเป็นอย่างไรต่อ</p>
+<p>Mark สรุปไว้ในส่วนท้ายของการบรรยายหากอัตราเร่งของการพัฒนาทางด้านกลไกในการยับยั้งและป้องกันยังคงดำเนินไป ช่องโหว่ที่ถูกค้นพบจะถูกทำให้ยากขึ้นในการนำมาใช้งานและจะส่งผลต่อกระบวนการอื่นๆ ก่อนที่จะมีการพัฒนาโค้ดสำหรับโจมตีช่องโหว่ ในสถานการณ์นั้นหาก Defensive มี Telemetry ที่สิทธิ์สูงกว่าโค้ดหรือเครื่องมือของ Offensive การตรวจจับจะมีโอกาสประสบความสำเร็จสูงขึ้นตาม</p>
+<p>ด้วย Mitigation ที่เกิดขึ้น ช่องโหว่ในกลุ่ม Memory corruption จะถูกลดความสำคัญและจะเกิดการโอนถ่ายความสำคัญนั้นไปยังช่องโหว่ในกลุ่มอื่นแทนที่การระบุช่องโหว่ การพัฒนาโค้ดสำหรับโจมตีและผลกระทบที่ช่องโหว่สามารถสร้างขึ้นได้นั้นมีภาพที่สวยงามกว่า ตัวอย่างของช่องโหว่ในกลุ่มที่น่าสนใจ เช่น ช่องโหว่ที่มีที่มาจากปัญหาในฝั่ง Cryptography จากช่องโหว่ Remote code execution ใน Microsoft Exchange ที่ถูกค้นพบโดย Orange Tsai หรือช่องโหว่อย่าง ZeroLogon นอกเหนือจากช่องโหว่ในฝั่ง Cryptography แล้ว ช่องโหว่ของเทคโนโลยีเว็บและช่องโหว่ในโปรโตคอลก็กำลังได้รับความสนใจสูงขึ้นเช่นเดียวกัน</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://pandora.sh/posts/conti-leak-analysis/">
+                  <span class="button__text">Conti Leak Analysis</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      
+  </div>
+</footer>
+
+<script src="https://pandora.sh/assets/main.js"></script>
+<script src="https://pandora.sh/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

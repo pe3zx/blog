@@ -10,10 +10,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>P. Boonyakarn © 2018 - 2021 CC-BY</copyright>
-    <lastBuildDate>Sun, 22 Aug 2021 00:19:36 +0700</lastBuildDate>
+    <lastBuildDate>Sun, 05 Sep 2021 16:42:34 +0700</lastBuildDate>
     
 	<atom:link href="https://pandora.sh/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Economic of Offensive and Defensive Development</title>
+      <link>https://pandora.sh/posts/economics-of-offensive-and-defensive-development/</link>
+      <pubDate>Sun, 05 Sep 2021 16:42:34 +0700</pubDate>
+      
+      <guid>https://pandora.sh/posts/economics-of-offensive-and-defensive-development/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          มุมมองปัจจุบันและอนาคตของการพัฒนาศักยภาพในเชิง Offensive และ Defensive 
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Conti Leak Analysis</title>

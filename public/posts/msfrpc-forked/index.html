@@ -58,9 +58,10 @@ The is a forked version intended to support Python 3."
 <meta property="og:title" content="My Forked Version of msfrpc with Python3 Support" />
 <meta property="og:description" content="The Metasploit&#39;s msgrpc module utilized MessagePack, a binary serialized version of JSON, as a format and only requirement to use this feature is to load msgrpc module..." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/msfrpc-forked/" />
+<meta property="og:url" content="https://pandora.sh/posts/msfrpc-forked/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2018-12-07T16:11:00+07:00" />
 <meta property="article:modified_time" content="2018-12-07T16:11:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -183,7 +184,7 @@ The is a forked version intended to support Python 3."
     <div class="post-content">
       
       <p>The Metasploit&rsquo;s msgrpc module utilized MessagePack, a binary serialized version of JSON, as a format and only requirement to use this feature is to load msgrpc module:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ msfconsole -x <span style="color:#e6db74">&#34;load msgrpc ServerHost=127.0.0.1 ServerPort=55552 User=msf Pass=&#39;abc123&#39;&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ msfconsole -x <span style="color:#e6db74">&#34;load msgrpc ServerHost=127.0.0.1 ServerPort=55552 User=msf Pass=&#39;abc123&#39;&#34;</span>
 </code></pre></div><p>Trustwave&rsquo;s SpiderLabs built &ldquo;msfrpc&rdquo; to handle RPC authentication and message authorization as a module for Ruby and Python, but isn&rsquo;t getting any update since 2012.</p>
 <p>The is a <a href="https://github.com/pe3zx/msfrpc">forked version</a> intended to support Python 3.x with fixes and updates on calling logic. You can also find examples code in main function. Please let me know if you are in trouble with this project.</p>
 <p>Full API documentation available <a href="https://metasploit.help.rapid7.com/docs/rpc-api">here</a>.</p>

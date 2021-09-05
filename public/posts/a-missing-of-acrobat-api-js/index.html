@@ -57,9 +57,10 @@ During the past engagement, the PDF files were sent to the targets with embedded
 <meta property="og:title" content="A Missing of Acrobat API JavaScript" />
 <meta property="og:description" content="One way to execute JavaScript with a PDF file is to rely on Acrobat API which already has a subset of useful API for red team engagement or adversary simulation when your target primarily uses Adobe products as a default PDF reader." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/a-missing-of-acrobat-api-js/" />
+<meta property="og:url" content="https://pandora.sh/posts/a-missing-of-acrobat-api-js/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-10-11T16:46:00+07:00" />
 <meta property="article:modified_time" content="2019-10-11T16:46:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -187,7 +188,7 @@ During the past engagement, the PDF files were sent to the targets with embedded
 <p>So, if there&rsquo;s no plaintext or JS tag, the only way to hide this object is to compress it as a data stream and decompress when use. The compressed data stream will look like the image below.</p>
 <p><img src="https://1.bp.blogspot.com/-e45siGY5DWk/XaBJ_xtdD4I/AAAAAAAATTQ/KZz4pw61EDQkQNFMYo5slbh5M_UuV86sgCLcBGAsYHQ/s1600/2019-10-11_16-19-59.png" alt=""></p>
 <p><code>pdf-parser</code> has a feature to extract and decompress the specified object. All I need to do is to randomly find what&rsquo;s the exact object that has compressed JavaScript code and then run:</p>
-<pre><code>pdf-parser.py -o &lt;object-id&gt; -f file.pdf
+<pre tabindex="0"><code>pdf-parser.py -o &lt;object-id&gt; -f file.pdf
 </code></pre><p>The result will look like this:</p>
 <p><img src="https://1.bp.blogspot.com/-gyTKXCcECtc/XaBPZNsmtSI/AAAAAAAATTc/ukPNEuH_AaEXRcHOk9IpkUOdXSAoB9trQCLcBGAsYHQ/s1600/2019-10-11_16-44-48.png" alt=""></p>
 <p>I still don&rsquo;t know what makes the JavaScript be compressed but it possibly happens because of features like PDF size reducing and optimization.</p>

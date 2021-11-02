@@ -58,10 +58,9 @@ As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicio
 <meta property="og:title" content="Quick Note on Nanocore Tradecraft - A Double ZIP File" />
 <meta property="og:description" content="Trustwave SpiderLabs published a new technique used by Nanocore to bypass an email security gateway solution that inspects file attachment content. I found this technique simple but effective with the fact that there are many file parser implemented in a current security solution and many of it interprets content differently." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://pandora.sh/posts/quick-note-on-nanocore-tradecraft/" />
 <meta property="article:published_time" content="2019-11-12T13:39:00+07:00" />
 <meta property="article:modified_time" content="2019-11-12T13:39:00+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
-
 
 
 
@@ -203,7 +202,7 @@ As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicio
 </ul>
 <p>From the NanoCore sample, we can see that the attachment was built by concatenated two ZIP files together because there&rsquo;s no significant change made with offsets in each of <code>ZIPFILERECORD</code>. If we split the attachment into the two seperated ZIP file, it can be extracted without error.</p>
 <p>To reproduce this technique, it can be done simply with system commands, for example with <code>copy /b</code>, <code>Get-Content</code>, or <code>cat</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ps" data-lang="ps"><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\SHIPPING_MX00034900_PL_INV_pdf.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ps" data-lang="ps"><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\SHIPPING_MX00034900_PL_INV_pdf.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
 
 <span style="color:#a6e22e">Hash</span>
 <span style="color:#a6e22e">----</span>
@@ -267,6 +266,11 @@ As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicio
   <div class="footer__inner">
     
       <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      <span>
+        <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+          <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+        </a>
+      </span>
       
   </div>
 </footer>

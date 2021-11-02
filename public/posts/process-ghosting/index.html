@@ -59,10 +59,9 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 <meta property="og:title" content="Process Ghosting" />
 <meta property="og:description" content="ทำความรู้จัก Process Ghosting เปลี่ยนไฟล์ให้เป็น “ผี” เพื่อหลบโปรแกรม Anti Malware" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/process-ghosting/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://pandora.sh/posts/process-ghosting/" />
 <meta property="article:published_time" content="2021-06-20T19:56:51+07:00" />
 <meta property="article:modified_time" content="2021-06-20T19:56:51+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
-
 
 
 
@@ -209,7 +208,7 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS stat <span style="color:#f92672">=</span> NtOpenFile(<span style="color:#f92672">&amp;</span>file, 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS stat <span style="color:#f92672">=</span> NtOpenFile(<span style="color:#f92672">&amp;</span>file, 
     DELETE <span style="color:#f92672">|</span> SYNCHRONIZE <span style="color:#f92672">|</span> GENERIC_READ <span style="color:#f92672">|</span> GENERIC_WRITE,
     <span style="color:#f92672">&amp;</span>attr, 
     <span style="color:#f92672">&amp;</span>status_block, 
@@ -225,7 +224,7 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 </li>
 <li>หลังจากมีการกำหนด flag ทั้งในกรณีที่มีการเรียกใช้ <code>NtCreateFile</code> หรือในกรณีที่มีการเรียกใช้ <code>CreateFileW</code> เสร็จแล้ว ให้ทำการเรียกใช้ฟังก์ชัน <code>NtSetInformationFile</code> ที่มีการระบุคลาส <code>FileDispositionInformation</code> เอาไว้ คลาส <code>FileDispositionInformation</code> ที่อ้างอิงมาจากสตรัคเจอร์ <code>FILE_DISPOSITION_INFORMATION</code> จะต้องมีการกำหนดค่าในฟิลด์ <code>DeleteFile</code> ให้เป็น <code>TRUE</code> ด้วย</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
 info.DeleteFile <span style="color:#f92672">=</span> TRUE;
 NtSetInformationFile(
     hDelFile,
@@ -237,7 +236,7 @@ NtSetInformationFile(
 </code></pre></div><ul>
 <li>ทำการเขียนไฟล์จาก handle ของไฟล์ที่เราได้มาจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> ด้วยโค้ด(ของมัลแวร์)ที่เราต้องการ</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">status <span style="color:#f92672">=</span> NtWriteFile(
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">status <span style="color:#f92672">=</span> NtWriteFile(
         hDelFile,
         NULL,
         NULL,
@@ -251,7 +250,7 @@ NtSetInformationFile(
 </code></pre></div><ul>
 <li>เตรียมการสร้างโปรเซสด้วยการสร้างอิมเมจจากไฟล์ที่จะเป็นวัตถุดิบในการสร้างโปรเซสก่อนด้วยฟังก์ชัน <code>NtCreateSection</code> ในขั้นตอนนี้หากการสร้างอิมเมจสมบูรณ์ เราจะได้ handle ของอิมเมจมาเพื่อใช้สร้างโปรเซสต่อ</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">HANDLE hSection <span style="color:#f92672">=</span> nullptr;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">HANDLE hSection <span style="color:#f92672">=</span> nullptr;
 status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#f92672">&amp;</span>hSection,
     SECTION_ALL_ACCESS,
     NULL,
@@ -264,7 +263,7 @@ status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#
 <li>ก่อนจะทำการสร้างโปรเซส เรียกใช้ฟังก์ชัน <code>NtClose</code> เพื่อปิด handle ที่เกิดจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> อ้างอิงจาก flag ที่เรากำหนดไว้ในขั้นตอนก่อนหน้า เมื่อมีการปิด handle ที่เกี่ยวข้องกับไฟล์แล้ว ไฟล์ที่ handle นี้เชื่อมโยงจะถูกลบ</li>
 <li>นำ handle ของอิมเมจที่ได้จากการเรียกใช้ฟังก์ชัน <code>NtCreateSection</code> ไปสร้างเป็นโปรเซสต่อ โดยอาจใช้ฟังก์ชันอย่าง <code>NtCreateProcessEx</code> แล้วทำการระบุพารามิเตอร์ในส่วน <code>sectionHandle</code> เป็น handle ของอิมเมจที่เรามีอยู่</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS status <span style="color:#f92672">=</span> NtCreateProcessEx(
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS status <span style="color:#f92672">=</span> NtCreateProcessEx(
     <span style="color:#f92672">&amp;</span>hProcess,
     PROCESS_ALL_ACCESS,
     NULL,
@@ -328,6 +327,11 @@ status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#
   <div class="footer__inner">
     
       <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      <span>
+        <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+          <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+        </a>
+      </span>
       
   </div>
 </footer>

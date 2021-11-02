@@ -60,10 +60,9 @@ News Facebook ออกมาอัปเดตถึงสถานการณ
 <meta property="og:title" content="Facebook Breach 2019" />
 <meta property="og:description" content="เมื่อปี 2019 มีการค้นพบการมีอยู่ของข้อมูลบัญชีผู้ใช้งาน Facebook อยู่ในระบบภายนอกซึ่งคาดว่ามีการดึงออกไปด้วยวิธีการหรือการใช้ช่องโหว่บางอย่าง เหตุการณ์ดังกล่าวเป็นต้นเหตุซึ่งนำมาสู่เหตุการณ์ใหญ่ในอาทิตย์นี้หลังจากมีการพบข้อมูลซึ่งคาดว่าเป็นข้อมูลชุดเดียวกันถูกปล่อยออกมาบนอินเตอร์เน็ตกว่า 533 ล้านบัญชี ข้อมูลชุดดังกล่าวมีลักษณะพิเศษที่ควรถูกพูดถึงในหลายมุมมองไม่ว่าจะเป็นเนื้อหาของข้อมูลเอง หรือประเภทและลักษณะของข้อมูลที่ถูกปล่อยออกมาซึ่งอาจช่วยบ่งชี้ให้เห็นถึง &#34;ชุดของข้อมูล&#34; ที่ถูกเข้าครอบโดยบุคคลหรือกลุ่มบุคคลที่ต่างกันและอาจถูกเข้าถึงไปแล้วหลายครั้ง ลักษณะพิเศษดังกล่าวจะถูกพูดถึงในลำดับต่อไป" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/facebook-breach-2019/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://pandora.sh/posts/facebook-breach-2019/" />
 <meta property="article:published_time" content="2021-04-06T02:13:43+07:00" />
 <meta property="article:modified_time" content="2021-04-06T02:13:43+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
-
 
 
 
@@ -207,7 +206,7 @@ News Facebook ออกมาอัปเดตถึงสถานการณ
 </ol>
 <h2 id="file-naming">File Naming</h2>
 <p>จุดสังเกตที่น่าสนใจอย่างหนึ่งนั้นปรากฎอยู่ในไฟล์ Rar ที่ถูกบีบอัดซ้ำและถูกจัดเก็บไว้ในไฟล์ <code>f.zip</code> ตามที่ได้มีการระบุไว้ ไฟล์ Rar ซึ่งปรากฎใน <code>f.zip</code> และปรากฎในชุดไฟล์แบบผสมนั้นถูกตั้งชื่อตามประเทศ ซึ่งคาดว่าเป็นการพยายามแยกกลุ่มของผู้ใช้งานซึ่งอยู่ในแต่ละไฟล์ด้วยชื่อประเทศ ทั้งนี้การตั้งชื่อประเทศในแต่ละไฟล์ไม่ได้มีการกำหนดตามชื่อในภาษาอังกฤษโดยทั่วไป แต่มีลักษณะของการกำหนดชื่อไฟล์เป็นภาษาอิตาลี ตามตัวอย่างดังนี้</p>
-<pre tabindex="0"><code>africa.rar                  bulgaria.rar      estonia.rar    irlanda.rar        marocco.rar         russia.rar
+<pre><code>africa.rar                  bulgaria.rar      estonia.rar    irlanda.rar        marocco.rar         russia.rar
 albania.rar                 burkina_faso.rar  ethiopia.rar   islanda.rar        mauritius.rar       serbia.rar
 algeria.rar                 burundi.rar       fiji.rar       israele.rar        messico.rar         SHA1SUMS
 angola.rar                  cambodia.rar      filippine.rar  italia.rar         moldova.rar         singapore.rar
@@ -249,7 +248,7 @@ brunei.rar                  elsalvador.rar    iran.rar       marco.rar          
 <ul>
 <li>ไฟล์ซึ่งใช้ Zip ในการบีบอัด ดังนี้</li>
 </ul>
-<pre tabindex="0"><code>Afghanistan.zip   Bahrain.zip      Brunei.zip     Canada.zip   'Finland Text.zip'   India.zip        'South Africa.zip'
+<pre><code>Afghanistan.zip   Bahrain.zip      Brunei.zip     Canada.zip   'Finland Text.zip'   India.zip        'South Africa.zip'
 Albania.zip       Bangladesh.zip   Bulgaria.zip   Chile.zip     Germany.zip         Indonesia_2.zip   UAE.zip
 Algeria.zip       Belgium.zip      Burundi.zip    China.zip     Ghana.zip           Iraq.zip          uk.zip
 Argentina.zip     Bolivia.zip      Cambodia.zip   Cyprus.zip    Haiti_2.zip        'Japan A.zip'      USA.zip
@@ -285,13 +284,13 @@ Austriaia.zip     Botswana.zip     Cameroon.zip   Ethopia.zip   India_2.zip     
 <ul>
 <li>Header จากไฟล์ที่มีที่มาจาก <code>f.zip</code></li>
 </ul>
-<pre tabindex="0"><code>phone,uid,email,first_name,last_name,gender,date_registered,birthday,location,hometown,relationship_status,education_last_year,work,groups,pages,last_update,creation_time
+<pre><code>phone,uid,email,first_name,last_name,gender,date_registered,birthday,location,hometown,relationship_status,education_last_year,work,groups,pages,last_update,creation_time
 </code></pre><ul>
 <li>Header จากไฟล์ <code>Full Alegria.txt</code></li>
 </ul>
-<pre tabindex="0"><code>id,phone,first_name,last_name,email,birthday,gender,locale,hometown,location,link
+<pre><code>id,phone,first_name,last_name,email,birthday,gender,locale,hometown,location,link
 </code></pre><h2 id="date-and-time">Date and Time</h2>
-<pre tabindex="0"><code>Facebook\Raw\Mixed\Afghanistan\Afghanistan.txt                          1/14/2020 4:42:26 AM
+<pre><code>Facebook\Raw\Mixed\Afghanistan\Afghanistan.txt                          1/14/2020 4:42:26 AM
 Facebook\Raw\Mixed\Albania\Albania.txt                                  5/30/2020 7:54:36 AM
 Facebook\Raw\Mixed\Algeria\Full Alegria.txt                             4/5/2021 10:17:18 PM
 Facebook\Raw\Mixed\Argentina\Argentina.txt                              12/25/2019 8:33:14 AM
@@ -508,6 +507,11 @@ Facebook\Raw\Original\yemen\yemen.csv                                   12/29/20
   <div class="footer__inner">
     
       <div class="copyright copyright--user">P. Boonyakarn © 2018 - 2021 CC-BY</div>
+      <span>
+        <a href="https://webring.wonderful.software#pandora.sh" title="วงแหวนเว็บ" target="_blank" rel="noopener">
+          <img src="/img/webring.svg" width="20px" height="20px" alt="วงแหวนเว็บ" />
+        </a>
+      </span>
       
   </div>
 </footer>

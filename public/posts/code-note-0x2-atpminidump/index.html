@@ -61,9 +61,10 @@
 <meta property="og:title" content="Code Note 0x2: ATPMiniDump" />
 <meta property="og:description" content="Code Note คือชุดของบล็อกและโพสต์ซึ่งจะนำโค้ดของโปรแกรมจากโครงการโอเพนซอร์สมาทำการวิเคราะห์และทำความเข้าใจ ให้ความหมายและข้อเสนอแนะ โดย Code Note ในฉบับที่ 0x2 จะเป็นการนำโค้ดจากโครงการ ATPMiniDump มาทำการวิเคราะห์และตรวจสอบ โดยจะนำผลลัพธ์ที่ได้ไปใช้ในการทดสอบและประเมินผลกับโซลูชัน Endpoint Detection and Response ต่อไป" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/code-note-0x2-atpminidump/" />
+<meta property="og:url" content="https://pandora.sh/posts/code-note-0x2-atpminidump/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-28T13:29:50+07:00" />
 <meta property="article:modified_time" content="2020-07-28T13:29:50+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -228,7 +229,7 @@
 </ul>
 <h1 id="project-overview">Project Overview</h1>
 <p>ข้อมูลจาก GitHub แสดงให้เห็นว่าโครงการนี้ถูกพัฒนาโดยใช้ภาษา C ทั้งหมด โดยโครงการนี้มีโครงสร้างของไฟล์และไดเรกทอรีตามแผนภาพด้านล่างครับ</p>
-<pre><code>.
+<pre tabindex="0"><code>.
 ├── ATPMiniDump
 │   ├── ATPMiniDump.c
 │   ├── ATPMiniDump.h
@@ -251,7 +252,7 @@
 <li>ไฟล์ ATPMiniDump.sln จัดเก็บข้อมูลการตั้งค่าของ Solution สำหรับ Visual Studio</li>
 </ol>
 <p>ในกรณีของการ build ผ่านโปรแกรม <code>cl.exe</code> ให้ใช้คำสั่งดังต่อไปนี้</p>
-<pre><code>cl.exe ATPMiniDump.c Advapi32.lib
+<pre tabindex="0"><code>cl.exe ATPMiniDump.c Advapi32.lib
 </code></pre><p>กระบวนการ build สามารถทำได้ผ่าน Visual Studio เช่นกัน</p>
 <h1 id="project-background">Project Background</h1>
 <h2 id="attacking-lsassexe">Attacking lsass.exe</h2>
@@ -263,7 +264,7 @@
 <p>โครงการ ATPMiniDump ถูกพัฒนาออกมาภายใต้จุดประสงค์เพื่อให้โปรแกรม ATPMiniDump สามารถหลบหลีกการตรวจจับโดยเทคโนโลยีในฝั่งของการตรวจจับและป้องกันภัยคุกคามโดยเฉพาะอย่างยิ่ง Microsoft Defender ATP ได้ และยังสามารถทำงานจนบรรลุจุดประสงค์ของมันคือการสร้างไฟล์ที่มีข้อมูลจากหน่วยความจำของโปรเซส <code>lsass.exe</code> ได้โดยไม่ถูกขัดขวาง ทั้งนี้วิธีการที่ถูกใช้เพื่อข้ามผ่านการตรวจจับนี้ในปัจจุบันได้ถูกรายงานให้กับทางไมโครซอฟต์เพื่อทำการแก้ไขแล้ว</p>
 <p>ในส่วนเริ่มต้นของบล็อก <a href="https://www.matteomalvica.com/blog/2019/12/02/win-defender-atp-cred-bypass/">Evading WinDefender ATP credential-theft: a hit after a hit-and-miss start</a> นั้น ผู้พัฒนาโครงการ ATPMiniDump ได้อธิบายถึงสมมติฐานที่น่าสนใจเกี่ยวกับแนวคิดที่ใช้ในการตรวจจับกิจกรรมต้องสงสัยกับโปรเซส <code>lsass.exe</code> ว่า Microsoft Defender ATP อาจเฝ้าระวังพฤติกรรมต้องสงสัยโดยการตรวจสอบจำนวนของข้อมูลที่ถูกอ่านผ่านฟังก์ชัน <code>ReadProcessMemory()</code> เมื่อมีปลายทางของการเข้าถึงคือโปรเซส lsass.exe</p>
 <p>ฟังก์ชัน <code>ReadProcessMemory()</code> เป็นฟังก์ชันซึ่งทำให้โปรเซสที่เรียกใช้ฟังก์ชันนี้สามารถคัดลอกข้อมูลซึ่งอยู่ในพื้นที่หน่วยความจำของโปรเซสอื่นในตำแหน่งที่ระบุมาเก็บไว้ในพื้นที่หน่วยความจำของโปรเซสตัวเองได้ ฟังก์ชัน <code>ReadProcessMemory()</code> เป็นฟังก์ชันสำคัญซึ่งถูกใช้ใน mimikatz ภายใต้ฟังก์ชัน <code>kull_m_memory_copy()</code> ซึ่งจะถูกเรียกใช้อยู่เสมอเมื่อ mimikatz จะทำการเข้าถึงข้อมูลในโปรเซส อาทิ จากฟังก์ชัน <code>kuhl_m_sekurlsa_getLogonData()</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL <span style="color:#a6e22e">kull_m_memory_copy</span>(OUT PKULL_M_MEMORY_ADDRESS Destination, 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL <span style="color:#a6e22e">kull_m_memory_copy</span>(OUT PKULL_M_MEMORY_ADDRESS Destination, 
     IN PKULL_M_MEMORY_ADDRESS Source, IN SIZE_T Length)
 {
 	...
@@ -287,7 +288,7 @@
 		<span style="color:#66d9ef">break</span>;
     ...
 </code></pre></div><p>โครงการ ATPMiniDump จึงเลือกใช้ฟังก์ชัน <code>PssCaptureSnapShot()</code> ซึ่งเป็นฟังก์ชันในการสร้าง snapshot ของโปรเซสแทนฟังก์ชัน <code>ReadProcessMemory()</code> การทำ process snapshotting นั้นเป็นกระบวนการในรวบรวมข้อมูลในหน่วยความจำของโปรเซสเพื่อจุดประสงค์ในการสร้างข้อมูล snapshot สำหรับการวิเคราะห์และแก้ไขปัญหาของระบบ ดังนั้นในกรณีของ ATPMiniDump นั้น ฟังก์ชัน <code>PssCaptureSnapShot()</code> อาจสามารถเรียกได้ว่าถูกนำมาใช้ในทางที่ผิด (abuse) นั่นเอง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">DWORD <span style="color:#a6e22e">PssCaptureSnapshot</span>(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">DWORD <span style="color:#a6e22e">PssCaptureSnapshot</span>(
   HANDLE            ProcessHandle,
   PSS_CAPTURE_FLAGS CaptureFlags,
   DWORD             ThreadContextFlags,
@@ -311,7 +312,7 @@
 <li>ขั้นตอนของการสร้างไฟล์ memory dump จากข้อมูลของหน่วยความจำจากขั้นตอนก่อนหน้า เกิดขึ้นหลังจากมีการแสดงข้อความ <code>[3] create memorydump file:</code></li>
 </ol>
 <p>ฟังก์ชัน <code>wmain()</code> เริ่มต้นการทำงานด้วยการเตรียมความพร้อมในการระบุค่าและตรวจสอบสถานะการตั้งค่าของระบบต่างๆ ตามที่เห็นในโค้ดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">sizeof</span>(LPVOID) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">8</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">sizeof</span>(LPVOID) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">8</span>) {
 		wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;[!] Sorry, this tool only works on a x64 version of Windows.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
 		exit(<span style="color:#ae81ff">1</span>);
 }
@@ -329,7 +330,7 @@ SetDebugPrivilege();
 <li>ทำการเรียกใช้ฟังก์ชัน <code>SetDebugPrivilege()</code> เพื่อกำหนดสิทธิ์ของโปรเซส <code>ATPMiniDump.exe</code> ให้มีสิทธิ์ <code>SeDebugPrivilege</code> การกำหนดสิทธิ์สามารถดูเพิ่มเติมได้ที่หัวข้อของการวิเคราะห์<a href="#setdebugprivilege-function">ฟังก์ชัน <code>SetDebugPrivilege()</code></a></li>
 </ul>
 <p>เมื่อการตรวจสอบเงื่อนไขและตั้งค่าเสร็จสมบูรณ์ ฟังก์ชัน <code>wmain()</code> จะเริ่มทำการสร้างตัวแปรใหม่ภายใต้ชื่อ <code>pWinVerInfo</code> มีประเภทของตัวแปรเป็น <code>PWIN_VER_INFO</code> ตามที่ระบุไว้ในไฟล์ <code>ATPMiniDump.h</code> <a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L49">ในบรรทัดที่ 49</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_WIN_VER_INFO</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_WIN_VER_INFO</span> {
 	WCHAR chOSMajorMinor[<span style="color:#ae81ff">8</span>];
 	DWORD dwBuildNumber;
 	UNICODE_STRING ProcName;
@@ -353,13 +354,13 @@ SetDebugPrivilege();
 <li>ชื่อของตัวแปรแบบ struct คือ <code>WIN_VER_INFO</code></li>
 <li>ชื่อของพอยน์เตอร์ซึ่งชี้มายัง struct นี้คือ <code>*PWIN_VER_INFO</code></li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">PWIN_VER_INFO pWinVerInfo <span style="color:#f92672">=</span> (PWIN_VER_INFO)calloc(<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">sizeof</span>(WIN_VER_INFO));
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">PWIN_VER_INFO pWinVerInfo <span style="color:#f92672">=</span> (PWIN_VER_INFO)calloc(<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">sizeof</span>(WIN_VER_INFO));
 </code></pre></div><p>เนื่องจากข้อมูลประเภท <code>PWIN_VER_INFO</code> นั้นเป็น pointer ซึ่งชี้ไปยังตำแหน่งในหน่วยความจำที่จะมีการโครงสร้างตามที่ระบุเอาไว้ การสร้างตัวแปร <code>pWinVerInfo</code> จึงมีการระบุตำแหน่งของพื้นที่หน่วยความจำซึ่งจองเอาไว้ผ่านการเรียกใช้ฟังก์ชัน <code>calloc</code> ซึ่งถูกเรียกใช้เพื่อจองพื้นที่ในหน่วยความจำแบบอาเรย์ที่มีขนาดตามขนาดของ <code>PWIN_VER_INFO</code></p>
 <p>หลังจากเสร็จสิ้นการสร้างตัวแปร <code>pWinVerInfo</code> โค้ดในส่วนถัดมายังมีการสร้างและกำหนดขนาดของตัวแปรอีกตัวหนึ่งคือ <code>osInfo</code> เป็นประเภท <code>OSVERSIONINFOEX</code> ซึ่งเป็นประเภทของข้อมูลที่ถูกระบุเอาไว้อยู่แล้วในไฟล์ <code>Windows.h</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">OSVERSIONINFOEXW osInfo;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">OSVERSIONINFOEXW osInfo;
 osInfo.dwOSVersionInfoSize <span style="color:#f92672">=</span> <span style="color:#66d9ef">sizeof</span>(osInfo);
 </code></pre></div><p>อ้างอิงจากไมโครซอฟต์ โครงสร้าง <code>OSVERSIONINFOEXW</code> เป็นโครงสร้างซึ่งเอามาไว้สำหรับเก็บข้อมูลซึ่งเกี่ยวข้องกับระบบปฏิบัติการ ลักษณะของโครงสร้างสามารถดูได้จากลักษณะของโครงสร้างด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_OSVERSIONINFOEXW</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_OSVERSIONINFOEXW</span> {
   DWORD dwOSVersionInfoSize;
   DWORD dwMajorVersion;
   DWORD dwMinorVersion;
@@ -373,7 +374,7 @@ osInfo.dwOSVersionInfoSize <span style="color:#f92672">=</span> <span style="col
   BYTE  wReserved;
 } OSVERSIONINFOEXW, <span style="color:#f92672">*</span>POSVERSIONINFOEXW, <span style="color:#f92672">*</span>LPOSVERSIONINFOEXW, RTL_OSVERSIONINFOEXW, <span style="color:#f92672">*</span>PRTL_OSVERSIONINFOEXW;
 </code></pre></div><p>จากโครงสร้างของ <code>OSVERSIONINFOEXW</code> และการกำหนดค่าให้ด้วยโค้ด <code>osInfo.dwOSVersionInfoSize</code> ให้มีขนาดตามตัวแปร <code>osInfo</code> เป็นการบ่งชี้ว่าตัวแปร <code>osInfo</code> มีการถูกตั้งค่าเพื่อที่จะถูกใช้ในส่วนต่อไปในฟังก์ชันนี้</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion)GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion)GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
 <span style="color:#66d9ef">if</span> (RtlGetVersion <span style="color:#f92672">==</span> NULL) {
   <span style="color:#66d9ef">return</span> FALSE;
 }
@@ -384,7 +385,7 @@ RtlGetVersion(<span style="color:#f92672">&amp;</span>osInfo);
 <p>โค้ดในส่วนถัดมาด้านบนคือส่วนของโค้ดซึ่งใช้ตรวจสอบระบบและรุ่นของระบบปฏิบัติการว่ารองรับการทำงานตามเงื่อนไขของโปรแกรมหรือไม่ เนื่องจากระบบและรุ่นของระบบปฏิบัติการหากนับตาม <a href="https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions">Release version</a> จะมีรูปแบบ อาทิ Windows 10 และ Windows Server ในรุ่นที่ถูกปล่อยออกมาพร้อมกับ Windows 10 จะมี Release version คือ 10.0 ส่วน Windows 8.1 และ Windows Server ในรุ่นที่ปล่อยออกมาพร้อมกับ Windows 8.1 จะมี Release version คือ 6.3 โดยข้อมูลที่อยู่หน้าจุดจะเรียกว่า Major version และข้อมูลซึ่งอยู่หลังจุดจะถูกเรียกว่า Minor version ฟังก์ชัน <code>wmain()</code> จึงมีการนำค่าทั้งสองส่วนนี้มาประกอบร่างให้สามารถเกิดรูปแบบของ X.X ตามที่ควรจะเป็น</p>
 <p>เนื่องจากข้อมูลของระบบของเราอยู่ในตัวแปร <code>osInfo</code> และในโครงสร้าง <code>OSVERSIONEXW</code> นั้นค่า Major version สามารถหาได้จาก <code>osInfo.dwMajorVersion</code> และค่า Minor version สามารถหาได้จาก <code>osInfo.dwMinorVersion</code> การประกอบร่างที่เราพูดถึงกันอยู่นี้จึงเป็นการนำค่าในสองส่วนนี้มาเชื่อมกันโดยมีเครื่องหมายจุดคั่นกลาง สำหรับโค้ดในฟังก์ชัน <code>wmain()</code> นั้น กระบวนการนี้เกิดขึ้นได้ด้วยการเรียกใช้ฟังก์ชัน <code>swprintf_s()</code></p>
 <p>ฟังก์ชัน <code>swprintf_s()</code> เป็นฟังก์ชันซึ่งจะทำการคัดลอกข้อมูลที่ต้องการ ทำการจัดรูปแบบและลักษณะ ก่อนจะนำไปเก็บไว้ที่ตำแหน่งปลายที่เราระบุ ซึ่งสามารถอธิบายได้ตามรายละเอียดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">swprintf_s(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">swprintf_s(
   pWinVerInfo<span style="color:#f92672">-&gt;</span>chOSMajorMinor,
   _countof(pWinVerInfo<span style="color:#f92672">-&gt;</span>chOSMajorMinor), 
   <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;%u.%u&#34;</span>, 
@@ -399,7 +400,7 @@ pWinVerInfo<span style="color:#f92672">-&gt;</span>dwBuildNumber <span style="co
 <li><code>osInfo.dwMajorVersion</code> และ <code>osInfo.dwMinorVersion</code> คือลำดับของอากิวเมนต์ที่จะถูกคัดลอกและเอาไปใส่ไว้ใน <code>pWinVerInfo-&gt;chOSMajorMinor</code> ด้วยรูปแบบ <code>L&quot;%u.%u&quot;</code></li>
 </ul>
 <p>หลังจากกระบวนการคัดลอก จัดรูปแบบและเอาไปใส่ไว้ที่หน่วยความจำปลายทางด้วยฟังก์ชัน <code>swprintf_s()</code> แล้ว โค้ดยังมีการกำหนดค่าใน <code>pWinVerInfo.dwBuildNumber</code> ให้เป็นค่าตาม <code>osInfo.dwBuildNumber</code> ด้วย</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (_wcsicmp(pWinVerInfo<span style="color:#f92672">-&gt;</span>chOSMajorMinor, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;10.0&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (_wcsicmp(pWinVerInfo<span style="color:#f92672">-&gt;</span>chOSMajorMinor, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;10.0&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
 		lpOSVersion <span style="color:#f92672">=</span> <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;10 or Server 2016&#34;</span>;
 		wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[+] Operating System is Windows %ls, build number %d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, lpOSVersion, pWinVerInfo<span style="color:#f92672">-&gt;</span>dwBuildNumber);
 }
@@ -415,7 +416,7 @@ pWinVerInfo<span style="color:#f92672">-&gt;</span>dwBuildNumber <span style="co
 <p>หากสภาพแวดล้อมของระบบสอดคล้องกับเงื่อนไขการทำงานของโปรแกรม โปรแกรมจะทำงานต่อในโค้ดส่วนถัดไปและถือเสร็จสิ้นการทำงานในขั้นตอนที่ 2 หรือขั้นตอนของการตรวจสอบรุ่นของระบบปฏิบัติการ และเข้าสู่ขั้นตอนที่ 3 หรือขั้นตอนของการเริ่มเข้าถึงข้อมูลในหน่วยความจำของโปรเซสเพื่อระบุหาข้อมูลสำหรับยืนยันตัวตน</p>
 <p>ในขั้นตอนที่ 3 กรบวนการทำงานเริ่มต้นที่การสร้าง function pointer ของฟังก์ชัน <code>RtlInitUnicodeString()</code> จาก <code>ntdll.dll</code> โดยหน้าที่หลักของฟังก์ชันนี้คือการเปลี่ยนค่าสตริงให้กลายเป็นสตริงแบบ Unicode ฟังก์ชันนี้ทำการเปลี่ยนค่าซึ่งอยู่ในสตริง <code>lpwProcName</code> ให้มาเก็บในตำแหน่งของ <code>pWinVerInfo.ProcName</code> ในลักษณะของ Unicode</p>
 <p>ค่าของตัวแปร <code>lpwProcName</code> ถูกกำหนดไว้ในบรรทัด 155 ว่ามีค่าคือ <code>lsass.exe</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlInitUnicodeString RtlInitUnicodeString <span style="color:#f92672">=</span> (_RtlInitUnicodeString) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlInitUnicodeString&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlInitUnicodeString RtlInitUnicodeString <span style="color:#f92672">=</span> (_RtlInitUnicodeString) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlInitUnicodeString&#34;</span>);
 <span style="color:#66d9ef">if</span> (RtlInitUnicodeString <span style="color:#f92672">==</span> NULL) {
   <span style="color:#66d9ef">return</span> FALSE;
 }
@@ -430,13 +431,13 @@ RtlInitUnicodeString(<span style="color:#f92672">&amp;</span>pWinVerInfo<span st
 wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[+] Process ID of %wZ is: %lld</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, pWinVerInfo<span style="color:#f92672">-&gt;</span>ProcName, (ULONG64)pWinVerInfo<span style="color:#f92672">-&gt;</span>hTargetPID);
 </code></pre></div><p>หลังจากนั้นฟังก์ชัน <code>GetPID()</code> ถูกเรียกใช้งานโดยมีการระบุตัวแปร <code>pWinVerInfo</code> เอาไว้เป็นข้อมูลนำเข้า หากใครได้อ่าน<a href="#getpid-function">การอธิบายฟังก์ชัน <code>GetPID()</code></a> มาแล้วจะเข้าใจได้ทันทีว่าฟังก์ชัน <code>GetPID()</code> จะมีการนำค่า <code>pWinVerInfo.ProcName</code> ไปหา process ID ก่อนจะนำผลลัพธ์ที่ได้ไปเก็บไว้ใน <code>pWinVerInfo.hTargetPID</code></p>
 <p>เมื่อทราบเป้าหมายแล้วว่าโปรเซส <code>lsass.exe</code> มีการทำงานอยู่และมี process ID ใด ฟังก์ชัน <code>wmain()</code> จะเริ่มทำการสร้างการเข้าถึงหน่วยความจำในโปรเซส <code>lsass.exe</code> ทันทีตามตัวอย่างโค้ดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[+] Open a process handle.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[+] Open a process handle.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
 HANDLE hProcess <span style="color:#f92672">=</span> NULL;
 OBJECT_ATTRIBUTES ObjectAttributes;
 InitializeObjectAttributes(<span style="color:#f92672">&amp;</span>ObjectAttributes, NULL, <span style="color:#ae81ff">0</span>, NULL, NULL);
 </code></pre></div><p>มีการสร้างตัวแปรใหม่ขึ้นมาในส่วนแรก 2 รายการ ได้แก่ <code>hProcess</code> ประเภท <code>HANDLE</code> ซึ่งทำให้เราสามารถเดาได้คร่าวๆ ว่าเมื่อตัวแปรนี้ถูกนำมาใช้งาน มันจะเก็บ process handle ของโปรเซสใด โปรเซสหนึ่งเอาไว้</p>
 <p>ตัวแปร <code>ObjectAttributes</code> เป็นอีกตัวแปรที่ถุกสร้างขึ้นมาพร้อมๆ กับ <code>hProcess</code> โดย <code>ObjectAttributes</code> เป็นตัวแปรประเภท <code>OBJECT_ATTRIBUTES</code> สำหรับการกำหนดคุณลักษณะของออบเจ็กต์ ตัวแปร <code>ObjectAttributes</code> ยังมีการถูก initialize เอาไว้ด้วยฟังก์ชัน <code>InitializeObjectAttributes()</code> ซึ่งทำให้คาดเดาได้ว่าตัวแปร <code>ObjectAttributes</code> อาจถูกใช้ในอนาคต ลักษณะของพารามิเตอรที่ระบุให้กับฟังก์ชัน <code>InitializeObjectAttributes()</code> ยังไม่มีลักษณะพิเศษใดๆ เป็นเพียงการ initialize แบบว่างเปล่าเอาไว้เท่านั้น</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">CLIENT_ID uPid <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">CLIENT_ID uPid <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
 uPid.UniqueProcess <span style="color:#f92672">=</span> pWinVerInfo<span style="color:#f92672">-&gt;</span>hTargetPID;
 uPid.UniqueThread <span style="color:#f92672">=</span> (HANDLE)<span style="color:#ae81ff">0</span>;
 
@@ -444,7 +445,7 @@ ULONG rights <span style="color:#f92672">=</span> (PROCESS_CREATE_PROCESS <span 
 printf(<span style="color:#e6db74">&#34;Access rights %x</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, rights);
 </code></pre></div><p>ต่อมามีการสร้างตัวแปรใหม่เพิ่มขึ้นมาอีก 2 รายการ ได้แก่ <code>uPid</code> เป็นประเภท <code>CLIENT_ID</code> ที่ถูกระบุเอาไว้ใน<a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L67">ไฟล์ <code>ATPMiniDump.h</code> บรรทัดที่ 67</a> หลังจากถูกสร้างขึ้น ตัวแปร <code>uPid</code> มีการถูกกำหนดค่าทันทีตามโครงสร้างของประเภท <code>CLIENT_ID</code> โดยค่า <code>uPid.UniqueProcess</code> ถูกกำหนดให้เป็นค่า process ID ของ <code>lsass.exe</code> ตามที่เก็บเอาไว้ใน <code>pWinVerInfo.hTargetPID</code> และค่า <code>uPid.UniqueThread</code> ถูกกำหนดให้เป็นค่า 0 ในประเภท <code>HANDLE</code></p>
 <p>ตัวแปรที่สองคือ <code>rights</code> โดยมีการกำหนดค่าตาม access rights ของโปรเซสที่ระบุไว้ใน<a href="https://docs.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights">เอกสารของไมโครซอฟต์</a> เราคาดว่าค่าในตัวแปร <code>rights</code> จะถูกนำมาใช้อีกครั้งเพื่อระบุสิทธิ์ที่เราจะขอเข้าถึงโปรเซส</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_ZwOpenProcess ZwOpenProcess <span style="color:#f92672">=</span> (_ZwOpenProcess) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;ZwOpenProcess&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_ZwOpenProcess ZwOpenProcess <span style="color:#f92672">=</span> (_ZwOpenProcess) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;ZwOpenProcess&#34;</span>);
 <span style="color:#66d9ef">if</span> (ZwOpenProcess <span style="color:#f92672">==</span> NULL) {
   <span style="color:#66d9ef">return</span> FALSE;
 }
@@ -461,7 +462,7 @@ printf(<span style="color:#e6db74">&#34;ZwOpenProcess Handle %d</span><span styl
   exit(<span style="color:#ae81ff">1</span>);
 }
 </code></pre></div><p>โค้ดส่วนต่อมาคือการสร้าง function pointer ของฟังก์ชัน <code>ZwOpenProcess()</code> และการเรียกใช้ฟังก์ชัน <code>ZwOpenProcess()</code> เราจะเห็นได้จากพารามิเตอร์ของฟังก์ชัน <code>ZwOpenProcess()</code> ว่าตัวแปรซึ่งถูกสร้างและกำหนดค่ามาก่อนหน้านั้นถูกใช้อย่างไร ในกรณีที่การทำงานของฟังก์ชัน <code>ZwOpenProcess()</code> เสร็จสิ้น ตัวแปร <code>hProcess</code> จะเก็บ process handle สำหรับโปรเซส <code>lsass.exe</code> ซึ่งสามารถนำไปใช้ต่อได้จนกว่า process handle ดังกล่าวจะถูกทำลายทิ้ง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">HANDLE snapshotHandle;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">HANDLE snapshotHandle;
 
 DWORD flags <span style="color:#f92672">=</span> (DWORD)PSS_CAPTURE_VA_CLONE
   <span style="color:#f92672">|</span> PSS_CAPTURE_HANDLES
@@ -494,20 +495,20 @@ printf(<span style="color:#e6db74">&#34;Snapshot Handle %d</span><span style="co
 <li>พารามิเตอร์ <code>*SnapshotHandle</code> ซึ่งในที่นี้คือ <code>&amp;snapshotHandle</code> เป็น handle สำหรับ snapshot ซึ่งฟังก์ชันนี้จะดำเนินการบันทึก</li>
 </ul>
 <p>ในสถานการณ์ที่ <code>hProcess</code> เป็น handle ของ <code>lsass.exe</code> เราคาดหวังว่าหลังจาก <code>PssCaptureSnapshot</code> ทำงานจนเสร็จแล้ว เราจะสามารถเข้าถึง snapshot ได้ที่ตำแหน่งของ <code>snapshotHandle</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">MINIDUMP_CALLBACK_INFORMATION CallbackInfo;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">MINIDUMP_CALLBACK_INFORMATION CallbackInfo;
 ZeroMemory(<span style="color:#f92672">&amp;</span>CallbackInfo, <span style="color:#66d9ef">sizeof</span>(MINIDUMP_CALLBACK_INFORMATION));
 CallbackInfo.CallbackRoutine <span style="color:#f92672">=</span> ATPMiniDumpWriteDumpCallback;
 CallbackInfo.CallbackParam <span style="color:#f92672">=</span> NULL;
 </code></pre></div><p>ต่อมาตัวแปร <code>CallbackInfo</code> ที่มีประเภทข้อมูลคือ <code>MINIDUMP_CALLBACK_INFORMATION</code> โดยพื้นที่ในหน่วยความจำของตัวแปร <code>CallbackInfo</code> ถูกเขียนทับด้วยค่าศูนย์ผ่านฟังก์ชัน <code>ZeroMemory</code> ให้มีขนาดเท่ากับขนาดของข้อมูลประเภท <code>MINIDUMP_CALLBACK_INFORMATION</code></p>
 <p>โครงสร้างของประเภทข้อมูล <code>MINIDUMP_CALLBACK_INFORMATION</code> ได้ถูกระบุไว้แล้วใน <code>DbgHelp.h</code> ซึ่งมีโครงสร้างตามรายละเอียดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_MINIDUMP_CALLBACK_INFORMATION</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_MINIDUMP_CALLBACK_INFORMATION</span> {
   MINIDUMP_CALLBACK_ROUTINE CallbackRoutine;
   PVOID                     CallbackParam;
 } MINIDUMP_CALLBACK_INFORMATION, <span style="color:#f92672">*</span>PMINIDUMP_CALLBACK_INFORMATION;
 </code></pre></div><p>อ้างอิงจากเอกสารของไมโครซอฟต์ <code>MINIDUMP_CALLBACK_INFORMATION</code> มีความเกี่ยวข้องฟังก์ชัน <code>MiniDumpWriteDump()</code> ซึ่งสามารถใช้เพื่อทำการสร้างไฟล์ที่มีข้อมูลของ minidump ได้ เราจึงสามารถคาดเดาจุดประสงค์ของสิ่งที่จะเกิดขึ้นต่อไปได้ว่าโค้ดอาจพยายามที่จะสร้างไฟล์ minidump จากข้อมูลซึ่งถูกชี้โดย <code>snapshotHandle</code></p>
 <p>จากโครงสร้างของ <code>MINIDUMP_CALLBACK_INFORMATION</code> โค้ดในส่วนถัดมาหลังจากการเรียกใช้ฟังก์ชัน <code>ZeroMemory()</code> จะแสดงให้เห็นถึงการกำหนดให้กับสมาชิกในโครงสร้างโดยมีการกำหนดให้ <code>CallbackInfo.CallbackRoutine</code> มีค่าเป็น <code>ATPMiniDumpWriteDumpCallBack</code> และค่า <code>CallbackInfo.CallbackParam</code> มีค่าเป็น <code>NULL</code></p>
 <p>เราจะเห็นการกำหนด <code>ATPMiniDumpWriteDumpCallback</code> ในลักษณะของ callback ที่<a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.c#L301">บรรทัดที่ 301</a> ตามโค้ดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL CALLBACK <span style="color:#a6e22e">ATPMiniDumpWriteDumpCallback</span>(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL CALLBACK <span style="color:#a6e22e">ATPMiniDumpWriteDumpCallback</span>(
 	__in     PVOID CallbackParam,
 	__in     <span style="color:#66d9ef">const</span> PMINIDUMP_CALLBACK_INPUT CallbackInput,
 	__inout  PMINIDUMP_CALLBACK_OUTPUT CallbackOutput
@@ -523,7 +524,7 @@ CallbackInfo.CallbackParam <span style="color:#f92672">=</span> NULL;
 }
 </code></pre></div><p>Callback คือลักษณะของฟังก์ชันซึ่งจะถูกเรียกใช้เมื่อเกิดเหตุการณ์หนึ่งขึ้นมา โดยการเรียกใช้ callback จะต้องมีการ register หรือ &ldquo;ผูก&rdquo; มันไว้ก่อนซึ่งในบางครั้งก็ทำได้โดยการระบุชื่อของฟังก์ชัน callback ไปเป็นอากิวเมนต์ ในกรณีนี้การระบุ <code>ATPMiniDumpWriteDumpCallBack</code> ไว้ให้กับ <code>CalbackInfo.CallbackRoutine</code> อาจแสดงให้เห็นถึงการ register ฟังก์ชัน callback เอาไว้ใช้ภายหลัง</p>
 <p>จนถึงจุดนี้ หากฟังก์ชันทำงานจนเสร็จสิ้นและโปรแกรมไม่ได้มีการหยุดการทำงาน กระบวนการในขั้นที่มีการเข้าถึงหน่วยความจำของโปรเซส <code>lsass.exe</code> และทำ snapshot ด้วยฟังก์ชัน <code>PssCaptureSnapshot</code> ก็ถือได้ว่าเสร็จสิ้น ในส่วนต่อไป ฟังก์ชัน <code>wmain()</code> จะดำเนินการในขั้นตอนสุดท้ายคือการเรียกใช้ฟังก์ชัน <code>MiniDumpWriteDump()</code> เพื่อสร้างไฟล์จากข้อมูล snapshot</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;[3] Create memorydump file:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;[3] Create memorydump file:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
 
 WCHAR chDmpFile[MAX_PATH] <span style="color:#f92672">=</span> <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">??</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">&#34;</span>;
 WCHAR chWinPath[MAX_PATH];
@@ -535,7 +536,7 @@ UNICODE_STRING uFileName;
 RtlInitUnicodeString(<span style="color:#f92672">&amp;</span>uFileName, chDmpFile);
 wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[+] Dump %wZ memory to: %wZ</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, pWinVerInfo<span style="color:#f92672">-&gt;</span>ProcName, uFileName);
 </code></pre></div><p>โค้ดด้านบนแสดงให้เห็นการเตรียมการเพื่อการเขียนไฟล์ โดยมีการสร้างพาธและชื่อไฟล์เพื่อรองรับการสร้างไฟล์เอาไว้</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">HANDLE hDmpFile <span style="color:#f92672">=</span> NULL;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">HANDLE hDmpFile <span style="color:#f92672">=</span> NULL;
 
 IO_STATUS_BLOCK IoStatusBlock;
 ZeroMemory(<span style="color:#f92672">&amp;</span>IoStatusBlock, <span style="color:#66d9ef">sizeof</span>(IoStatusBlock));
@@ -595,7 +596,7 @@ status <span style="color:#f92672">=</span> NtCreateFile(
 <li>ส่วน <code>NULL</code> ของ <code>EaBuffer</code> และ 0 ของ <code>EaLength</code> ใช้สำหรับระบุคุณลักษณะเพิ่มเติม (extended attributes) ให้กับไฟล์</li>
 </ul>
 <p>โค้ดส่วนสุดท้ายด้านล่างจะแสดงให้เห็นถึงการเรียกใช้ฟังก์ชัน <code>MiniDumpWriteDump()</code> ในการเขียนข้อมูลจาก <code>snapshotHandle</code> ซึ่งเป็นผลมาจากการใช้ฟังก์ชัน <code>PssCaptureSnapshot()</code> ลงไปที่ <code>hDmpFile</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL Success <span style="color:#f92672">=</span> MiniDumpWriteDump(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL Success <span style="color:#f92672">=</span> MiniDumpWriteDump(
   snapshotHandle, <span style="color:#75715e">// hProcess
 </span><span style="color:#75715e"></span>  dwTargetPID, <span style="color:#75715e">// ProcessId
 </span><span style="color:#75715e"></span>  hDmpFile, <span style="color:#75715e">// hDmpFile
@@ -618,7 +619,7 @@ ZwClose(hProcess);
 <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 </code></pre></div><p>จุดที่น่าสนใจในการเรียกใช้ฟังก์ชัน <code>MiniDumpWriteDump()</code> คือพารามิเตอร์ <code>DumpType</code> ซึ่งมีการระบุ flag เอาไว้เป็น <code>MiniDumpWithFullMemory</code> ซึ่งหมายถึงการให้สร้าง minidump จากข้อมูลทุกส่วน ไม่ใช่เพียงแค่ส่วนโค้ดหรือส่วนข้อมูลปลีกย่อย</p>
 <p>อีกจุดหนึ่งที่น่าสนใจคือหน้าที่ของพารามิเตอร์ <code>CallbackParam</code> ซึ่งในที่นี้คือ <code>CallbackInfo</code> หากเราดูที่เนื้อหาของโค้ดในฟังก์ชัน callback อย่าง <code>ATPMiniDumpWRiteDumpCallBack</code> ก็จะสามารถอธิบายได้ว่า <code>CallbackInfo</code> ถูกระบุเพื่อให้รับข้อมูลเพื่อเติมจากกระบวนการทำ minidump</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL CALLBACK <span style="color:#a6e22e">ATPMiniDumpWriteDumpCallback</span>(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">BOOL CALLBACK <span style="color:#a6e22e">ATPMiniDumpWriteDumpCallback</span>(
 	__in     PVOID CallbackParam,
 	__in     <span style="color:#66d9ef">const</span> PMINIDUMP_CALLBACK_INPUT CallbackInput,
 	__inout  PMINIDUMP_CALLBACK_OUTPUT CallbackOutput
@@ -641,12 +642,12 @@ ZwClose(hProcess);
 <p>โค้ดในฟังก์ชัน <code>GetPID()</code> มีการพยายามเรียกใช้ฟังก์ชันซึ่งอยู่ในไลบรารี DLL อื่น แนะนำให้อ่านหัวข้อ <a href="#loading-external-function-with-function-pointer">Loading External Function with Function Pointer</a> เพิ่มเติมเพื่อความเข้าใจที่มากขึ้นครับ</p>
 </blockquote>
 <p>ฟังก์ชัน <code>GetPID()</code> เป็นฟังก์ชันที่จะส่งออกข้อมูลประเภท <code>BOOL</code> เป็นผลลัพธ์ ฟังก์ชันมีการระบุพารามิเตอร์เอาไว้โดยจะถูกเก็บไว้ในตัวแปร <code>pWinVerInfo</code> ซึ่งเป็นตัวแปรประเภท <code>PWIN_VER_INFO</code> ฟังก์ชัน <code>GetPID()</code> มีการถูกเรียกใช้งานเพียงหนึ่งครั้งจากโค้ดในฟังก์ชัน <code>wmain()</code> <a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.c#L182">บรรทัดที่ 182</a> ตามตัวอย่างด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>GetPID(pWinVerInfo)) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>GetPID(pWinVerInfo)) {
   wprintf(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;	[!] Enumerating process failed.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
   exit(<span style="color:#ae81ff">1</span>);
 }
 </code></pre></div><p>ผมจะขอยกที่มาของอากิวเมนต์ไว้อธิบายในฟังก์ชัน <code>wmain()</code> ซึ่งเป็นส่วนของโค้ดที่กำหนดขึ้นมา ดังนั้นในการอธิบายฟังก์ชัน <code>GetPID()</code> เราจะสมมติโครงสร้างที่สมบูรณ์ของข้อมูลในประเภท <code>PWIN_VER_INFO</code> ขึ้นมาเพื่อให้เข้าใจการทำงานได้ง่ายขึ้นแทน โดยโครงสร้างของข้อมูลประเภท <code>PWIN_VER_INFO</code> ถูกกำหนดอยู่ในไฟล์ <code>ATPMiniDump.h</code> <a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L49">ในบรรทัดที่ 49</a> ตามโครงสร้างด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_WIN_VER_INFO</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_WIN_VER_INFO</span> {
 	WCHAR chOSMajorMinor[<span style="color:#ae81ff">8</span>];
 	DWORD dwBuildNumber;
 	UNICODE_STRING ProcName;
@@ -674,7 +675,7 @@ ZwClose(hProcess);
 <p>เริ่มต้นการทำงาน มีการ initialize ค่าในตัวแปร <code>pWinVerInfo</code> ก่อนหนึ่งครั้งที่ <code>pWinVerInfo.hTargetPID</code> โดยถูกกำหนดให้เป็นค่า <code>NULL</code> จากชื่อของฟังก์ชันหลักคือ <code>GetPID()</code> เราคงพอจะเดากันได้ว่าฟังก์ชันนี้น่าจะพยายามหาค่า <code>PID</code> ของโปรเซสใดโปรเซสหนึ่งซึ่งจะมาถูกเก็บเอาไว้ใน <code>pWinVerInfo.hTargetPID</code> ด้วยเป้าหมายนี้นั้น ลอจิคที่ดูสมเหตุสมผลคือการแสดงรายการของโปรเซสที่มีอยู่ในระบบ ณ ขณะนั้นทั้งหมด แล้วไล่หาค่า PID ด้วยปัจจัยบางอย่างก่อนที่จะนำมาเก็บไว้ที่ตำแหน่งดังกล่าว</p>
 <p>หากใครได้อ่านฟังก์ชัน <code>wmain()</code> ก็อาจจะพอปะติดปะต่อได้ว่าตัวแปร <code>pWinVerInfo</code> ซึ่งเป็นค่านำเข้านั้นมีการกำหนดค่าไว้กับสมาชิก <code>pWinVerInfo.ProcName</code> ไว้อยู่แล้วว่าให้เป็นค่าใด ดังนั้นปัจจัยซึ่งจะนำมาใช้หาค่า <code>PID</code> จึงมีความเป็นไปได้สูงว่าจะมีการใช้ <code>pWinVerInfo.ProcName</code> ครับ ส่วนหากใครยังไม่ได้อ่านก็ไม่เป็นไร ยังไปต่อกันได้อยู่ครับ :)</p>
 <p>ต่อมามีการใช้ท่า function pointer ในการโหลด 3 ฟังก์ชันกลุ่ม Windows Kernel API มาจาก <code>ntdll.dll</code> โดย 3 ฟังก์ชันนั้นคือ <code>ZwQuerySystemInformation()</code> ซึ่งมักถูกใช้สำหรับหาข้อมูลเกี่ยวกับระบบ, ฟังก์ชัน <code>NtAllocateVirtualMemory()</code> สำหรับการจองพื้นที่ในหน่วยความจำของโปรเซส และฟังก์ชัน <code>NtFreeVirtualMemory()</code> สำหรับการคืนพื้นที่หน่วยความจำที่จองมา</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_ZwQuerySystemInformation ZwQuerySystemInformation <span style="color:#f92672">=</span> (_ZwQuerySystemInformation) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;ZwQuerySystemInformation&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_ZwQuerySystemInformation ZwQuerySystemInformation <span style="color:#f92672">=</span> (_ZwQuerySystemInformation) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;ZwQuerySystemInformation&#34;</span>);
 <span style="color:#66d9ef">if</span> (ZwQuerySystemInformation <span style="color:#f92672">==</span> NULL) {
 		<span style="color:#66d9ef">return</span> FALSE;
 }
@@ -689,7 +690,7 @@ _NtFreeVirtualMemory NtFreeVirtualMemory <span style="color:#f92672">=</span> (_
   <span style="color:#66d9ef">return</span> FALSE;
 }
 </code></pre></div><p>ฟังก์ชัน <code>ZwQuerySystemInformation()</code> เป็นฟังก์ชันแรกซึ่งถูกเรียกใช้ตามโค้ดด้านล่าง โดยก่อนที่จะมีการเรียกใช้ฟังก์ชันนี้นั้น โค้ดได้มีการสร้างและกำหนดค่าให้กับตัวแปร <code>uReturnLength</code> ซึ่งเป็นตัวแปรประเภท <code>ULONG</code> ให้มีค่าเป็น 0 ด้วย</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">ULONG uReturnLength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">ULONG uReturnLength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
 NTSTATUS status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
   SystemProcessInformation, <span style="color:#75715e">// SystemInformationClass
 </span><span style="color:#75715e"></span>  <span style="color:#ae81ff">0</span>, <span style="color:#75715e">// SystemInformation
@@ -715,7 +716,7 @@ NTSTATUS status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 </blockquote>
 <p>ทั้งนี้ถ้าเราสังเกตดูให้ดีในการเรียกใช้ฟังก์ชัน <code>ZwQuerySystemInformation()</code> พารามิเตอร์ <code>SystemInformation</code> ซึ่งควรถูกระบุเพื่อจัดเก็บข้อมูลกลับไม่มีการระบุค่าใด ๆ เอาไว้เลย พารามิเตอร์ที่ดูเหมือนจะมีการรับข้อมูลมีเพียงพารามิเตอร์เดียวคือ <code>uReturnLength</code> ซึ่งรับค่าขนาดของผลลัพธ์ออกมาเก็บไว้ จากนั้นจึงมีการตรวจสอบด้วยค่าประเภท <code>NTSTATUS</code> เพื่อให้แน่ใจว่าฟังก์ชันทำงานไม่ล้มเหลว อย่างไรก็ตามเฉลยของการเรียกใช้ฟังก์ชัน <code>ZwQuerySystemInformation()</code> ก็อยู่ไม่ใกล้ไม่ไกลจากโค้ดส่วนปัจจุบัน ซึ่งก็คืออีกไม่กี่บรรทัดต่อจากนี้ครับ</p>
 <p>หลังจากมีการเรียกใช้ <code>ZwQuerySystemInformation()</code> จนได้ค่าขนาดของผลลัพธ์ของประเภทข้อมูล <code>SystemProcessInformation</code> มาเก็บไว้ที่ <code>uReturnLength</code> แล้ว เราจะเห็นการใช้ค่าใน <code>uReturnLength</code> ในโค้ดด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">LPVOID pBuffer <span style="color:#f92672">=</span> NULL;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">LPVOID pBuffer <span style="color:#f92672">=</span> NULL;
 SIZE_T uSize <span style="color:#f92672">=</span> uReturnLength;
 status <span style="color:#f92672">=</span> NtAllocateVirtualMemory(
   GetCurrentProcess(), <span style="color:#75715e">// ProcessHandle
@@ -748,14 +749,14 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 <p>พารามิเตอร์อื่นๆ ซึ่งถูกระบุในการเรียกใช้ฟังก์ชัน อาทิ <code>AllocationType</code>, <code>ZeroBits</code> และ <code>Protect</code> เป็นพารามิเตอร์เสริมซึ่งใช้เพื่อระบุคุณลักษณะอื่นๆ ของพื้นที่หน่วยความจำที่ทำการจอง ผลลัพธ์ของการเรียกใช้ฟังก์ชัน <code>NtAllocateVirtualMemory()</code> จะถูกตรวจสอบว่าฟังก์ชันทำงานเสร็จสิ้นหรือไม่ หากไม่เสร็จสิ้นฟังก์ชันจะถูกหยุดการทำงาน แต่หากฟังก์ชันนี้ทำงานเสร็จสิ้น เราก็จะได้พื้นที่ใหม่ในหน่วยความจำของโปรเซสปัจจุบันตามขนาดที่เราระบุ และสามารถเรียกใช้ได้ผ่านตำแหน่งของหน่วยความจำซึ่งถูกเก็บอยู่ในตัวแปร <code>pBuffer</code></p>
 <p>ต่อมาฟังก์ชัน <code>ZwQuerySystemInformation()</code> จะถูกเรียกใช้เป็นครั้งที่สองด้วยจุดประสงค์ที่ต่างออกไป เนื่องจากในตอนนี้เรามีพื้นที่ว่างในหน่วยความจำพร้อมใช้งานแล้ว เราก็สามารถระบุพื้นที่ดังกล่าวให้กับฟังก์ชัน <code>ZwQuerySystemInformation()</code> เพื่อจัดเก็บข้อมูลต่อได้ สังเกตว่าธรรมชาติของภาษาซีนั้น ก่อนจะมีการดำเนินการเรียกหาข้อมูลใดๆ เราจำเป็นจะต้องจัดเตรียมพื้นที่เอาไว้จัดเก็บผลลัพธ์เสมอ ซึ่งนั่นคือสิ่งที่เราเห็นในการเรียกใช้ฟังก์ชัน <code>ZwQuerySystemInformation()</code> ครั้งแรกกับการเรัยกใช้ฟังก์ชัน <code>NtAllocationVirtualMemory()</code> ครับ</p>
 <p>การเรียกใช้ฟังก์ชัน <code>ZwQuerySystemInformation()</code> ในครั้งที่สองจะสังเกตได้อย่างชัดเจนว่าตัวแปร <code>pBuffer</code> นั้นถูกใส่ไว้ในตำแหน่งของพารามิเตอร์ <code>SystemInformation</code> เพื่อเป็นตำแหน่งที่จะเก็บข้อมูลผลลัพธ์ของการทำงาน โดยเมื่อสิ้นสุดการทำงานแล้ว พื้นที่หน่วยความจำซึ่งถูกอ้างอิงด้วยตัวแปร <code>pBuffer</code> จะเก็บข้อมูลประเภท <code>SystemProcessInformation</code> หรืออธิบายอีกอย่างได้คือข้อมูลของรายละเอียดของโปรเซสที่กำลังทำงานอยู่ในระบบ (หากใครสนใจว่า <code>pBuffer</code> เก็บข้อมูลในลักษณะใด ก็สามาถดีบั๊กเพื่อดูค่าในตัวแปรนี้ได้ตามสะดวกครับ)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlEqualUnicodeString RtlEqualUnicodeString <span style="color:#f92672">=</span> (_RtlEqualUnicodeString) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlEqualUnicodeString&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlEqualUnicodeString RtlEqualUnicodeString <span style="color:#f92672">=</span> (_RtlEqualUnicodeString) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlEqualUnicodeString&#34;</span>);
 <span style="color:#66d9ef">if</span> (RtlEqualUnicodeString <span style="color:#f92672">==</span> NULL) {
   <span style="color:#66d9ef">return</span> FALSE;
 }
 </code></pre></div><p>โค้ดส่วนต่อมาคือการสร้าง function pointer ให้กับฟังก์ชันชื่อ <code>RtlEqualUnicodeString()</code> ด้วยรูปแบบที่เราคุ้นเคยกันดี ฟังก์ชัน <code>RtlEqualUnicodeString()</code> มีการทำงานตรงตัวตามชื่อของมันการรับค่าอินพุตเข้าไปสองค่าในประเภท <code>PCUNICODE_STRING</code> หรือสตริงซึ่งใช้ยูนิโค้ด จากนั้นทำการเปรียบเทียบว่าสตริงทั้งสองค่านั้นเป็นสตริงเดียวกันหรือไม่ หากเป็นสตริงเดียวกันฟังก์ชัน <code>RtlEqualUnicodeString()</code> จะส่งผลลัพธ์เป็น <code>TRUE</code> และเป็น <code>FALSE</code> หากไม่เป็นสตริงเดียวกัน</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">PSYSTEM_PROCESSES pProcInfo <span style="color:#f92672">=</span> (PSYSTEM_PROCESSES) pBuffer;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">PSYSTEM_PROCESSES pProcInfo <span style="color:#f92672">=</span> (PSYSTEM_PROCESSES) pBuffer;
 </code></pre></div><p>ในส่วนถัดมาเราจะเห็นโค้ดในลักษณะที่เหมือนกับการทำ function pointer แต่ในความคิดของผมนั้น มันจะสามารถเข้าใจได้ง่ายกว่าถ้าเราอธิบายโค้ดในบรรทัดด้านบนว่าเป็นการเอาค่าผลลัพธ์จากการทำงานของฟังก์ชัน <code>ZwQuerySystemInformation()</code> นั้นมาทำการแปลงให้อยู่ในประเภทข้อมูลที่ชื่อ <code>PSYSTEM_PROCESSES</code> และเก็บผลลัพธ์ที่ได้ไว้ในตัวแปรชื่อ <code>pProcInfo</code> การทำแบบนี้มีจุดประสงค์เพื่อให้เราสามารถเข้าถึงค่าใน <code>pBuffer</code> ได้อย่างเป็นรูปแบบตามโครงสร้างที่ประเภทข้อมูลนี้พึงมี เราสามารถดูรายละเอียดเพิ่มเติมของ <code>PSYSTEM_PROCESSES</code> ได้จาก<a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L87">ไฟล์ <code>ATPMiniDump.h</code> ที่บรรทัดที่ 87 ครับ</a></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_SYSTEM_PROCESSES</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">_SYSTEM_PROCESSES</span> {
 	ULONG NextEntryDelta;
 	ULONG ThreadCount;
 	ULONG Reserved1[<span style="color:#ae81ff">6</span>];
@@ -770,7 +771,7 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 </code></pre></div><p>เมื่อผ่านการแปลงประเภทแล้ว เราสามารถมโนต่อได้เลยว่าหากเราเรียกดูข้อมูลโดยใช้การอ้างเป็น <code>&amp;pProcInfo.ProcessName</code> เราก็จะได้รายการของชื่อโปรเซสจากผลลัพ์ของ <code>SystemProcessInformation</code> นั่นเอง</p>
 <p>ในตอนนี้เรามีรายการข้อมูลของโปรเซสที่ทำงานอยู่ในระบบอยู่แล้ว ด้วยจุดประสงค์ของฟังก์ชัน <code>GetPID()</code> คือการหาค่า process ID และค่านำเข้าของฟังก์ชันซึ่งคือ <code>pWinVerInfo.ProcName</code> เราน่าจะพอเดาสิ่งที่จะเกิดขึ้นต่อไปได้แล้วว่าสิ่งที่จะเกิดขึ้นต่อไปในการทำงานของฟังก์ชันนี้นั้นคือการนำข้อมูลใน <code>pProcInfo</code> ซึ่งเก็บรายการโปรเซสที่ทำงานอยู่ทั้งหมดในระบบมาเปรียบเทียบชื่อกับข้อมูลในตัวแปร <code>pWinVerInfo.ProcName</code> ด้วยฟังก์ชัน <code>RtlEqualUnicodeString()</code> ซึ่งถูกสร้างขึ้นมาแต่ยังไม่ถูกเรียกใช้ เมื่อมีเปรียบเทียบชื่อจนเจอแล้ว เราก็สามารถคาดเดาได้ว่าค่า <code>pProcInfo.ProcessId</code> ของโปรเซสที่มีชื่อตรงกับที่เราต้องการจะถูกย้ายมาเก็บไว้ใน <code>pWinVerInfo.hTargetPID</code> ที่มีการ initialize ค่าเป็น <code>NULL</code> เอาไว้ตั้งแต่เริ่มต้นฟังก์ชัน</p>
 <p>โค้ดส่วนถัดไปอธิบายสิ่งที่เราคาดเดาไว้ด้านบนครับ</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">do</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">do</span> {
 		<span style="color:#66d9ef">if</span> (RtlEqualUnicodeString(<span style="color:#f92672">&amp;</span>pProcInfo<span style="color:#f92672">-&gt;</span>ProcessName, <span style="color:#f92672">&amp;</span>pWinVerInfo<span style="color:#f92672">-&gt;</span>ProcName, TRUE)) {
 			pWinVerInfo<span style="color:#f92672">-&gt;</span>hTargetPID <span style="color:#f92672">=</span> pProcInfo<span style="color:#f92672">-&gt;</span>ProcessId;
 			<span style="color:#66d9ef">break</span>;
@@ -779,7 +780,7 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 		pProcInfo <span style="color:#f92672">=</span> (PSYSTEM_PROCESSES)(((LPBYTE)pProcInfo) <span style="color:#f92672">+</span> pProcInfo<span style="color:#f92672">-&gt;</span>NextEntryDelta);
 } <span style="color:#66d9ef">while</span> (pProcInfo);
 </code></pre></div><p>มีการเรียกใช้ <code>do-while</code> ในการไล่หาข้อมูลใน <code>pProcInfo</code> และเราจะเห็นการขยับค่าใน <code>pProcInfo</code> ด้วยการเอาตำแหน่งข้อมูลปัจจุบันมารวมระยะห่างของข้อมูลในรายการโปรเซสซึ่งถัดไปด้วย <code>pProcInfo.NextEntryDelta</code> ด้วย ในกรณีที่มีโปรเซสซึ่งมีชื่อตรงกับที่เราต้องการ ค่า process ID ก็จะถูกนำไปเก็บไว้ <code>pWinVerInfo.hTargetPID</code> แต่กรณีที่ไม่พบแล้วนั้น ค่าใน <code>pWinVerInfo.hTargetPID</code> ก็จะยังคงเป็นค่า <code>NULL</code> ตามที่ iniitalize ไว้ในตอนแรกเหมือนเดิม</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">status <span style="color:#f92672">=</span> NtFreeVirtualMemory(GetCurrentProcess(), <span style="color:#f92672">&amp;</span>pBuffer, <span style="color:#f92672">&amp;</span>uSize, MEM_RELEASE);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">status <span style="color:#f92672">=</span> NtFreeVirtualMemory(GetCurrentProcess(), <span style="color:#f92672">&amp;</span>pBuffer, <span style="color:#f92672">&amp;</span>uSize, MEM_RELEASE);
 
 <span style="color:#66d9ef">if</span> (pWinVerInfo<span style="color:#f92672">-&gt;</span>hTargetPID <span style="color:#f92672">==</span> NULL) {
   <span style="color:#66d9ef">return</span> FALSE;
@@ -794,7 +795,7 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 <p>ฟังก์ชัน <code>IsEleveated()</code> เป็นฟังก์ชันที่จะส่งออกข้อมูลประเภท <code>BOOL</code> ไม่มีการรับอากิวเมนต์ใดๆ เข้ามาประมวลผลในฟังก์ชัน และจะส่งออกค่าออกเป็น <code>TRUE</code> หรือ <code>FALSE</code> เท่านั้น</p>
 <p>จุดประสงค์ของฟังก์ชัน <code>IsElevated()</code> คือการตรวจสอบ access token ของโปรเซสปัจจุบันว่าได้มีการกำหนดประเภทของค่าใน access token ว่ามีการตั้งค่าที่ถูกต้องแล้วหรือไม่ โดยค่าใน access token ที่ฟังก์ชันนี้จะทำการตรวจสอบคือค่าใน struct ชื่อ <code>TOKEN_ELEVATION</code> ซึ่งค่าใน access token ที่ระบุสิทธิ์ของผู้ดูแลระบบ</p>
 <p>ฟังก์ชันทำการตรวจสอบ access token ปัจจุบันที่โปรเซส <code>ATPMiniDump.exe</code> มีอยู่ผ่านฟังก์ชัน <code>OpenAccessToken()</code> โดยฟังก์ชัน <code>OpenAccessToken()</code> มีการรับค่า process handle ซึ่งเป็นเป้าหมายของการตรวจสอบ สิทธิ์และรูปแบบในการเข้าถึง access token ของโปรเซสดังกล่าวและพอยน์เตอร์ซึ่งชี้ไปยังตัวแปรที่จะใช้เพื่อจัดเก็บตำแหน่งของ access token handle โดยในกรณีนี้เราจะสามารถสังเกตได้ว่าฟังก์ชันมีการใช้ process handle ที่เป็นผลลัพธ์จากการเรียกใช้ฟังก์ชัน <code>GetCurrentProcess()</code> ซึ่งจะได้ผลลัพธ์เป็น process handle ของโปรเซสปัจจุบัน</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>OpenProcessToken(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>OpenProcessToken(
         GetCurrentProcess(), <span style="color:#75715e">// ProcessHandle
 </span><span style="color:#75715e"></span>        TOKEN_QUERY <span style="color:#f92672">|</span> TOKEN_ADJUST_PRIVILEGES, <span style="color:#75715e">// DesiredAccess
 </span><span style="color:#75715e"></span>        <span style="color:#f92672">&amp;</span>hToken <span style="color:#75715e">// TokenHandle
@@ -805,7 +806,7 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 }
 </code></pre></div><p>ในกรณีที่ฟังก์ชัน <code>OpenProcessToken()</code> ทำงานเสร็จสิ้นและไม่เกิดข้อผิดพลาด ฟังก์ชันจะมีการสร้างตัวแปร <code>Elevation</code> จาก struct <code>TOKEN_ELEVATION</code> และมีการสร้างตัวแปร <code>cbSize</code> โดยมีการกำหนดค่าให้จัดเก็บขนาดของ struct <code>TOKEN_ELEVATION</code> เอาไว้ในรูปแบบ DWORD</p>
 <p>หากสงสัยว่าตัวแปรสองตัวนี้ถูกสร้างขึ้นมาเพราะอะไร โค้ดด้านล่างคือคำตอบครับ</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (GetTokenInformation(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (GetTokenInformation(
       hToken, <span style="color:#75715e">// TokenHandle
 </span><span style="color:#75715e"></span>      TokenElevation, <span style="color:#75715e">// TokenInformationClass
 </span><span style="color:#75715e"></span>      <span style="color:#f92672">&amp;</span>Elevation, <span style="color:#75715e">// TokenInformation
@@ -834,7 +835,7 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 <p>จุดประสงค์ของฟังก์ชัน <code>SetDebugPrivilege()</code> คือการกำหนดสิทธิ์ของโปรเซส <code>ATPMiniDump.exe</code> ให้มีสิทธิ์ <code>SeDebugPrivilege</code> ซึ่งเป็นสิทธิ์ของระบบปฏิบัติการที่ทำให้สามารถตรวจสอบและเปลี่ยนแปลงการทำงานของข้อมูลในหน่วยความจำของโปรเซสใดๆ ซึ่งมีบัญชีผู้ใช้งานอื่นเป็นเจ้าของ รวมไปถึงดำเนินการด้วยสิทธิ์ของระบบบางอย่างได้ กระบวนการกำหนดสิทธิ์จะทำโดยการแก้ไขค่าเกี่ยวกับสิทธิ์ที่โปรเซส <code>ATPMiniDump.exe</code> มีอยู่เพื่อให้ได้สิทธิ์ตามต้องการ โดยค่าดังกล่าวในสภาพแวดล้อมของระบบปฏิบัติการ Windows นั้นจะมีชื่อเรียกว่า access token</p>
 <p>ค่า access token เป็นค่าซึ่งได้มาเมื่อผู้ใช้งานเข้าสู่ระบบโดยจะถูกถือครองโดยผู้ใช้งานและโปรเซสที่ถูกสร้างโดยผู้ใช้งาน ค่าที่อยู่ใน access token จะกำหนดสิทธิ์ที่ผู้ใช้งานและโปรเซสของผู้ใช้งานสามารถดำเนินการภายในระบบ ระบบจะทำการตรวจสอบ access token ดังกล่าวว่ามีสิทธิ์เพียงพอที่จะดำเนินการในเรื่องอย่างใดอย่างหนึ่งหรือไม่</p>
 <p>ฟังก์ชันทำการตรวจสอบ access token ปัจจุบันที่โปรเซส <code>ATPMiniDump.exe</code> มีอยู่ผ่านฟังก์ชัน <code>OpenAccessToken()</code> เช่นเดียวกับที่ปรากฎในฟังก์ชัน <code>IsElevated()</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>OpenProcessToken(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>OpenProcessToken(
         GetCurrentProcess(), <span style="color:#75715e">// ProcessHandle
 </span><span style="color:#75715e"></span>        TOKEN_QUERY <span style="color:#f92672">|</span> TOKEN_ADJUST_PRIVILEGES, <span style="color:#75715e">// DesiredAccess
 </span><span style="color:#75715e"></span>        <span style="color:#f92672">&amp;</span>hToken <span style="color:#75715e">// TokenHandle
@@ -847,10 +848,10 @@ status <span style="color:#f92672">=</span> ZwQuerySystemInformation(
 <li>ระบุจำนวนของรูปแบบ privilege ที่ไว้ที่ <code>TokenPrivileges.PrivilegeCount</code> ในที่นี้ค่าดังกล่าวจะถูกระบุเป็น <code>1</code> เนื่องจากรูปแบบของ privilege ที่จะถูกกำหนดลงไปนั้นมีอยู่รูปแบบเดียว</li>
 <li>ระบุประเภทของรูปแบบ privilege ที่จะกำหนด เราจะเห็น conditional operator ของภาษาซีในส่วนนี้คือเครื่องหมาย <code>?</code> การระบุประเภทดังกล่าวจะทำการกำหนดค่า <code>SE_PRIVILEGE_ENABLED</code> ซึ่งเป็นการกำหนดค่า privilege ในกรณีที่เงื่อนไข <code>TokenPrivileges.Privileges[0].Attribute</code> มีอยู่จริง (ซึ่งมีจริงอยู่แล้ว) ค่า <code>SE_PRIVILEGE_ENABLED</code> เมื่อถูกใส่ไปใน access token แล้วจะถือว่าโปรเซสที่มี access token มีสิทธิ์ <code>SeDebugPrivilege</code> ในทันที</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">TokenPrivileges.PrivilegeCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">TokenPrivileges.PrivilegeCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
 TokenPrivileges.Privileges[<span style="color:#ae81ff">0</span>].Attributes <span style="color:#f92672">=</span> TRUE <span style="color:#f92672">?</span> SE_PRIVILEGE_ENABLED : <span style="color:#ae81ff">0</span>;
 </code></pre></div><p>นอกเหนือจากส่วนของค่าใน access token เกี่ยวกับสิทธิ์ ค่าภายใน access token ยังต้องประกอบไปด้วยค่าเฉพาะตามโครงสร้างของ access token ที่ระบบกำหนด ค่าเฉพาะดังกล่าวซึ่งถูกกำหนดให้นำมาใช้ตาม<a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/-token">โครงสร้างของ access token</a> ที่ระบบกำหนดคือค่า locally unique identifier (LUID) ซึ่งจะแตกต่างกันไปเมื่อมีการบูตระบบขึ้นมา โปรแกรมจะมีการเรียกใช้ฟังก์ชัน <code>LookupPrivilegeValueW()</code> เพื่อนำค่า LUID ดังกล่าวมาใส่ในแอตทริบิวต์ของตัวแปร <code>TokenPrivileges</code> ตามที่ระบบกำหนดไว้ ในกรณีที่การดำเนินในขั้นตอนนี้ไม่เสร็จสมบูรณ์ โปรแกรมจะหยุดการทำงานทันที</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">LPWSTR lpwPriv <span style="color:#f92672">=</span> <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;SeDebugPrivilege&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">LPWSTR lpwPriv <span style="color:#f92672">=</span> <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;SeDebugPrivilege&#34;</span>;
 <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>LookupPrivilegeValueW(
         NULL, <span style="color:#75715e">// lpSystemName
 </span><span style="color:#75715e"></span>        (LPCWSTR)lpwPriv, <span style="color:#75715e">// lpName
@@ -861,7 +862,7 @@ TokenPrivileges.Privileges[<span style="color:#ae81ff">0</span>].Attributes <spa
     <span style="color:#66d9ef">return</span> FALSE;
 }
 </code></pre></div><p>เมื่อองค์ประกอบของ access token สมบูรณ์แล้ว โปรแกรมจะนำ access token ใหม่ไปใช้งานผ่านฟังก์ชัน <code>AdjustTokenPrivilges()</code> ซึ่งจะรับตำแหน่งของ access token handle ปัจจุบันของโปรเซสไป และรับค่า access token ใหม่จากตัวแปร <code>TokenPrivileges</code> ไปปรับใช้ ในกรณีที่การดำเนินในขั้นตอนนี้ไม่เสร็จสมบูรณ์ โปรแกรมจะหยุดการทำงานทันที</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>AdjustTokenPrivileges(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>AdjustTokenPrivileges(
         hToken, <span style="color:#75715e">// TokenHandle
 </span><span style="color:#75715e"></span>        FALSE, <span style="color:#75715e">// DisableAllPrivileges
 </span><span style="color:#75715e"></span>        <span style="color:#f92672">&amp;</span>TokenPrivileges,  <span style="color:#75715e">// NewState
@@ -877,14 +878,14 @@ TokenPrivileges.Privileges[<span style="color:#ae81ff">0</span>].Attributes <spa
 <h2 id="notes">Notes</h2>
 <h3 id="loading-external-function-with-function-pointer">Loading External Function with Function Pointer</h3>
 <p>จุดสังเกตที่น่าสนใจอย่างหนึ่งในโค้ดของโครงการ ATPMiniDump คือการเรียกใช้งาน Windows API ในระดับ kernel อยู่หลายส่วนตามตัวอย่างด้านล่างซึ่งเป็นโค้ดในฟังก์ชัน <code>wmain()</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
 
 <span style="color:#66d9ef">if</span> (RtlGetVersion <span style="color:#f92672">==</span> NULL) {
     <span style="color:#66d9ef">return</span> FALSE;
 }
 </code></pre></div><p>โค้ดด้านบนมีจุดมุ่งหมายในการพยายามเรียกใช้ฟังก์ชัน <code>RtlGetVersion()</code> จากไลบรารี <code>ntdll.dll</code> ที่ป็น kernel-mode API โดยในขณะเดียวกันก็มี user-mode API ที่ชื่อ <code>GetVersionEx()</code> ซึ่งมีลักษณะและรูปแบบผลลัพธ์ใกล้เคียงกัน</p>
 <p>อย่างไรก็ตามเนื่องจากไลบรารี <code>ntdll.dll</code> ซึ่งเก็บ kernel-mode API หลายรายการเอาไว้ให้เรียกใช้ได้นั้นไม่ได้เป็นไลบรารีพื้นฐานที่มักถูกเรียกใช้หรือมีความพร้อมใช้งานโดยทั่วไป ดังนั้นการจะทำให้ฟังก์ชัน <code>RtlGetVersion()</code> สามารถถูกเรียกใช้ได้โดยโค้ดในฟังก์ชัน <code>wmain()</code> จึงจำเป็นต้องมีการเพิ่มขั้นตอนหรือกลไกในการเตรียมฟังก์ชัน <code>RtlGetVersion()</code> ให้สามารถเรียกใช้ได้ขึ้นมา อย่างไรก็ตามก่อนที่เราจะพูดถึงกลไกลในส่วนนี้ การได้รู้เหตุผลว่าทำไมเราถึงต้องมีกลไกนี้อาจจะช่วยให้เราเข้าใจการทำงานในโค้ดตรงส่วนนี้มากขึ้นครับ</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
 </code></pre></div><p>หากเราพยายามทำความเข้าใจโค้ดด้านบน เราจะเห็นลำดับการทำงานตามขั้นตอนดังนี้</p>
 <ol>
 <li>เพื่อที่จะใช้ฟังก์ชัน <code>RtlGetVersion()</code> ในไลบรารี <code>ntdll.dll</code> ที่ยังไม่สามารถเรียกใช้ได้ทันที โค้ดจึงต้องทำการสร้างการเชื่อมโยงไปยังไลบรารี <code>ntdll.dll</code> ก่อนด้วยฟังก์ชัน <code>GetModuleHandle()</code> พร้อมระบุไลบรารีที่จะเรียกหา</li>
@@ -892,16 +893,16 @@ TokenPrivileges.Privileges[<span style="color:#ae81ff">0</span>].Attributes <spa
 <li>หลังจากได้ตำแหน่งของไลบรารีหรือโมดูล <code>ntdll.dll</code> ในหน่วยความจำมาแล้ว โค้ดมีการเรียกใช้ฟังก์ชัน <code>GetProcAddress()</code> ซึ่งทำหน้าที่ในการหาตำแหน่งจองฟังก์ชันในไลบรารีหรือโมดูล โดยในที่นี้ฟังก์ชัน <code>GetProcAddress()</code> จะถูกใช้เพื่อเรียกหาตำแหน่งของฟังก์ชัน <code>RtlGetVersion()</code> ซึ่งอยู่ในไลบรารี <code>ntdll.dll</code></li>
 </ol>
 <p>ผลลัพธ์ที่ได้จากการเรียกใช้ฟังก์ชัน <code>GetModuleHandle()</code> และฟังก์ชัน <code>GetProcAddress()</code> คือตำแหน่งของฟังก์ชัน <code>RtlGetVersion()</code> ในหน่วยความจำ อย่างไรก็ตามเพื่อให้โค้ดของโปรแกรมสามารถเรียกใช้ฟังก์ชัน <code>RtlGetVersion()</code> ได้ การรู้เพียงแค่ว่าฟังก์ชัน <code>RtlGetVersion()</code> นั้นอยู่ที่ไหนนั้นไม่เพียงพอ เพราะโดยทั่วไปนั้นโค้ดซึ่งจะทำหน้าที่เป็นฟังก์ชันจะต้องมีส่วนประกอบส่วนอื่นอีกที่จำเป็น อาทิ ประเภทของผลลัพธ์ที่ฟังก์ชันจะส่งออกมาเมื่อทำงานจนเสร็จสิ้น หรืออากิวเมนต์ จำนวนอากิวเมนต์และประเภทอากิวเมนต์นำเข้าที่ฟังก์ชันดังกล่าวจะรับเข้ามาประมวลผล เราจึงจำเป็นต้องเพิ่ม<strong>กลไก</strong>ที่จะเข้ามามีบทบาทเพื่อช่วยรวบรวมโครงสร้างของฟังก์ชันให้สมบูรณ์</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) <span style="color:#ae81ff">0x12345678</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion) <span style="color:#ae81ff">0x12345678</span>
 </code></pre></div><p>ถ้าเราสมมติว่าผลลัพธ์ของ <code>GetModuleHandle()</code> และ <code>GetProcAddrss()</code> นั้นคือ <code>0x12345678</code> ซึ่งก็คือตำแหน่งของ <code>RtlGetVersion()</code> ในหน่วยความจำ สิ่งที่เกิดขึ้นต่อมาคือการเปลี่ยนการทำ type casting ค่า <code>0x12345678</code> ให้เป็นประเภทเฉพาะที่เรากำหนดไว้ก่อนแล้วซึ่งในที่นี้คือ <code>_RtlGetVersion</code> ก่อนจะนำผลลัพธ์ที่ได้ไปกำหนดให้กับตัวแปร <code>RtlGetVersion</code> ที่เป็นตัวแปรประเภท <code>_RtlGetVersion</code> เช่นกัน</p>
 <p>พอถึงจุดนี้เราอาจจะงงว่า <code>_RtlGetVersion</code> ซึ่งเป็นประเภทของตัวแปรมันมาจากไหนและมีที่มาอย่างไร คำตอบสำหรับคำถามนี้จะอยู่ในไฟล์ <a href="https://github.com/b4rtik/ATPMiniDump/blob/master/ATPMiniDump/ATPMiniDump.h#L114"><code>ATPMiniDump.h</code> ที่บรรทัดที่ 114</a> ครับ</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#a6e22e">NTSTATUS</span>(NTAPI <span style="color:#f92672">*</span>_RtlGetVersion)(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">typedef</span> <span style="color:#a6e22e">NTSTATUS</span>(NTAPI <span style="color:#f92672">*</span>_RtlGetVersion)(
 	LPOSVERSIONINFOEXW lpVersionInformation
 );
 </code></pre></div><p>คำว่า <code>typedef</code> เป็นคีย์เวิร์ดในภาษาซีซึ่งทำให้เราสามารถกำหนดชื่อ (alias) ให้กับประเภทของข้อมูลได้ในไวยากรณ์คือ <code>typedef type-definition alias</code> เช่น <code>typedef int length</code> คือการสร้างประเภทใหม่ชื่อ <code>length</code> จากประเภทจำนวนเต็ม (<code>int</code>) ดังนั้นจากโค้ดในไฟล์ <code>ATPMiniDump.h</code> ด้านบน เราสามารถอธิบายมันได้เป็นการสร้างประเภทของข้อมูลใหม่ในชื่อ <code>_RtlGetVersion</code> จากประเภท <code>NTSTATUS</code> ซึ่งเป็นประเภทของข้อมูลหนึ่งในระบบปฏิบัติการ Windows อย่างไรก็ตามการใช้ <code>typedef</code> ในลักษณะนี้ไม่ได้เป็นเพียงแค่การสร้างชื่อใหม่กับประเภทของข้อมูลเดิม แต่เป็นการใช้ <code>typedef</code> เพื่อสร้างสิ่งที่เราจะเรียกมันว่า <strong>function pointer</strong></p>
 <p><strong>Function pointer</strong> เป็นเหมือนเงาของฟังก์ชันที่แท้จริง เมื่อ function pointer ถูกเรียกใช้งานมันจะรับอากิวเมนต์ที่มีประเภทและจำนวนตามที่ฟังก์ชันซึ่งมันชี้อยู่ต้องการ ก่อนจะส่งอากิวเมนต์เหล่านั้นไปยังตำแหน่งในหน่วยความจำซึ่งฟังก์ชันที่แท้จริงอยู่ ในส่วนของวิธีการลำดับการส่งและการล้างอากิวเมนต์นั้น กระบวนการเหล่านี้จะถูกกำหนดด้วย <a href="https://en.wikipedia.org/wiki/X86_calling_conventions">calling convention</a> ซึ่งจะถูกระบุไว้ที่ตัว function pointer เช่นเดียวกัน</p>
 <p>ดังนั้นจากโค้ด <code>typedef</code> ด้านบน เราจะเห็นการสร้างประเภทของข้อมูลใหม่ในชื่อ <code>_RtlGetVersion</code> จากประเภท <code>NTSTATUS</code> โดยมี <code>NTAPI</code> ซึ่งเป็น calling convetion ที่มีรากเหง้าคือ <code>__stdcall</code> มาประกอบและช่วยให้รู้ว่าพารามิเตอร์หรืออากิวเมนต์ควรถูกจัดเรียงและถูกจัดการอย่างไร ส่วนสุดท้ายคือการรับพารามิเตอร์ซึ่งเราจะเห็นว่าใน <code>typedef</code> ของเรานั้นจะมีการรับพารามิเตอร์ <code>lpVersionInformation</code> ซึ่งมีประเภทเป็น <code>LPOSVERSIONINFOEX</code> เข้าไป</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion)GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">_RtlGetVersion RtlGetVersion <span style="color:#f92672">=</span> (_RtlGetVersion)GetProcAddress(GetModuleHandle(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;ntdll.dll&#34;</span>), <span style="color:#e6db74">&#34;RtlGetVersion&#34;</span>);
 
 <span style="color:#66d9ef">if</span> (RtlGetVersion <span style="color:#f92672">==</span> NULL) {
 		<span style="color:#66d9ef">return</span> FALSE;

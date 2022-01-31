@@ -58,9 +58,10 @@
 <meta property="og:title" content="Ransomware as a Service With REvil (ESXi variant)" />
 <meta property="og:description" content="สะท้อนความเคลื่อนไหวของตลาดบริการ Ransomware as a Service ผ่านการวิเคราะห์ REvil ใหม่ที่สามารถใช้เพื่อโจมตี ESXi ได้" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/ransomware-as-a-service-with-revil/" />
+<meta property="og:url" content="https://pandora.sh/posts/ransomware-as-a-service-with-revil/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-06-29T20:55:33+07:00" />
 <meta property="article:modified_time" content="2021-06-29T20:55:33+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -203,7 +204,7 @@
 </ul>
 <p>เนื่องจากโค้ดของมัลแวร์ไม่ได้มีมาตรการป้องกันการวิเคราะห์เป็นพิเศษ เราสามารถเห็นการทำงานเบื้องต้นคร่าว ๆ หากไล่วิเคราะห์ฟังก์ชันซึ่งถูกเรียกเป็นลำดับไปได้ดังนี้</p>
 
-  <img src="https://i.imgur.com/5Kcodmp.jpg"  class="center"  style="border-radius: 8px;"  />
+  <img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/5Kcodmp.jpg"  class="center"  style="border-radius: 8px;"  />
 
 
 <ul>
@@ -214,7 +215,7 @@
 <li>ส่วนของการไล่พาธ ซึ่งประกอบไปด้วยส่วนของการสร้างกุญแจเข้ารหัสเฉพาะในแต่ละไฟล์ ส่วนของการเข้ารหัสไฟล์และส่วนที่ใช้เพื่อสร้าง ransom note ในแต่ละไดเรกทอรี</li>
 </ul>
 <p>มัลแวร์เรียกค่าไถ่ของ REvil ในสายพันธุ์ที่พุ่งเป้าโจมตีสภาพแวดล้อม ESXi ยังคงสืบทอดความเหมือนกับมัลแวร์เรียกค่าไถ่ซึ่งปรากฎในสภาพแวดล้อมอื่น จุดหนึ่งซึ่งมีความเหมือนกันเป็นเอกลักษณ์คือส่วนการตั้งค่าของมัลแวร์ที่จะถูกฝังเอาไว้ในลักษณะของ JSON ตามรูปแบบด้านล่าง</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
    <span style="color:#f92672">&#34;pk&#34;</span>:<span style="color:#e6db74">&#34;r58UPwgbaRk5py762WpY/rEsl1jd936THXwqUwID/iM=&#34;</span>,
    <span style="color:#f92672">&#34;pid&#34;</span>:<span style="color:#e6db74">&#34;$2a$12$V3e/gZmP0hFlQhnJLAyOM.Fsb56ksfw0p42oLlNwf2Jou485ElO4K&#34;</span>,
    <span style="color:#f92672">&#34;sub&#34;</span>:<span style="color:#e6db74">&#34;7987&#34;</span>,
@@ -239,14 +240,14 @@
 </ul>
 <p>เมื่อพูดถึงจุดที่เหมือนกันไปแล้ว เรามาดูในจุดซึ่งแตกต่างกันบ้าง เนื่องจากไฟล์ตัวอย่างของมัลแวร์เรียกค่าไถ่นี้พุ่งเป้าการโจมตีที่ไปสภาพแวดล้อมใน VMware ESXi เพื่อทำให้ความเสียหายเกิดขึ้นมากที่สุดกับระบบ REvil ใน variant ได้มีการอิมพลีเมนต์ฟังก์ชันในการบังคับปิดการทำงานของ virtual machine เอาไว้ซึ่งจะทำงานหากไม่มีการระบุค่า <code>--silent</code> เมื่อเริ่มการทำงานมัลแวร์</p>
 
-  <img src="https://i.imgur.com/XC2ZZ60.jpg"  class="center"  style="border-radius: 8px;"  />
+  <img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/XC2ZZ60.jpg"  class="center"  style="border-radius: 8px;"  />
 
 
 <p>กระบวนการในส่วนนี้ไม่ได้มีอะไรซับซ้อน มัลแวร์สร้างคำสั่งสำหรับเรียกใช้ <code>pkill -9</code> กับค่าสตริง <code>vmx-*</code> จากนั้นนำมารวมด้วย <code>sprintf()</code> ก่อนนำไปเอ็กซีคิวต์ เกิดผลลัพธ์เป็นการบังคับปิดโปรเซสทุกโปรเซสซึ่งมีชื่อเริ่มต้นด้วยสตริง <code>vmx-*</code> ซึ่งส่วนใหญ่คือโปรเซสของ virtual machine นอกเหนือจากการใช้ฟังก์ชัน <code>pkill</code> เราจะเห็นมัลแวร์เรียกใช้คำสั่ง <code>esxcli</code> ด้านล่างเพื่อปิด virtual machine อีกรอบด้วย</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">esxcli --formatter<span style="color:#f92672">=</span>csv --format-param<span style="color:#f92672">=</span>fields<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;WorldID,DisplayName&#34;</span> vm process list | awk -F <span style="color:#e6db74">&#34;\&#34;*,\&#34;*&#34;</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#f92672">{</span>system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;esxcli vm process kill --type=force --world-id=&#34;</span> $1<span style="color:#f92672">)}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">esxcli --formatter<span style="color:#f92672">=</span>csv --format-param<span style="color:#f92672">=</span>fields<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;WorldID,DisplayName&#34;</span> vm process list | awk -F <span style="color:#e6db74">&#34;\&#34;*,\&#34;*&#34;</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#f92672">{</span>system<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;esxcli vm process kill --type=force --world-id=&#34;</span> $1<span style="color:#f92672">)}</span>
 </code></pre></div><p>การวิเคราะห์มัลแวร์เรียกค่าไถ่ REvil ของ <a href="https://intel471.com/blog/revil-ransomware-as-a-service-an-analysis-of-a-ransomware-affiliate-operation">Intel471</a> ระบุถึงการใช้ไลบรารีที่เกี่ยวข้องกับการเข้ารหัสของ REvil อยู่สองไลบรารี ไลบรารีหนึ่งเป็นไลบรารีของ <a href="https://github.com/vstakhov/opt-cryptobox/tree/master/curve25519">Curve25519</a> ซึ่งปรากฎตรงกันกับฟังก์ชันในไฟล์ตัวอย่างของมัลแวร์ อีกไลบรารีหนึ่งเป็นของอัลกอริธึม <a href="https://cr.yp.to/snuffle.html">Salsa20</a> แบบ <a href="https://cr.yp.to/snuffle/salsa20/merged/salsa20.c">merged</a> ที่มีการใส่โค้ดแบบ inline ของ Salsa20 core เอาไว้ อย่างไรก็ตามดูเหมือนว่าโค้ดที่ถูกเอามาใช้ในการอิมพลีเมนต์นั้นจะมาจากโค้ดแบบ <a href="https://cr.yp.to/snuffle/salsa20/ref/salsa20.c">ref</a> มากกว่า</p>
 
-  <img src="https://i.imgur.com/X6prfbP.jpg"  class="center"  style="border-radius: 8px;"  />
+  <img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/X6prfbP.jpg"  class="center"  style="border-radius: 8px;"  />
 
 
 <p>หลักฐานซึ่งใช้บ่งชี้การใช้โค้ดแบบ <a href="https://cr.yp.to/snuffle/salsa20/ref/salsa20.c">ref</a> แทนที่แบบ <a href="https://cr.yp.to/snuffle/salsa20/merged/salsa20.c">merged</a> นั้นสามารถเห็นได้ที่ฟังก์ชัน <code>0x40fe37</code> ฟังก์ชันนี้มีลักษณะที่มีอิมพลีเมนต์ฟังก์ชัน <code>ECRYPT_encrypt_bytes()</code> มา เราจะสังเกตได้ว่าโค้ดในแบบ ref จะมีการเรียกใช้ฟังก์ชันข้างในด้วย ซึ่งหากอ้างอิงจากโค้ดหลักนั้น ฟังก์ชันดังกล่าวคือ <code>salsa20_wordtobyte()</code> ภาพทั้งหมดจะเชื่อมต่อกันหากเราลองนำโค้ดแบบ ref มาลองคอมไพล์และ disassemble เป็นตัวอย่าง</p>
@@ -257,16 +258,16 @@
 <li>เงื่อนไขที่สองคือการพยายามเปลี่ยน mode ของไฟล์เป็น 600 และ 700 ซึ่งหากล้มเหลว ไฟล์นั้นจะไม่ถูกเข้ารหัส (อนุมานในประเด็นนี้ไว้ว่าเป็นเรื่องของสิทธิ์ของบัญชีที่ใช้รันมัลแวร์กับสิทธิ์ของไฟล์)</li>
 </ul>
 
-  <img src="https://i.imgur.com/OEx0C7N.jpg"  class="center"  style="border-radius: 8px;"  />
+  <img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/OEx0C7N.jpg"  class="center"  style="border-radius: 8px;"  />
 
 
 <p>เนื่องจากตัวเลือกของการเข้ารหัสนั้นขึ้นอยู่กับผู้ใช้งาน ซึ่งหากไม่มีการกำหนดตัวเลือกในการเข้ารหัสนั้นมัลแวร์จะเข้ารหัสทั้งหมดในระบบ เมื่อเปรียบเทียบกับมัลแวร์เรียกค่าไถ่ DARKSIDE ซึ่งโจมตีสภาพแวดล้อม ESXi เหมือนกัน มัลแวร์เรียกค่าไถ่ DARKSIDE เลือกที่จะเข้ารหัสเฉพาะไฟล์ของ virtual machine เป็นค่าเริ่มต้น ซึ่งอาจทำให้กระบวนการเข้ารหัสและสร้างความเสียหายเป็นไปอย่างรวดเร็วขึ้น มัลแวร์เรียกค่าไถ่ DARKSIDE จะมีการเพิ่มเช็คในเรื่องของขนาดไฟล์และพื้นที่ดิสก์ที่เหลืออยู่อีกด้วย</p>
 <p>ในกรณีของ REvil ในไฟล์ตัวอย่างซึ่งทำการวิเคราะห์นี้ มัลแวร์จะทำการสร้าง ransom note ด้วยข้อความด้านล่างกับทุกไดเรกทอรี และมีเอกลักษณ์สำคัญคือเพิ่มนามสกุลของไฟล์ที่ถูกเข้ารหัสด้วย <code>.rhkrc</code></p>
 
-  <img src="https://i.imgur.com/8LTJQdF.gif"  class="center"  style="border-radius: 8px;"  />
+  <img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/8LTJQdF.gif"  class="center"  style="border-radius: 8px;"  />
 
 
-<pre><code>---=== Welcome. Again. ===---
+<pre tabindex="0"><code>---=== Welcome. Again. ===---
 
 [+] Whats Happen? [+]
 

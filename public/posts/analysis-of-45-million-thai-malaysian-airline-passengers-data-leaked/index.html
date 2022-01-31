@@ -56,9 +56,10 @@
 <meta property="og:title" content="Analysis of 45 Million Travelers to Thailand and Malaysia Data Leaked" />
 <meta property="og:description" content="บทวิเคราะห์การเสนอและตรวจสอบสมมติฐานซึ่งเกี่ยวข้องกับการรั่วไหลข้อมูลจำนวนกว่า 45 ล้านรายการของนักท่องเที่ยวซึ่งเดินทางมายังประเทศไทยและมาเลเซีย" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/analysis-of-45-million-thai-malaysian-airline-passengers-data-leaked/" />
+<meta property="og:url" content="https://pandora.sh/posts/analysis-of-45-million-thai-malaysian-airline-passengers-data-leaked/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-16T14:26:30+07:00" />
 <meta property="article:modified_time" content="2020-07-16T14:26:30+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -198,14 +199,14 @@
 </ul>
 <h2 id="executive-summary">Executive Summary</h2>
 <p>เมื่อวันที่ 12 กรกฎาคม 2020 บริษัทด้านความปลอดภัย Cyble, Inc ได้มีการ<a href="https://cybleinc.com/2020/07/12/records-of-45-million-travelers-to-thailand-and-malaysia-leaked-on-darkweb/">เปิดเผยการค้นพบรายการข้อมูลของผู้โดยสารของสายการบินซึ่งเดินทางมายังประเทศไทยและมาเลเซียกว่า 45 ล้านรายการใน Darkweb</a> โดยแหล่งข้อมูลที่ Cyble, Inc ค้นพบนั้นแสดงให้เห็นถึงความต้องการในการขายข้อมูลโดยผู้ที่ถือข้อมูลอยู่ ข้อมูลที่ถูกขายดังกล่าวถูกระบุประเภทของข้อมูลเอาไว้ ได้แก่ รหัสผู้โดยสาร, ชื่อและนามสกุลของผู้โดยสาร, หมายเลขโทรศัพท์, ข้อมูลในพาสปอร์ต, ที่อยู่, เพศและรายละเอียดเที่ยวบิน</p>
-<p><img src="https://i.imgur.com/zAnabZ5.png" alt="From Cyble, Inc"></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/zAnabZ5.png" alt="From Cyble, Inc"></p>
 <p>Cyble, Inc กล่าวว่าทางทีมวิเคราะห์ได้มีการซื้อข้อมูลชุดดังกล่าวมาทำการวิเคราะห์แล้วเพื่อนำมาใช้ปรับปรุงบริการแจ้งเตือนตามลักษณะธุรกิจของตนซึ่งให้บริการในการแจ้งเตือนผู้ใช้บริการเมื่อมีการรั่วไหลของข้อมูลส่วนตัว</p>
 <p>ในบทวิเคราะห์นี้ ผู้เขียนมีจุดประสงค์ในการนำเสนอสมมติฐานซึ่งบ่งชี้ให้เห็นว่าการขายข้อมูลชุดดังกล่าวซึ่ง Cyble, Inc ค้นพบนั้นมีความเกี่ยวข้องกับกรณีการโจมตีบริการของ Data Viper และความเกี่ยวข้องกับกรณีการโจมตีและการรั่วไหลข้อมูลของสายการบิน Thai Lion Air และ Malindo Air สมมติฐานนี้จะนำเสนอหนึ่งในความเป็นไปได้ในประเด็นที่เกี่ยวกับแหล่งที่มาของข้อมูล ซึ่งสามารถนำไปใช้ในการวิเคราะห์เหตุการณ์ด้านความปลอดภัย ตรวจสอบหลักฐานดิจิตอลและดำเนินการลดผลกระทบที่เกิดขึ้นจากเหตุการณ์ด้านความปลอดภัยต่อไป</p>
 <h2 id="events-timeline">Events Timeline</h2>
 <ul>
 <li><strong>Sep 11, 2019</strong>: มีการเผยแพร่ข้อมูลของ Malindo Air และ Thai Lion Air จำนวนประมาณ 40 ล้านรายการ ในเว็บไซต์ A ผู้ขายข้อมูลให้รายละเอียดไว้เป็นภาษารัสเซียว่ามีข้อมูลนี้มีลักษณะเป็นฐานข้อมูลโดยผู้เข้าชมสามารถดาวโหลดข้อมูลในรูปแบบไฟล์ CSV ได้ฟรี ข้อมูลดังกล่าวประกอบไปด้วยชื่อและนามสกุล, วันเดือนปีเกิด, ที่อยู่, ข้อมูลในพาสบอร์ด, อีเมลและหมายเลขโทรศัพท์ ในปัจจุบันข้อมูลชุดนี้ไม่สามารถดาวโหลดได้แล้ว</li>
 </ul>
-<p><img src="https://i.imgur.com/TIcDKdj.png" alt=""></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/TIcDKdj.png" alt=""></p>
 <ul>
 <li><strong>Sep 12, 2019</strong>: บัญชีผู้ใช้งานทวิตเตอร์ @UnderTheBreach เริ่ม<a href="https://twitter.com/UnderTheBreach/status/1171883176052056064">รายงานการมีอยู่ของข้อมูลที่เกี่ยวข้องกับ Thai Lion Air ออกสู่สาธารณะ</a> ทวีตดังกล่าวมีข้อมูลซึ่งระบุเพิ่มเติมว่าแฮกเกอร์ทำการโจมตีและประสบความสำเร็จในการนำข้อมูลออกมาจากฐานข้อมูล โดยฐานข้อมูลแรกนั้นมีข้อมูลทั้งหมด 21 ล้านรายการ ประกอบไปด้วยรหัสผู้โดยสาร, รหัสการจองเที่ยวบิน, ที่อยู่ผู้โดยสาร, หมายเลขโทรศัพท์และอีเมล ในส่วนของฐานข้อมูลที่สองนั้นมีข้อมูลอยู่ 14 ล้านรายการ ประกอบไปด้วยข้อมูลชื่อผู้โดยสาร, วันเดือนปีเกิด, หมายเลขโทรศัพท์, รหัสพาสปอร์ตและวันหมดอายุพาสปอร์ต</li>
 <li><strong>Sep 17, 2019</strong>: เว็บไซต์ Blognone ซึ่งเป็นสื่อด้านเทคโนโลยีในไทย<a href="https://www.blognone.com/node/111980">เริ่มรายงานการโจมตี</a>โดยอ้างอิงจาก<a href="https://www.bleepingcomputer.com/news/security/millions-of-lion-air-passenger-records-exposed-and-exchanged-on-forums/">เว็บไซต์ BleepingComputer</a> ในรายงานข่าวนั้นมีการให้ข้อมูลเพิ่มเติมเกี่ยวกับเหตุการณ์ดังกล่าวได้แก่
@@ -223,7 +224,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="https://i.imgur.com/Vn1lIjp.png" alt=""></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/Vn1lIjp.png" alt=""></p>
 <ul>
 <li><strong>July 13, 2020</strong>: KrebsOnSecurity <a href="https://krebsonsecurity.com/2020/07/breached-data-indexer-data-viper-hacked/">รายการงานการโจมตีบริการ Data Viper ออกสู่สาธารณะ</a></li>
 <li><strong>July 14, 2020</strong>: เว็บไซต์ TechTalkThai ซึ่งเป็นสื่อด้านเทคโนโลยีในไทย<a href="https://www.techtalkthai.com/hacker-revenges-by-hack-data-breach-detection-databases/">เริ่มรายงานการโจมตีบริการ Data Viper</a> โดยอ้างอิงแหล่งข่าวมาจากเว็บไซต์ <a href="https://www.zdnet.com/article/hacker-breaches-security-firm-in-act-of-revenge/">ZDNet</a></li>

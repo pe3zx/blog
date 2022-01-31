@@ -59,9 +59,10 @@
 <meta property="og:title" content="FIN7 CrimeOps: ศึกษาปฏิบัติการของกลุ่มอาชญากรไซเบอร์ &#34;FIN7&#34; กลุ่มนักล่าระบบ Point of Sale (POS)" />
 <meta property="og:description" content="ศึกษาปฏิบัติการของกลุ่มอาชญากรไซเบอร์ FIN7 ทั้งในมุมกลยุทธ์ ปฏิบัติการและเทคนิคการโจมตีทางไซเบอร์ และทำความเข้าใจเหตุผลว่าทำไม FIN7 อาจเป็นกลุ่มอาชญากรไซเบอร์ที่ดีที่สุดในด้าน Operation management" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://pandora.sh/posts/fin7-crimeops-a-learning-note/" />
+<meta property="og:url" content="https://pandora.sh/posts/fin7-crimeops-a-learning-note/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-09T14:08:26+07:00" />
 <meta property="article:modified_time" content="2020-07-09T14:08:26+07:00" /><meta property="og:site_name" content="Pandora&#39;s Box" />
+
 
 
 
@@ -184,7 +185,7 @@
     <div class="post-content">
       
       <p>การศึกษาปฏิบัติการของกลุ่มอาชญากรไซเบอร์ FIN7 ซึ่งถูกจัดลำดับตามความซับซ้อนของปฏิบัติการและผลกระทบที่เกิดขึ้นให้อยู่ในกลุ่ม Advanced Persistent Threat หรือ APT นั้นเป็นงาน(อดิเรก)ซึ่งอยู่ในรายการสิ่งที่ต้องทำของผมมานานแล้วตั้งแต่ช่วงปี 2018 ซึ่งมีการเปิดเผยข้อมูลวงในของปฏิบัติการออกมาจาก <a href="https://www.justice.gov/opa/press-release/file/1084316/download">indictment ที่ออกโดยกระทรวงยุติธรรมสหรัฐฯ</a> อย่างไรก็ตามเนื่องจากกิจกรรมของอาชญากรกลุ่มนี้ยังไม่ได้ปรากฎในประเทศไทยอ้างอิงจากข้อมูลสาธารณะที่เกี่ยวข้องกับภัยคุกคาม  (หรืออาจปรากฎแต่ยังไม่สามารถระบุหรือเชื่อมโยงได้) ปฏิบัติการและข้อมูลที่ถูกเปิดเผยออกมาก็เลยถูกบดบังด้วยกิจกรรมของกลุ่มอาชญากรทางไซเบอร์กลุ่มอื่นแทน</p>
-<p><img src="https://i.imgur.com/3bHqfbG.png" alt="CrimeOps: The operational art of cybercrime"></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/3bHqfbG.png" alt="CrimeOps: The operational art of cybercrime"></p>
 <p>สิ่งที่ทำให้โพสต์นี้เกิดขึ้นมาได้นั้นมาจากแนวทางเดิมที่ผมทำมาโดยตลอดคือการใช้โพสต์หรือบล็อกเป็นที่สรุปความเข้าใจเมื่อได้เรียนรู้อะไรใหม่ สื่อที่ถูกนำมาสรุปในวันนี้นั้นมาจากงานสัมมนาออนไลน์ซึ่งจัดโดย <a href="https://www.opcde.com/">OPCDE</a> ในชื่อ vOPCDE ภายใต้หัวข้อ <a href="https://www.youtube.com/watch?v=E9F7WCO-pZM">CrimeOps: The operational art of cybercrime</a> บรรยายโดย <a href="https://twitter.com/thegrugq">thegrugq</a> ในหัวข้อการสัมมนานี้นั้น grugq ใช้ TTP ของกลุ่ม FIN7 เป็นแกนหลักในการอธิบายสิ่งที่เรียกว่า crime operations หรือ <strong>CrimeOps</strong> ซึ่งเผยความคิดเห็นที่สะท้อนมุมที่น่าสนใจของ TTP ออกมาให้ได้ทำความเข้าใจเพิ่มเติมครับ</p>
 <p>หัวข้อในบทความนี้มีดังต่อไปนี้ครับ</p>
 <ul>
@@ -236,7 +237,7 @@
 <p>กลุ่ม FIN7 ใช้วิธีการจดทะเบียนบริษัททั่วไปโดยอ้างว่าเป็นบริษัทที่ดำเนินงานทางด้าน cybersecurity แต่แท้จริงแล้วเป็นกิจการซึ่งบังหน้าปฏิบัติการที่แท้จริงคือการเจาะระบบและนำข้อมูลบัตรเครดิตและข้อมูลธุรกรรมออกมาขาย คนที่มีส่วนร่วมในปฏิบัติการบางส่วนนั้นก็มาจากการว่าจ้างในลักษณะทั่วไปในตำแหน่งของ penetration tester ซึ่งมีการประกาศรับ การสัมภาษณ์และการให้ทำงานซึ่งเป็นการเจาะระบบจริงๆ</p>
 <p>grugq ให้ความเห็นว่าคนซึ่งถูกว่าจ้างเข้าไปทำงานในตำแหน่งดังกล่าวนั้นน่าจะรู้ว่ามีอะไรบางอย่างผิดปกติ เพราะกิจกรรมซึ่งทำจริงๆ นั้นแตกต่างไปจากการทดสอบเจาะระบบโดยทั่วไปอยู่พอสมควรในมุมของการไม่มีรีพอร์ตสรุปผลการทดสอบเจาะระบบ การฝังตัวอยู่ในระบบในระยะเวลาที่นานและการนำข้อมูลจริงออกมา</p>
 <p>ด้วยลักษณะขององค์กรอาชญากรรมแบบบริษัท grugq จึงอธิบาย organization chart และตำแหน่งงานรวมไปถึงความรับผิดชอบในแต่ละตำแหน่งออกมาได้ตามรูปด้านล่าง</p>
-<p><img src="https://i.imgur.com/cAnNtMY.png" alt="FIN7 Organization Chart"></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/cAnNtMY.png" alt="FIN7 Organization Chart"></p>
 <p>จาก organization chart ด้านบน เราจะสามารถเห็นหน้าที่ของแต่ละส่วนซึ่งสามารถอธิบายความรับผิดชอบได้ดังนี้</p>
 <ol>
 <li><strong>กลุ่ม Management</strong> มีหน้าที่รับผิดชอบคือ
@@ -261,7 +262,7 @@
 </ol>
 <h3 id="fin7-process">FIN7 Process</h3>
 <p>grugq อธิบายภาพรวมกระบวนการดำเนินงานของกลุ่ม FIN7 เอาไว้ว่าเป็นลักษณะของ &ldquo;การมีกระบวนการไว้เพื่อรับกลุ่มหรือบริษัทเป็นของนำเข้า และส่งออกมาไว้เป็นเงินสด&rdquo; ซึ่งเป็นคำอธิบายที่ตรงตามลักษณะของกลุ่ม FIN7 โดย grugq ยังมีการอธิบายกระบวนการในการก่ออาชญากรรมออกมาได้ตามรูปด้านล่าง</p>
-<p><img src="https://i.imgur.com/Izp7kSf.png" alt="FIN7 Crime Process"></p>
+<p><img src="https://pandora-artifacts.s3.ap-southeast-1.amazonaws.com/public/Izp7kSf.png" alt="FIN7 Crime Process"></p>
 <p>เราจะเห็นการแบ่งส่วนของการทำอาชญากรรมโดยกลุ่ม FIN7 ออกเป็น 2 ส่วนใหญ่ๆ ส่วนแรกคือกระบวนการที่เกิดขึ้นก่อนการโจมตีหรือ pre-exploitation และอีกกระบวนการจะเกิดขึ้นหลังจากที่กระบวนการโจมตีเกิดขึ้นและกลุ่ม FIN7 เข้าไปอยู่ในเครือข่าบเป้าหมายได้แล้ว ซึ่งเราจะเรียกมันว่า post-exploitation</p>
 <p>grugq ให้ความเห็นในข้อมูลในส่วนนี้ค่อนข้าง straightforward และออกจะน่าเบื่อ เพราะมันเป็นวิธีการทั่วๆ ไปในการดำเนินการอาชญากรรมและเป็นภาพที่เราอาจมีโอกาสเห็นในระดับ Tactical ทั้งนี้จุดน่าสนใจจริงๆ จะอยู่ก่อนหน้ากระบวนการ Target selection และอยู่แทรกในระหว่างการดำเนินการโจมตี ได้แก่</p>
 <ul>

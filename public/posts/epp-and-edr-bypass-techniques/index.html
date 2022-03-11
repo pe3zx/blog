@@ -209,7 +209,7 @@ Before we begin, I would like to point out to another great research from @Hexac
 </ul>
 <p>Hoang Bui <a href="https://medium.com/@fsx30/bypass-edrs-memory-protection-introduction-to-hooking-2efb21acffd6">pointed out</a> about hooking and bypassing techniques on <code>CyMemDef64.dll</code></p>
 <h2 id="palo-alto-traps">Palo Alto Traps</h2>
-<p><a href="https://www.c0d3xpl0it.com/2019/01/bypassing-paloalto-traps-edr-solution.html">@c0d3xpl0it</a> at Bits of Security wrote a blog to present an idea to bypass Traps. The technique utilized built-in tool <code>FLTMC.exe</code> which can be used to manage filter driver to unload Traps' file monitoring filter driver. The technique required administrator privilege to issue the commands.</p>
+<p><a href="https://www.c0d3xpl0it.com/2019/01/bypassing-paloalto-traps-edr-solution.html">@c0d3xpl0it</a> at Bits of Security wrote a blog to present an idea to bypass Traps. The technique utilized built-in tool <code>FLTMC.exe</code> which can be used to manage filter driver to unload Traps&rsquo; file monitoring filter driver. The technique required administrator privilege to issue the commands.</p>
 <h2 id="windows-defender">Windows Defender</h2>
 <p>Mantvydas Baranauskas at <a href="https://ired.team/offensive-security/evading-windows-defender-using-classic-c-shellcode-launcher-with-1-byte-change">Red Teaming Experiments</a> presented an idea to modify shellcode in purpose of evading detection, which I personally think that it is similar but not the same to Ghost Writing technique I learnt on SEC504. This technique can be accomplished by changing parts of shellcode to avoid some kind of pattern detection, and flip it back before deploying to the allocated memory.</p>
 

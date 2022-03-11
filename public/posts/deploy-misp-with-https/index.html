@@ -186,32 +186,32 @@ Generate a Valid Certificate with mkcert mkcert&amp;rsquo;s pre-built binaries a
 <h2 id="generate-a-valid-certificate-with-mkcert">Generate a Valid Certificate with mkcert</h2>
 <p>mkcert&rsquo;s <a href="https://github.com/FiloSottile/mkcert/releases">pre-built binaries</a> are available on various platforms, choose one that match your client operating system. Some mkcert option will not work if <code>libnss3-tools</code> or <code>nss-tools</code> is not available on the system. Make sure you have already installed one of them based on you current distribution, in case you&rsquo;re using Linux.</p>
 <p>Install local CA and generate locally-trusted certificate can be done by:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ./mkcert -install
-Created a new local CA at <span style="color:#e6db74">&#34;/home/user/.local/share/mkcert&#34;</span> 💥
-The local CA is now installed in the Firefox and/or Chrome/Chromium trust store <span style="color:#f92672">(</span>requires browser restart<span style="color:#f92672">)</span>! 🦊
-
-$ ./mkcert misp.local localhost 127.0.0.1 ::1
-Using the local CA at <span style="color:#e6db74">&#34;/home/user/.local/share/mkcert&#34;</span> ✨
-
-Created a new certificate valid <span style="color:#66d9ef">for</span> the following names 📜
- - <span style="color:#e6db74">&#34;misp.local&#34;</span>
- - <span style="color:#e6db74">&#34;localhost&#34;</span>
- - <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>
- - <span style="color:#e6db74">&#34;::1&#34;</span>
-
-The certificate is at <span style="color:#e6db74">&#34;./misp.local+3.pem&#34;</span> and the key at <span style="color:#e6db74">&#34;./misp.local+3-key.pem&#34;</span> ✅
-</code></pre></div><p>The commands above will create a certificate and a key for <code>misp.local</code>, <code>localhost</code>, <code>127.0.0.1</code> and <code>::1</code>. You can change your MISP domain to whatever you want. The domain <code>misp.local</code> will be added to the system&rsquo;s host file to make it easier to access the instance.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ./mkcert -install
+</span></span><span style="display:flex;"><span>Created a new local CA at <span style="color:#e6db74">&#34;/home/user/.local/share/mkcert&#34;</span> 💥
+</span></span><span style="display:flex;"><span>The local CA is now installed in the Firefox and/or Chrome/Chromium trust store <span style="color:#f92672">(</span>requires browser restart<span style="color:#f92672">)</span>! 🦊
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ ./mkcert misp.local localhost 127.0.0.1 ::1
+</span></span><span style="display:flex;"><span>Using the local CA at <span style="color:#e6db74">&#34;/home/user/.local/share/mkcert&#34;</span> ✨
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Created a new certificate valid <span style="color:#66d9ef">for</span> the following names 📜
+</span></span><span style="display:flex;"><span> - <span style="color:#e6db74">&#34;misp.local&#34;</span>
+</span></span><span style="display:flex;"><span> - <span style="color:#e6db74">&#34;localhost&#34;</span>
+</span></span><span style="display:flex;"><span> - <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>
+</span></span><span style="display:flex;"><span> - <span style="color:#e6db74">&#34;::1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The certificate is at <span style="color:#e6db74">&#34;./misp.local+3.pem&#34;</span> and the key at <span style="color:#e6db74">&#34;./misp.local+3-key.pem&#34;</span> ✅
+</span></span></code></pre></div><p>The commands above will create a certificate and a key for <code>misp.local</code>, <code>localhost</code>, <code>127.0.0.1</code> and <code>::1</code>. You can change your MISP domain to whatever you want. The domain <code>misp.local</code> will be added to the system&rsquo;s host file to make it easier to access the instance.</p>
 <h2 id="setup-misp">Setup MISP</h2>
 <p>Manually install MISP according to the installation guidelines is time consuming, and if you want to make multi-purpose environment clean as much as you can, try <a href="https://github.com/MISP/misp-docker">MISP docker</a>. But first, make sure you have already installed git and docker.</p>
 <p>Clone MISP docker upstream with git clone:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git clone --depth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> https://github.com/MISP/misp-docker.git
-Cloning into <span style="color:#e6db74">&#39;misp-docker&#39;</span>...
-remote: Enumerating objects: 17, <span style="color:#66d9ef">done</span>.
-remote: Counting objects: 100% <span style="color:#f92672">(</span>17/17<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
-remote: Compressing objects: 100% <span style="color:#f92672">(</span>14/14<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
-remote: Total <span style="color:#ae81ff">17</span> <span style="color:#f92672">(</span>delta 1<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">12</span> <span style="color:#f92672">(</span>delta 1<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span>
-Unpacking objects: 100% <span style="color:#f92672">(</span>17/17<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
-</code></pre></div><p>MISP docker has three containers proxy, misp_db and misp_web, but in this tutorial I will spin on only misp_web and misp_db without proxy. So, I will let you finish some configuration in <code>docker-compose.yml</code> files by yourself, including:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone --depth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> https://github.com/MISP/misp-docker.git
+</span></span><span style="display:flex;"><span>Cloning into <span style="color:#e6db74">&#39;misp-docker&#39;</span>...
+</span></span><span style="display:flex;"><span>remote: Enumerating objects: 17, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Counting objects: 100% <span style="color:#f92672">(</span>17/17<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Compressing objects: 100% <span style="color:#f92672">(</span>14/14<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span><span style="display:flex;"><span>remote: Total <span style="color:#ae81ff">17</span> <span style="color:#f92672">(</span>delta 1<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">12</span> <span style="color:#f92672">(</span>delta 1<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Unpacking objects: 100% <span style="color:#f92672">(</span>17/17<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</span></span></code></pre></div><p>MISP docker has three containers proxy, misp_db and misp_web, but in this tutorial I will spin on only misp_web and misp_db without proxy. So, I will let you finish some configuration in <code>docker-compose.yml</code> files by yourself, including:</p>
 <ul>
 <li><code>MYSQL_PASSWORD</code></li>
 <li><code>MYSQL_ROOT_PASSWORD</code></li>
@@ -221,43 +221,43 @@ Unpacking objects: 100% <span style="color:#f92672">(</span>17/17<span style="co
 <li><code>TIMEZONE</code></li>
 </ul>
 <p><strong>Don&rsquo;t forget to add bind port on 443:443 for SSL/TLS connection</strong>. Because we are going not to use proxy, we have to specify docker-compose file we are going to build:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ cd misp-docker/
-$ docker-compose -f docker-compose.yml build
-...
-...
-...
-&lt;wait <span style="color:#66d9ef">until</span> building process is <span style="color:#66d9ef">done</span>&gt;
-$ docker-compose -f docker-compose.yml up
-Creating misp_db  ... <span style="color:#66d9ef">done</span>
-Creating misp_web ... <span style="color:#66d9ef">done</span>
-Attaching to misp_db, misp_web
-misp_db | <span style="color:#f92672">[</span>Entrypoint<span style="color:#f92672">]</span> MySQL Docker Image 5.7.24-1.1.8
-misp_db | <span style="color:#f92672">[</span>Entrypoint<span style="color:#f92672">]</span> Initializing database
-misp_web | Container started <span style="color:#66d9ef">for</span> the fist time. Setup might time a few minutes. Please wait...
-misp_web | <span style="color:#f92672">(</span>Details are logged in /tmp/install.log<span style="color:#f92672">)</span>
-misp_web | Restoring MISP files...
-misp_web | Configuring postfix
-...
-</code></pre></div><p>Because the default configuration for apache2 MISP relies on doesn&rsquo;t have SSL/TLS function enable. We need to enable manually by spawning shell on container and issue the following command:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ docker exec -ti misp_web bash
-root@2e215f3c031d:/etc/apache2# a2enmod ssl
-Considering dependency setenvif <span style="color:#66d9ef">for</span> ssl:
-Module setenvif already enabled
-Considering dependency mime <span style="color:#66d9ef">for</span> ssl:
-Module mime already enabled
-Considering dependency socache_shmcb <span style="color:#66d9ef">for</span> ssl:
-Enabling module socache_shmcb.
-Enabling module ssl.
-See /usr/share/doc/apache2/README.Debian.gz on how to configure SSL and create self-signed certificates.
-To activate the new configuration, you need to run:
-  service apache2 restart
-root@2e215f3c031d:/etc/apache2#
-</code></pre></div><p>To make MISP available on TCP/443 for supported SSL/TLS connection, update the existing apache2 configuration on <code>/etc/apache2/sites-enabled/misp.conf</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd misp-docker/
+</span></span><span style="display:flex;"><span>$ docker-compose -f docker-compose.yml build
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>&lt;wait <span style="color:#66d9ef">until</span> building process is <span style="color:#66d9ef">done</span>&gt;
+</span></span><span style="display:flex;"><span>$ docker-compose -f docker-compose.yml up
+</span></span><span style="display:flex;"><span>Creating misp_db  ... <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>Creating misp_web ... <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>Attaching to misp_db, misp_web
+</span></span><span style="display:flex;"><span>misp_db | <span style="color:#f92672">[</span>Entrypoint<span style="color:#f92672">]</span> MySQL Docker Image 5.7.24-1.1.8
+</span></span><span style="display:flex;"><span>misp_db | <span style="color:#f92672">[</span>Entrypoint<span style="color:#f92672">]</span> Initializing database
+</span></span><span style="display:flex;"><span>misp_web | Container started <span style="color:#66d9ef">for</span> the fist time. Setup might time a few minutes. Please wait...
+</span></span><span style="display:flex;"><span>misp_web | <span style="color:#f92672">(</span>Details are logged in /tmp/install.log<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>misp_web | Restoring MISP files...
+</span></span><span style="display:flex;"><span>misp_web | Configuring postfix
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Because the default configuration for apache2 MISP relies on doesn&rsquo;t have SSL/TLS function enable. We need to enable manually by spawning shell on container and issue the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ docker exec -ti misp_web bash
+</span></span><span style="display:flex;"><span>root@2e215f3c031d:/etc/apache2# a2enmod ssl
+</span></span><span style="display:flex;"><span>Considering dependency setenvif <span style="color:#66d9ef">for</span> ssl:
+</span></span><span style="display:flex;"><span>Module setenvif already enabled
+</span></span><span style="display:flex;"><span>Considering dependency mime <span style="color:#66d9ef">for</span> ssl:
+</span></span><span style="display:flex;"><span>Module mime already enabled
+</span></span><span style="display:flex;"><span>Considering dependency socache_shmcb <span style="color:#66d9ef">for</span> ssl:
+</span></span><span style="display:flex;"><span>Enabling module socache_shmcb.
+</span></span><span style="display:flex;"><span>Enabling module ssl.
+</span></span><span style="display:flex;"><span>See /usr/share/doc/apache2/README.Debian.gz on how to configure SSL and create self-signed certificates.
+</span></span><span style="display:flex;"><span>To activate the new configuration, you need to run:
+</span></span><span style="display:flex;"><span>  service apache2 restart
+</span></span><span style="display:flex;"><span>root@2e215f3c031d:/etc/apache2#
+</span></span></code></pre></div><p>To make MISP available on TCP/443 for supported SSL/TLS connection, update the existing apache2 configuration on <code>/etc/apache2/sites-enabled/misp.conf</code></p>
 <p>You can simply update the configuration and copy certificate and key to the container with docker cp command:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ docker cp misp.conf misp_web:/etc/apache2/sites-enabled/
-$ docker cp misp.local+3.pem misp_web:/etc/ssl/private/misp.crt
-$ docker cp misp.local+3-key.pem misp_web:/etc/ssl/private/misp.key
-</code></pre></div><p>Get back inside the container and restart apache2 service with <code>service apache2 restart</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ docker cp misp.conf misp_web:/etc/apache2/sites-enabled/
+</span></span><span style="display:flex;"><span>$ docker cp misp.local+3.pem misp_web:/etc/ssl/private/misp.crt
+</span></span><span style="display:flex;"><span>$ docker cp misp.local+3-key.pem misp_web:/etc/ssl/private/misp.key
+</span></span></code></pre></div><p>Get back inside the container and restart apache2 service with <code>service apache2 restart</code>.</p>
 <p>Update your host file to add misp.local for MISP server IP address and try accessing with <code>https://misp.local</code> and don&rsquo;t forget to update the instance <code>MISP.baseurl</code> configuration on <code>https://misp.local/servers/serverSettings/MISP</code>  to be <code>https://misp.local</code></p>
 
     </div>
